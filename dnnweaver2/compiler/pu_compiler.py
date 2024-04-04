@@ -17,7 +17,7 @@ class PUCompiler(object):
         self.log = logging.getLogger('PU Compiler')
         self.log.setLevel(log_level)
         self.rf_size = 8
-        self.rf = np.zeros((self.rf_size,), dtype=np.bool)
+        self.rf = np.zeros((self.rf_size,), dtype=bool)
         self.fpga_manager = fpga_manager
 
     def acquire_reg(self):

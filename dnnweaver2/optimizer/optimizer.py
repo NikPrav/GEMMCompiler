@@ -291,8 +291,8 @@ def _optimize_for_order(conv_params, order_type, verbose=False):
     best_energy = None
     best_tiling = None
 
-    cycle_array = np.zeros((num_B_tiles, num_O_tiles, num_IC_tiles, num_OC_tiles), dtype=np.float)
-    energy_array = np.zeros((num_B_tiles, num_O_tiles, num_IC_tiles, num_OC_tiles), dtype=np.float)
+    cycle_array = np.zeros((num_B_tiles, num_O_tiles, num_IC_tiles, num_OC_tiles), dtype=float)
+    energy_array = np.zeros((num_B_tiles, num_O_tiles, num_IC_tiles, num_OC_tiles), dtype=float)
 
     for _b in range(num_B_tiles):
         b = min(1 << _b, B)
