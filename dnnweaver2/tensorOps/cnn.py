@@ -542,7 +542,15 @@ class AddBackprop(GradOp):
 
 class MatMul(NodeOp):
     def __init__(self, data, weights, biases, name, dtype=None):
-
+        self.weights = weights
+        self.data = data
+        self.bias = biases
+        self.pad = (
+                (0,0),
+                (self.weights.shape[-2]//2, self.weights.shape[-2]//2),
+                (self.weights.shape[-2]//2, self.weights.shape[-2]//2),
+                (0,0)
+                )
         # Input data >3D
         self.data = data
 

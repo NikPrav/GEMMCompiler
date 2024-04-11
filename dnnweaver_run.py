@@ -28,6 +28,15 @@ with graph.as_default():
     # DnnWeaver2 automatically takes care of type conversion
     with graph.name_scope('pool1'):
         pool = maxPool(conv, pooling_kernel=(1,2,2,1), stride=(1,2,2,1), pad='VALID')
+    
+    with graph.name_scope('gemm0'):
+        weights = get_tensor(shape=(32, 3),
+                             name='weights',
+                             dtype=FixedPoint(16,12))
+        biases = get_tensor(shape=(32),
+                             name='biases',
+                             dtype=FixedPoint(32,20))
+        output = matmul(i, weights, biases, dtype=FixedPoint(16,8))
 
 
 print('*'*50)

@@ -4,13 +4,15 @@ import time
 import logging
 
 from itertools import permutations
-from multiprocessing import Pool, cpu_count
+from multiprocessing import Pool, cpu_count, get_context
 
 from dnnweaver2.utils.utils import ceil_a_by_b, log2
 from dnnweaver2.simulator.loop_stack import LoopStack
 from dnnweaver2.simulator.stats import Stats
 
 import numpy as np
+
+
 
 logger = logging.getLogger('{}.{}'.format(__name__, 'Optimizer'))
 logger.setLevel(logging.DEBUG)
@@ -209,7 +211,7 @@ def optimize_for_order(conv_params, pool_kernel=None, pool_stride=None, sequenti
         _bound_optimizer_method = functools.partial(_optimize_for_order, conv_params_with_pool)
 
         try:
-            pool = Pool(cpu_count())
+            pool = get_context("fork").Pool(cpu_count())
             results = pool.map_async(_bound_optimizer_method, order).get(10000)
             pool.close()
             pool.join()
