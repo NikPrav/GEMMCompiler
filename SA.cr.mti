@@ -1,0 +1,46 @@
+{D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v} {1 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module systolic_array_datapath
+
+Top level modules:
+	systolic_array_datapath
+
+} {} {}} {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v} {2 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module systolic_array_top
+** Warning: (vlog-2121) D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v(155): Illegal concatenation of an unsized constant. Will treat it as a 32-bit value.
+** Warning: (vlog-2121) D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v(191): Illegal concatenation of an unsized constant. Will treat it as a 32-bit value.
+** Warning: (vlog-2121) D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v(330): Illegal concatenation of an unsized constant. Will treat it as a 32-bit value.
+
+Top level modules:
+	systolic_array_top
+
+} {} {}} {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/tb_systolic_array_top.v} {1 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/tb_systolic_array_top.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module tb_systolic_array_top
+
+Top level modules:
+	tb_systolic_array_top
+
+} {} {}} {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v} {1 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module systolic_array_controller
+
+Top level modules:
+	systolic_array_controller
+
+} {} {}} {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v} {1 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module systolic_array_pe
+
+Top level modules:
+	systolic_array_pe
+
+} {} {}} {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v} {1 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module sram_bank_sp
+
+Top level modules:
+	sram_bank_sp
+
+} {} {}}

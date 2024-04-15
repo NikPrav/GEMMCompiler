@@ -1,0 +1,136 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dD:/GT-ece/Spring 2024/ECE8803_HML/project/project_vegeta_chip-main
+vsram_bank_sp
+Z0 !s110 1712955088
+!i10b 1
+!s100 [nQTC?F0jdjmd;H`olBPk0
+Ia:1ccXY9=Y1?=A8hg6G1R1
+Z1 VDg1SIo80bB@j0V0VzS_@n1
+Z2 dD:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main
+w1712870638
+8D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v
+FD:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v
+L0 2
+Z3 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z4 !s108 1712955088.000000
+!s107 D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v|
+!s90 -reportprogress|300|-work|work|-stats=none|D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v|
+!i113 1
+Z5 o-work work
+Z6 tCvgOpt 0
+vsystolic_array_controller
+R0
+!i10b 1
+!s100 ma@dJzQT@kzb=l<gR^;Z83
+I@looL@bH^DANWhVJ4lGTN3
+R1
+R2
+w1712896287
+8D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v
+FD:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v
+Z7 L0 36
+R3
+r1
+!s85 0
+31
+R4
+!s107 D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v|
+!s90 -reportprogress|300|-work|work|-stats=none|D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v|
+!i113 1
+R5
+R6
+vsystolic_array_datapath
+R0
+!i10b 1
+!s100 Nl2>UTWZ4V=]In=il]0;43
+I@U`LJ`mYA4hj0PP[8FYgU0
+R1
+R2
+w1712896094
+8D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v
+FD:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v
+R7
+R3
+r1
+!s85 0
+31
+R4
+!s107 D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v|
+!s90 -reportprogress|300|-work|work|-stats=none|D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v|
+!i113 1
+R5
+R6
+vsystolic_array_pe
+R0
+!i10b 1
+!s100 m]_HPZePKBei9nd8>01k>0
+Iz1cbm8a=Z>XIQHA[4mic60
+R1
+R2
+Z8 w1712851548
+8D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v
+FD:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v
+L0 27
+R3
+r1
+!s85 0
+31
+R4
+!s107 D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v|
+!s90 -reportprogress|300|-work|work|-stats=none|D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v|
+!i113 1
+R5
+R6
+vsystolic_array_top
+R0
+!i10b 1
+!s100 VkHC[b[fO`W]G7XaGgUQV1
+I=bik8Y`a;ilWm@9@E3AXG3
+R1
+R2
+w1712895848
+8D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v
+FD:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v
+L0 34
+R3
+r1
+!s85 0
+31
+R4
+!s107 D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v|
+!s90 -reportprogress|300|-work|work|-stats=none|D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v|
+!i113 1
+R5
+R6
+vtb_systolic_array_top
+R0
+!i10b 1
+!s100 =aAfRC<9mTQLHCo0z3UQa1
+Ijn4EFE7=O0eX>;zRKO<I]2
+R1
+R2
+R8
+8D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/tb_systolic_array_top.v
+FD:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/tb_systolic_array_top.v
+L0 38
+R3
+r1
+!s85 0
+31
+R4
+!s107 D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/tb_systolic_array_top.v|
+!s90 -reportprogress|300|-work|work|-stats=none|D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/tb_systolic_array_top.v|
+!i113 1
+R5
+R6

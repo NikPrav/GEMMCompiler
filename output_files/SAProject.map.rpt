@@ -1,0 +1,1481 @@
+Analysis & Synthesis report for SAProject
+Fri Apr 12 16:43:18 2024
+Quartus Prime Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. Analysis & Synthesis DSP Block Usage Summary
+  9. General Register Statistics
+ 10. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 11. Parameter Settings for User Entity Instance: Top-level Entity: |systolic_array_datapath
+ 12. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[0].m_pe
+ 13. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[1].m_pe
+ 14. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[2].m_pe
+ 15. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[3].m_pe
+ 16. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[4].m_pe
+ 17. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[5].m_pe
+ 18. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[6].m_pe
+ 19. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[7].m_pe
+ 20. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[0].m_pe
+ 21. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[1].m_pe
+ 22. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[2].m_pe
+ 23. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[3].m_pe
+ 24. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[4].m_pe
+ 25. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[5].m_pe
+ 26. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[6].m_pe
+ 27. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[7].m_pe
+ 28. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[0].m_pe
+ 29. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[1].m_pe
+ 30. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[2].m_pe
+ 31. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[3].m_pe
+ 32. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[4].m_pe
+ 33. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[5].m_pe
+ 34. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[6].m_pe
+ 35. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[7].m_pe
+ 36. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[0].m_pe
+ 37. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[1].m_pe
+ 38. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[2].m_pe
+ 39. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[3].m_pe
+ 40. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[4].m_pe
+ 41. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[5].m_pe
+ 42. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[6].m_pe
+ 43. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[7].m_pe
+ 44. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[0].m_pe
+ 45. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[1].m_pe
+ 46. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[2].m_pe
+ 47. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[3].m_pe
+ 48. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[4].m_pe
+ 49. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[5].m_pe
+ 50. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[6].m_pe
+ 51. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[7].m_pe
+ 52. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[0].m_pe
+ 53. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[1].m_pe
+ 54. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[2].m_pe
+ 55. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[3].m_pe
+ 56. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[4].m_pe
+ 57. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[5].m_pe
+ 58. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[6].m_pe
+ 59. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[7].m_pe
+ 60. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[0].m_pe
+ 61. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[1].m_pe
+ 62. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[2].m_pe
+ 63. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[3].m_pe
+ 64. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[4].m_pe
+ 65. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[5].m_pe
+ 66. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[6].m_pe
+ 67. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[7].m_pe
+ 68. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[0].m_pe
+ 69. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[1].m_pe
+ 70. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[2].m_pe
+ 71. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[3].m_pe
+ 72. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[4].m_pe
+ 73. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[5].m_pe
+ 74. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[6].m_pe
+ 75. Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[7].m_pe
+ 76. Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[7].m_pe"
+ 77. Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[6].m_pe"
+ 78. Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[5].m_pe"
+ 79. Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[4].m_pe"
+ 80. Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[3].m_pe"
+ 81. Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[2].m_pe"
+ 82. Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[1].m_pe"
+ 83. Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[0].m_pe"
+ 84. Port Connectivity Checks: "systolic_array_pe:pe_row[6].pe_col[7].m_pe"
+ 85. Port Connectivity Checks: "systolic_array_pe:pe_row[5].pe_col[7].m_pe"
+ 86. Port Connectivity Checks: "systolic_array_pe:pe_row[4].pe_col[7].m_pe"
+ 87. Port Connectivity Checks: "systolic_array_pe:pe_row[3].pe_col[7].m_pe"
+ 88. Port Connectivity Checks: "systolic_array_pe:pe_row[2].pe_col[7].m_pe"
+ 89. Port Connectivity Checks: "systolic_array_pe:pe_row[1].pe_col[7].m_pe"
+ 90. Port Connectivity Checks: "systolic_array_pe:pe_row[0].pe_col[7].m_pe"
+ 91. Post-Synthesis Netlist Statistics for Top Partition
+ 92. Elapsed Time Per Partition
+ 93. Analysis & Synthesis Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2020  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
+
+
+
++-------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                  ;
++---------------------------------+---------------------------------------------+
+; Analysis & Synthesis Status     ; Successful - Fri Apr 12 16:43:18 2024       ;
+; Quartus Prime Version           ; 20.1.1 Build 720 11/11/2020 SJ Lite Edition ;
+; Revision Name                   ; SAProject                                   ;
+; Top-level Entity Name           ; systolic_array_datapath                     ;
+; Family                          ; Cyclone V                                   ;
+; Logic utilization (in ALMs)     ; N/A                                         ;
+; Total registers                 ; 3248                                        ;
+; Total pins                      ; 618                                         ;
+; Total virtual pins              ; 0                                           ;
+; Total block memory bits         ; 0                                           ;
+; Total DSP Blocks                ; 64                                          ;
+; Total HSSI RX PCSs              ; 0                                           ;
+; Total HSSI PMA RX Deserializers ; 0                                           ;
+; Total HSSI TX PCSs              ; 0                                           ;
+; Total HSSI PMA TX Serializers   ; 0                                           ;
+; Total PLLs                      ; 0                                           ;
+; Total DLLs                      ; 0                                           ;
++---------------------------------+---------------------------------------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                                                  ;
++---------------------------------------------------------------------------------+-------------------------+--------------------+
+; Option                                                                          ; Setting                 ; Default Value      ;
++---------------------------------------------------------------------------------+-------------------------+--------------------+
+; Device                                                                          ; 5CSXFC6D6F31C6          ;                    ;
+; Top-level entity name                                                           ; systolic_array_datapath ; SAProject          ;
+; Family name                                                                     ; Cyclone V               ; Cyclone V          ;
+; Use smart compilation                                                           ; Off                     ; Off                ;
+; Enable parallel Assembler and Timing Analyzer during compilation                ; On                      ; On                 ;
+; Enable compact report table                                                     ; Off                     ; Off                ;
+; Restructure Multiplexers                                                        ; Auto                    ; Auto               ;
+; MLAB Add Timing Constraints For Mixed-Port Feed-Through Mode Setting Don't Care ; Off                     ; Off                ;
+; Create Debugging Nodes for IP Cores                                             ; Off                     ; Off                ;
+; Preserve fewer node names                                                       ; On                      ; On                 ;
+; Intel FPGA IP Evaluation Mode                                                   ; Enable                  ; Enable             ;
+; Verilog Version                                                                 ; Verilog_2001            ; Verilog_2001       ;
+; VHDL Version                                                                    ; VHDL_1993               ; VHDL_1993          ;
+; State Machine Processing                                                        ; Auto                    ; Auto               ;
+; Safe State Machine                                                              ; Off                     ; Off                ;
+; Extract Verilog State Machines                                                  ; On                      ; On                 ;
+; Extract VHDL State Machines                                                     ; On                      ; On                 ;
+; Ignore Verilog initial constructs                                               ; Off                     ; Off                ;
+; Iteration limit for constant Verilog loops                                      ; 5000                    ; 5000               ;
+; Iteration limit for non-constant Verilog loops                                  ; 250                     ; 250                ;
+; Add Pass-Through Logic to Inferred RAMs                                         ; On                      ; On                 ;
+; Infer RAMs from Raw Logic                                                       ; On                      ; On                 ;
+; Parallel Synthesis                                                              ; On                      ; On                 ;
+; DSP Block Balancing                                                             ; Auto                    ; Auto               ;
+; NOT Gate Push-Back                                                              ; On                      ; On                 ;
+; Power-Up Don't Care                                                             ; On                      ; On                 ;
+; Remove Redundant Logic Cells                                                    ; Off                     ; Off                ;
+; Remove Duplicate Registers                                                      ; On                      ; On                 ;
+; Ignore CARRY Buffers                                                            ; Off                     ; Off                ;
+; Ignore CASCADE Buffers                                                          ; Off                     ; Off                ;
+; Ignore GLOBAL Buffers                                                           ; Off                     ; Off                ;
+; Ignore ROW GLOBAL Buffers                                                       ; Off                     ; Off                ;
+; Ignore LCELL Buffers                                                            ; Off                     ; Off                ;
+; Ignore SOFT Buffers                                                             ; On                      ; On                 ;
+; Limit AHDL Integers to 32 Bits                                                  ; Off                     ; Off                ;
+; Optimization Technique                                                          ; Balanced                ; Balanced           ;
+; Carry Chain Length                                                              ; 70                      ; 70                 ;
+; Auto Carry Chains                                                               ; On                      ; On                 ;
+; Auto Open-Drain Pins                                                            ; On                      ; On                 ;
+; Perform WYSIWYG Primitive Resynthesis                                           ; Off                     ; Off                ;
+; Auto ROM Replacement                                                            ; On                      ; On                 ;
+; Auto RAM Replacement                                                            ; On                      ; On                 ;
+; Auto DSP Block Replacement                                                      ; On                      ; On                 ;
+; Auto Shift Register Replacement                                                 ; Auto                    ; Auto               ;
+; Allow Shift Register Merging across Hierarchies                                 ; Auto                    ; Auto               ;
+; Auto Clock Enable Replacement                                                   ; On                      ; On                 ;
+; Strict RAM Replacement                                                          ; Off                     ; Off                ;
+; Allow Synchronous Control Signals                                               ; On                      ; On                 ;
+; Force Use of Synchronous Clear Signals                                          ; Off                     ; Off                ;
+; Auto Resource Sharing                                                           ; Off                     ; Off                ;
+; Allow Any RAM Size For Recognition                                              ; Off                     ; Off                ;
+; Allow Any ROM Size For Recognition                                              ; Off                     ; Off                ;
+; Allow Any Shift Register Size For Recognition                                   ; Off                     ; Off                ;
+; Use LogicLock Constraints during Resource Balancing                             ; On                      ; On                 ;
+; Ignore translate_off and synthesis_off directives                               ; Off                     ; Off                ;
+; Timing-Driven Synthesis                                                         ; On                      ; On                 ;
+; Report Parameter Settings                                                       ; On                      ; On                 ;
+; Report Source Assignments                                                       ; On                      ; On                 ;
+; Report Connectivity Checks                                                      ; On                      ; On                 ;
+; Ignore Maximum Fan-Out Assignments                                              ; Off                     ; Off                ;
+; Synchronization Register Chain Length                                           ; 3                       ; 3                  ;
+; Power Optimization During Synthesis                                             ; Normal compilation      ; Normal compilation ;
+; HDL message level                                                               ; Level2                  ; Level2             ;
+; Suppress Register Optimization Related Messages                                 ; Off                     ; Off                ;
+; Number of Removed Registers Reported in Synthesis Report                        ; 5000                    ; 5000               ;
+; Number of Swept Nodes Reported in Synthesis Report                              ; 5000                    ; 5000               ;
+; Number of Inverted Registers Reported in Synthesis Report                       ; 100                     ; 100                ;
+; Clock MUX Protection                                                            ; On                      ; On                 ;
+; Auto Gated Clock Conversion                                                     ; Off                     ; Off                ;
+; Block Design Naming                                                             ; Auto                    ; Auto               ;
+; SDC constraint protection                                                       ; Off                     ; Off                ;
+; Synthesis Effort                                                                ; Auto                    ; Auto               ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal                    ; On                      ; On                 ;
+; Pre-Mapping Resynthesis Optimization                                            ; Off                     ; Off                ;
+; Analysis & Synthesis Message Level                                              ; Medium                  ; Medium             ;
+; Disable Register Merging Across Hierarchies                                     ; Auto                    ; Auto               ;
+; Resource Aware Inference For Block RAM                                          ; On                      ; On                 ;
+; Automatic Parallel Synthesis                                                    ; On                      ; On                 ;
+; Partial Reconfiguration Bitstream ID                                            ; Off                     ; Off                ;
++---------------------------------------------------------------------------------+-------------------------+--------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 12          ;
+; Maximum allowed            ; 6           ;
+;                            ;             ;
+; Average used               ; 1.00        ;
+; Maximum used               ; 6           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
+;     Processor 2            ;   0.1%      ;
+;     Processor 3            ;   0.1%      ;
+;     Processor 4            ;   0.1%      ;
+;     Processor 5            ;   0.1%      ;
+;     Processor 6            ;   0.1%      ;
++----------------------------+-------------+
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                                    ;
++----------------------------------+-----------------+------------------------+-----------------------------------------------------------------------------------+---------+
+; File Name with User-Entered Path ; Used in Netlist ; File Type              ; File Name with Absolute Path                                                      ; Library ;
++----------------------------------+-----------------+------------------------+-----------------------------------------------------------------------------------+---------+
+; systolic_array_pe.v              ; yes             ; User Verilog HDL File  ; D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v       ;         ;
+; systolic_array_datapath.v        ; yes             ; User Verilog HDL File  ; D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v ;         ;
++----------------------------------+-----------------+------------------------+-----------------------------------------------------------------------------------+---------+
+
+
++---------------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary             ;
++---------------------------------------------+-----------+
+; Resource                                    ; Usage     ;
++---------------------------------------------+-----------+
+; Estimate of Logic utilization (ALMs needed) ; 1656      ;
+;                                             ;           ;
+; Combinational ALUT usage for logic          ; 2296      ;
+;     -- 7 input functions                    ; 0         ;
+;     -- 6 input functions                    ; 0         ;
+;     -- 5 input functions                    ; 0         ;
+;     -- 4 input functions                    ; 64        ;
+;     -- <=3 input functions                  ; 2232      ;
+;                                             ;           ;
+; Dedicated logic registers                   ; 3248      ;
+;                                             ;           ;
+; I/O pins                                    ; 618       ;
+;                                             ;           ;
+; Total DSP Blocks                            ; 64        ;
+;                                             ;           ;
+; Maximum fan-out node                        ; clk~input ;
+; Maximum fan-out                             ; 3248      ;
+; Total fan-out                               ; 24050     ;
+; Average fan-out                             ; 3.51      ;
++---------------------------------------------+-----------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                                                                                     ;
++-------------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+---------------------------------------------------------------------+-------------------------+--------------+
+; Compilation Hierarchy Node                      ; Combinational ALUTs ; Dedicated Logic Registers ; Block Memory Bits ; DSP Blocks ; Pins ; Virtual Pins ; Full Hierarchy Name                                                 ; Entity Name             ; Library Name ;
++-------------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+---------------------------------------------------------------------+-------------------------+--------------+
+; |systolic_array_datapath                        ; 2296 (0)            ; 3248 (0)                  ; 0                 ; 64         ; 618  ; 0            ; |systolic_array_datapath                                            ; systolic_array_datapath ; work         ;
+;    |systolic_array_pe:pe_row[0].pe_col[0].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[0].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[0].pe_col[1].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[1].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[0].pe_col[2].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[2].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[0].pe_col[3].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[3].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[0].pe_col[4].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[4].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[0].pe_col[5].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[5].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[0].pe_col[6].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[6].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[0].pe_col[7].m_pe| ; 36 (36)             ; 43 (43)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[7].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[1].pe_col[0].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[0].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[1].pe_col[1].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[1].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[1].pe_col[2].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[2].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[1].pe_col[3].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[3].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[1].pe_col[4].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[4].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[1].pe_col[5].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[5].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[1].pe_col[6].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[6].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[1].pe_col[7].m_pe| ; 36 (36)             ; 43 (43)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[7].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[2].pe_col[0].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[0].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[2].pe_col[1].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[1].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[2].pe_col[2].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[2].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[2].pe_col[3].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[3].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[2].pe_col[4].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[4].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[2].pe_col[5].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[5].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[2].pe_col[6].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[6].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[2].pe_col[7].m_pe| ; 36 (36)             ; 43 (43)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[7].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[3].pe_col[0].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[0].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[3].pe_col[1].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[1].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[3].pe_col[2].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[2].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[3].pe_col[3].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[3].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[3].pe_col[4].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[4].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[3].pe_col[5].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[5].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[3].pe_col[6].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[6].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[3].pe_col[7].m_pe| ; 36 (36)             ; 43 (43)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[7].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[4].pe_col[0].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[0].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[4].pe_col[1].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[1].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[4].pe_col[2].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[2].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[4].pe_col[3].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[3].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[4].pe_col[4].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[4].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[4].pe_col[5].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[5].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[4].pe_col[6].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[6].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[4].pe_col[7].m_pe| ; 36 (36)             ; 43 (43)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[7].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[5].pe_col[0].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[0].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[5].pe_col[1].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[1].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[5].pe_col[2].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[2].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[5].pe_col[3].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[3].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[5].pe_col[4].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[4].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[5].pe_col[5].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[5].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[5].pe_col[6].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[6].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[5].pe_col[7].m_pe| ; 36 (36)             ; 43 (43)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[7].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[6].pe_col[0].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[0].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[6].pe_col[1].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[1].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[6].pe_col[2].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[2].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[6].pe_col[3].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[3].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[6].pe_col[4].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[4].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[6].pe_col[5].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[5].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[6].pe_col[6].m_pe| ; 36 (36)             ; 52 (52)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[6].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[6].pe_col[7].m_pe| ; 36 (36)             ; 43 (43)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[7].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[7].pe_col[0].m_pe| ; 35 (35)             ; 51 (51)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[0].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[7].pe_col[1].m_pe| ; 35 (35)             ; 51 (51)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[1].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[7].pe_col[2].m_pe| ; 35 (35)             ; 51 (51)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[2].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[7].pe_col[3].m_pe| ; 35 (35)             ; 51 (51)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[3].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[7].pe_col[4].m_pe| ; 35 (35)             ; 51 (51)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[4].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[7].pe_col[5].m_pe| ; 35 (35)             ; 51 (51)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[5].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[7].pe_col[6].m_pe| ; 35 (35)             ; 51 (51)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[6].m_pe ; systolic_array_pe       ; work         ;
+;    |systolic_array_pe:pe_row[7].pe_col[7].m_pe| ; 35 (35)             ; 42 (42)                   ; 0                 ; 1          ; 0    ; 0            ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[7].m_pe ; systolic_array_pe       ; work         ;
++-------------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+---------------------------------------------------------------------+-------------------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
++-----------------------------------------------+
+; Analysis & Synthesis DSP Block Usage Summary  ;
++---------------------------------+-------------+
+; Statistic                       ; Number Used ;
++---------------------------------+-------------+
+; Independent 9x9                 ; 64          ;
+; Total number of DSP blocks      ; 64          ;
+;                                 ;             ;
+; Fixed Point Unsigned Multiplier ; 64          ;
++---------------------------------+-------------+
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 3248  ;
+; Number of registers using Synchronous Clear  ; 0     ;
+; Number of registers using Synchronous Load   ; 2048  ;
+; Number of registers using Asynchronous Clear ; 3248  ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 2624  ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                                                    ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+-------------------------------------------------------------------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                                                          ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+-------------------------------------------------------------------------------------+
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[0].m_pe|r_accum_out[0]  ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[1].m_pe|r_accum_out[0]  ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[2].m_pe|r_accum_out[0]  ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[3].m_pe|r_accum_out[0]  ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[4].m_pe|r_accum_out[0]  ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[5].m_pe|r_accum_out[0]  ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[6].m_pe|r_accum_out[0]  ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[7].pe_col[7].m_pe|r_accum_out[0]  ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[0].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[1].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[2].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[3].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[4].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[5].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[6].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[6].pe_col[7].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[0].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[1].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[2].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[3].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[4].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[5].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[6].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[5].pe_col[7].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[0].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[1].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[2].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[3].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[4].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[5].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[6].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[4].pe_col[7].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[0].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[1].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[2].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[3].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[4].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[5].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[6].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[3].pe_col[7].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[0].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[1].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[2].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[3].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[4].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[5].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[6].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[2].pe_col[7].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[0].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[1].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[2].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[3].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[4].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[5].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[6].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[1].pe_col[7].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[0].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[1].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[2].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[3].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[4].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[5].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[6].m_pe|r_accum_out[31] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; Yes        ; |systolic_array_datapath|systolic_array_pe:pe_row[0].pe_col[7].m_pe|r_accum_out[31] ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+-------------------------------------------------------------------------------------+
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: Top-level Entity: |systolic_array_datapath ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; NUM_ROW         ; 8     ; Signed Integer                                                ;
+; NUM_COL         ; 8     ; Signed Integer                                                ;
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[0].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[1].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[2].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[3].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[4].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[5].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[6].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[0].pe_col[7].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[0].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[1].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[2].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[3].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[4].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[5].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[6].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[1].pe_col[7].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[0].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[1].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[2].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[3].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[4].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[5].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[6].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[2].pe_col[7].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[0].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[1].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[2].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[3].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[4].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[5].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[6].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[3].pe_col[7].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[0].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[1].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[2].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[3].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[4].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[5].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[6].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[4].pe_col[7].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[0].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[1].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[2].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[3].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[4].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[5].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[6].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[5].pe_col[7].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[0].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[1].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[2].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[3].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[4].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[5].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[6].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[6].pe_col[7].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 0     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[0].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 1     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[1].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 1     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[2].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 1     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[3].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 1     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[4].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 1     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[5].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 1     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[6].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 1     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: systolic_array_pe:pe_row[7].pe_col[7].m_pe ;
++-----------------+-------+---------------------------------------------------------------+
+; Parameter Name  ; Value ; Type                                                          ;
++-----------------+-------+---------------------------------------------------------------+
+; DATA_WIDTH      ; 8     ; Signed Integer                                                ;
+; ACCU_DATA_WIDTH ; 32    ; Signed Integer                                                ;
+; LAST_ROW_PE     ; 1     ; Unsigned Binary                                               ;
++-----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[7].m_pe"                                                  ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port          ; Type   ; Severity ; Details                                                                             ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_cmd_down    ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_data_right  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_valid_right ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_cmd_right   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[6].m_pe"                                               ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port       ; Type   ; Severity ; Details                                                                             ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_cmd_down ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[5].m_pe"                                               ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port       ; Type   ; Severity ; Details                                                                             ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_cmd_down ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[4].m_pe"                                               ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port       ; Type   ; Severity ; Details                                                                             ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_cmd_down ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[3].m_pe"                                               ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port       ; Type   ; Severity ; Details                                                                             ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_cmd_down ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[2].m_pe"                                               ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port       ; Type   ; Severity ; Details                                                                             ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_cmd_down ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[1].m_pe"                                               ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port       ; Type   ; Severity ; Details                                                                             ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_cmd_down ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[7].pe_col[0].m_pe"                                               ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port       ; Type   ; Severity ; Details                                                                             ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_cmd_down ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[6].pe_col[7].m_pe"                                                  ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port          ; Type   ; Severity ; Details                                                                             ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_data_right  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_valid_right ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_cmd_right   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[5].pe_col[7].m_pe"                                                  ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port          ; Type   ; Severity ; Details                                                                             ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_data_right  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_valid_right ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_cmd_right   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[4].pe_col[7].m_pe"                                                  ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port          ; Type   ; Severity ; Details                                                                             ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_data_right  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_valid_right ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_cmd_right   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[3].pe_col[7].m_pe"                                                  ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port          ; Type   ; Severity ; Details                                                                             ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_data_right  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_valid_right ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_cmd_right   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[2].pe_col[7].m_pe"                                                  ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port          ; Type   ; Severity ; Details                                                                             ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_data_right  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_valid_right ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_cmd_right   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[1].pe_col[7].m_pe"                                                  ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port          ; Type   ; Severity ; Details                                                                             ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_data_right  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_valid_right ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_cmd_right   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "systolic_array_pe:pe_row[0].pe_col[7].m_pe"                                                  ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port          ; Type   ; Severity ; Details                                                                             ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+; o_data_right  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_valid_right ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; o_cmd_right   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++---------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-----------------------------------------------------+
+; Post-Synthesis Netlist Statistics for Top Partition ;
++-----------------------+-----------------------------+
+; Type                  ; Count                       ;
++-----------------------+-----------------------------+
+; arriav_ff             ; 3248                        ;
+;     CLR               ; 624                         ;
+;     ENA CLR           ; 576                         ;
+;     ENA CLR SLD       ; 2048                        ;
+; arriav_lcell_comb     ; 2296                        ;
+;     arith             ; 2048                        ;
+;         1 data inputs ; 1024                        ;
+;         2 data inputs ; 1024                        ;
+;     normal            ; 248                         ;
+;         2 data inputs ; 120                         ;
+;         3 data inputs ; 64                          ;
+;         4 data inputs ; 64                          ;
+; arriav_mac            ; 64                          ;
+; boundary_port         ; 618                         ;
+;                       ;                             ;
+; Max LUT depth         ; 4.10                        ;
+; Average LUT depth     ; 2.53                        ;
++-----------------------+-----------------------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:02     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus Prime Analysis & Synthesis
+    Info: Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
+    Info: Processing started: Fri Apr 12 16:43:08 2024
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off SAProject -c SAProject
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 6 of the 6 processors detected
+Info (12021): Found 1 design units, including 1 entities, in source file systolic_array_top.v
+    Info (12023): Found entity 1: systolic_array_top File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v Line: 34
+Info (12021): Found 1 design units, including 1 entities, in source file systolic_array_pe.v
+    Info (12023): Found entity 1: systolic_array_pe File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v Line: 27
+Info (12021): Found 1 design units, including 1 entities, in source file systolic_array_datapath.v
+    Info (12023): Found entity 1: systolic_array_datapath File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v Line: 36
+Info (12021): Found 1 design units, including 1 entities, in source file systolic_array_controller.v
+    Info (12023): Found entity 1: systolic_array_controller File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v Line: 36
+Info (12021): Found 1 design units, including 1 entities, in source file sram_bank_sp.v
+    Info (12023): Found entity 1: sram_bank_sp File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v Line: 2
+Info (12127): Elaborating entity "systolic_array_datapath" for the top level hierarchy
+Info (10008): Verilog HDL or VHDL information: EDA Netlist Writer cannot regroup multidimensional array "w_o_data_top_down" into its bus
+Info (10008): Verilog HDL or VHDL information: EDA Netlist Writer cannot regroup multidimensional array "w_o_data_left_right" into its bus
+Info (12128): Elaborating entity "systolic_array_pe" for hierarchy "systolic_array_pe:pe_row[0].pe_col[0].m_pe" File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v Line: 140
+Info (12128): Elaborating entity "systolic_array_pe" for hierarchy "systolic_array_pe:pe_row[7].pe_col[0].m_pe" File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v Line: 140
+Warning (10036): Verilog HDL or VHDL warning at systolic_array_pe.v(95): object "r_valid_down" assigned a value but never read File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v Line: 95
+Info (286030): Timing-Driven Synthesis is running
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Warning (21074): Design contains 7 input pin(s) that do not drive logic
+    Warning (15610): No output dependent on input pin "i_valid_left[0]" File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v Line: 70
+    Warning (15610): No output dependent on input pin "i_valid_left[1]" File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v Line: 70
+    Warning (15610): No output dependent on input pin "i_valid_left[2]" File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v Line: 70
+    Warning (15610): No output dependent on input pin "i_valid_left[3]" File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v Line: 70
+    Warning (15610): No output dependent on input pin "i_valid_left[4]" File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v Line: 70
+    Warning (15610): No output dependent on input pin "i_valid_left[5]" File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v Line: 70
+    Warning (15610): No output dependent on input pin "i_valid_left[6]" File: D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v Line: 70
+Info (21057): Implemented 4122 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 354 input pins
+    Info (21059): Implemented 264 output pins
+    Info (21061): Implemented 3440 logic cells
+    Info (21062): Implemented 64 DSP elements
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 10 warnings
+    Info: Peak virtual memory: 4917 megabytes
+    Info: Processing ended: Fri Apr 12 16:43:18 2024
+    Info: Elapsed time: 00:00:10
+    Info: Total CPU time (on all processors): 00:00:12
+
+
