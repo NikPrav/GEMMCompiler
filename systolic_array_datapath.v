@@ -49,7 +49,7 @@ module systolic_array_datapath#(
     i_valid_left        ,
     i_data_left         ,
     o_data              ,   // Data from Last Row Down
-    o_valid               // Valid from Last Row Down
+    o_valid                 // Valid from Last Row Down
 );
 
     /*

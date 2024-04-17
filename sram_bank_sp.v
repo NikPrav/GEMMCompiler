@@ -68,7 +68,7 @@ module sram_bank_sp #(
         end
         else
         begin
-            if(i_rd_wr_en==0)
+            if(i_rd_wr_en==0)   //read from bottom 
             begin
                 r_o_rd_data    <=  r_sram_bank[$unsigned(i_addr)];
             end

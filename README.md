@@ -1,4 +1,4 @@
-# Demse Systolic Array (SA)
+# Dense Systolic Array (SA)
 This SA is designed to support both Weights Stationary (WS) and Output Stationary (OS)
 
 Each PE takes 2 bit control: 

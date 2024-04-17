@@ -1,5 +1,5 @@
 Fitter report for SAProject
-Fri Apr 12 16:43:38 2024
+Wed Apr 17 11:48:53 2024
 Quartus Prime Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
 
 
@@ -57,7 +57,7 @@ https://fpgasoftware.intel.com/eula.
 +-------------------------------------------------------------------------------+
 ; Fitter Summary                                                                ;
 +---------------------------------+---------------------------------------------+
-; Fitter Status                   ; Failed - Fri Apr 12 16:43:38 2024           ;
+; Fitter Status                   ; Failed - Wed Apr 17 11:48:53 2024           ;
 ; Quartus Prime Version           ; 20.1.1 Build 720 11/11/2020 SJ Lite Edition ;
 ; Revision Name                   ; SAProject                                   ;
 ; Top-level Entity Name           ; systolic_array_datapath                     ;
@@ -5191,12 +5191,12 @@ Error (179000): Design requires 618 user-specified I/O pins -- too many to fit i
     Info (179001): Current design requires 618 user-specified I/O pins -- 618 normal user-specified I/O pins and 0 programming pins that have been constrained to use dual-purpose I/O pin locations
     Info (179002): Targeted device has 288 I/O pin locations available for user I/O -- 260 general-purpose I/O pins and 28 dual-purpose I/O pins
 Error (12289): An error occurred while applying the periphery constraints. Review the offending constraints and rerun the Fitter.
-Info (11798): Fitter preparation operations ending: elapsed time is 00:00:10
+Info (11798): Fitter preparation operations ending: elapsed time is 00:00:11
 Error (11802): Can't fit design in device. Modify your design to reduce resources, or choose a larger device. The Intel FPGA Knowledge Database contains many articles with specific details on how to resolve this error. Visit the Knowledge Database at https://www.altera.com/support/support-resources/knowledge-base/search.html and search for this specific error message number.
 Error: Quartus Prime Fitter was unsuccessful. 3 errors, 4 warnings
     Error: Peak virtual memory: 5473 megabytes
-    Error: Processing ended: Fri Apr 12 16:43:38 2024
-    Error: Elapsed time: 00:00:19
-    Error: Total CPU time (on all processors): 00:00:19
+    Error: Processing ended: Wed Apr 17 11:48:53 2024
+    Error: Elapsed time: 00:00:22
+    Error: Total CPU time (on all processors): 00:00:20
 
 

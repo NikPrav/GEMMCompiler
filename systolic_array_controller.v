@@ -155,6 +155,8 @@ module systolic_array_controller#(
                 r_top_rd_wr_en_from_ctrl    <=  {NUM_COL{WRITE_ENABLE}}     ;
                 r_left_rd_wr_en_from_ctrl   <=  {NUM_COL{WRITE_ENABLE}}     ;
                 r_i_down_wr_addr            <=  0;
+
+                // CHANGE: SRAM pointers should point to the write address 
             end
             else if(i_ctrl_state_to_ctrl == WARMUP)
             begin
@@ -193,10 +195,16 @@ module systolic_array_controller#(
         end
     end
 
-    assign  o_top_rd_wr_addr_from_ctrl  =   (i_ctrl_state_to_ctrl == IDLE) ? i_top_sram_rd_start_addr   : r_top_rd_wr_addr_from_ctrl;
+    // CHANGED: on IDLE, assign o_top_rd_wr_addr_from_ctrl to the input wr_addr from top (TB input)
+    
+    assign  o_top_rd_wr_addr_from_ctrl  =   (i_ctrl_state_to_ctrl == IDLE) ? i_top_wr_addr_to_ctrl   : r_top_rd_wr_addr_from_ctrl;
+    // assign  o_top_rd_wr_addr_from_ctrl  =   (i_ctrl_state_to_ctrl == IDLE) ? i_top_sram_rd_start_addr   : r_top_rd_wr_addr_from_ctrl;
     assign  o_top_rd_wr_en_from_ctrl    =   (i_ctrl_state_to_ctrl == IDLE) ? i_top_wr_en_to_ctrl        : r_top_rd_wr_en_from_ctrl;
+
+    assign  o_left_rd_wr_addr_from_ctrl =   (i_ctrl_state_to_ctrl == IDLE) ? i_left_wr_addr_to_ctrl  : r_left_rd_wr_addr_from_ctrl;
+    // assign  o_left_rd_wr_addr_from_ctrl =   (i_ctrl_state_to_ctrl == IDLE) ? i_left_sram_rd_start_addr  : r_left_rd_wr_addr_from_ctrl;
     assign  o_left_rd_wr_en_from_ctrl   =   (i_ctrl_state_to_ctrl == IDLE) ? i_left_wr_en_to_ctrl       : r_left_rd_wr_en_from_ctrl;
-    assign  o_left_rd_wr_addr_from_ctrl =   (i_ctrl_state_to_ctrl == IDLE) ? i_left_sram_rd_start_addr  : r_left_rd_wr_addr_from_ctrl;
+
     assign  o_valid_top_from_ctrl       =   r_valid_top_from_ctrl;
     assign  o_valid_left_from_ctrl      =   r_valid_left_from_ctrl;
 

@@ -104,18 +104,18 @@ module systolic_array_pe #(
     always@(posedge clk or negedge rst_n)
     begin
         if(!rst_n)
-        begin
-            r_stationary_data_top  <=  0;
-            r_stationary_valid_top <=  0;
-        end
-        else
-        begin
-            if(w_stationary_valid_top==1 & r_stationary_valid_top ==  0)
             begin
-                r_stationary_valid_top <=  1;
-                r_stationary_data_top  <=  i_data_top[0 +: DATA_WIDTH];
+                r_stationary_data_top  <=  0;
+                r_stationary_valid_top <=  0;
             end
-        end
+        else
+            begin
+                if(w_stationary_valid_top==1 & r_stationary_valid_top ==  0)
+                    begin
+                        r_stationary_valid_top <=  1;
+                        r_stationary_data_top  <=  i_data_top[0 +: DATA_WIDTH];
+                    end
+            end
     end
 
     /*
@@ -129,23 +129,23 @@ module systolic_array_pe #(
     always@(posedge clk or negedge rst_n)
     begin
         if(!rst_n)
-        begin
-            r_accum_out <=  0;
-        end
+            begin
+                r_accum_out <=  0;
+            end
         else
-        begin
-            if(w_stationary_valid_top)
             begin
-                r_accum_out <=  i_data_top;
+                if(w_stationary_valid_top)
+                    begin
+                        r_accum_out <=  i_data_top;
+                    end
+                else
+                    begin
+                        if(w_mac_en)
+                            begin
+                                r_accum_out <=  w_accum_out;
+                            end
+                    end
             end
-            else
-            begin
-                if(w_mac_en)
-                begin
-                    r_accum_out <=  w_accum_out;
-                end
-            end
-        end
     end
 
 

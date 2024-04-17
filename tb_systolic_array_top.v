@@ -62,14 +62,61 @@ module tb_systolic_array_top();
     reg     [LOG2_SRAM_BANK_DEPTH       -1: 0]      r_i_left_sram_rd_end_addr           = 0 ;
     reg     [LOG2_SRAM_BANK_DEPTH       -1: 0]      r_i_down_sram_rd_start_addr         = 0 ;
     reg     [LOG2_SRAM_BANK_DEPTH       -1: 0]      r_i_down_sram_rd_end_addr           = 0 ;
-    // Changed the following
-    initial begin
-        rst_n = 0;
-        #(`PERIOD)
-        rst_n = 1;
 
-        $stop;
-    end
+    param IDLE     =0;
+    param WARMUP   =1;
+    param STEADY   =2;
+    param DRAIN    =3;
+    
+    // Changed the following: Add temp memories for 
+    reg [DATA_WIDTH-1: 0] A[0:15];
+    reg [DATA_WIDTH-1: 0] B[0:15];
+
+    integer  i, j;
+
+    initial 
+        begin
+            rst_n = 0;
+            #(`PERIOD)
+            rst_n = 1;
+
+            $readmemb("array_A_fi.txt", A );
+            $readmemb("array_B_fi.txt", B );
+
+            // Set the operation state to IDLE
+            r_i_ctrl_state = IDLE;
+            
+            // Write data into the LEFT BUFFER 
+
+            // Enable 
+              _i_left_wr_en = 1;
+
+
+            for(i = 0; i < NUM_COL * NUM_ROW; i = i + 1) begin 
+                // Read value in A, send as data to SRAM                 
+                r_i_top_wr_data = A[i];
+
+                // Set the appropriate address in the SRAM
+                r_i_left_wr_addr = i;
+            end
+
+            // Disable write 
+            r_i_left_wr_en = 0;
+    
+
+            // Write data into the TOP BUFFER 
+
+            // Set addr to 0 initially 
+
+            // For loop increments by 8
+                // Read value in A, send as data to SRAM
+
+                // Set the appropriate address in the SRAM
+
+
+
+            $stop;
+        end
 
 
     systolic_array_top#(
@@ -102,4 +149,3 @@ module tb_systolic_array_top();
     // Free running clk
     always #(`PERIOD/2) clk = ~clk;
 endmodule
-

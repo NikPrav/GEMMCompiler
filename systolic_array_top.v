@@ -47,7 +47,7 @@ module systolic_array_top#(
 
     i_top_wr_en                 ,
     i_top_wr_data               ,
-    i_top_wr_addr               ,
+    i_top_wr_addr               ,jnbghv
     i_left_wr_en                ,
     i_left_wr_data              ,
     i_left_wr_addr              ,
@@ -331,6 +331,9 @@ module systolic_array_top#(
 
             assign  w_i_down_rd_wr_en       [gc]    =   w_down_rd_wr_en_from_ctrl;
             assign  w_i_down_wr_data        [gc]    =   w_o_data_down_from_sa   [(gc*OUT_DATA_WIDTH)    +:  OUT_DATA_WIDTH];
+
+            // ADDED: Assign rd_out of bottom SRAM to the output port of the top module, might need reordering of indices 
+            assign o_down_rd_data [gc] = w_o_down_rd_data[gc]; 
         end
 
         for(gr=0; gr<NUM_ROW; gr=gr+1)
