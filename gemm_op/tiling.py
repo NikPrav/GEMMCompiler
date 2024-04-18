@@ -37,6 +37,8 @@ def tile_systolic_array(input_array, weight_array, R, C, input_dim, output_dim, 
             # Tile the multiplication columnwise for weights
             for i_col in range(0, output_dim[0]//C):
                 # Tiling for buffer size
+                # Initializing an empty systolic array
+                output_tile = np.zeros((R, C))
                 for i_tile in range(0, n_tiles_per_row):
                     # Get the current tile
                     # Load to buffer from mem
@@ -49,8 +51,7 @@ def tile_systolic_array(input_array, weight_array, R, C, input_dim, output_dim, 
                     input_tile = np.zeros((R,n_cols))
                     weight_tile = np.zeros((n_cols,C))
 
-                    # Initializing an empty systolic array
-                    output_tile = np.zeros((R, C))
+                    
 
                     # Loading the inputs rowwise
                     for i_row_tile in range(0, R):
@@ -93,7 +94,7 @@ input_array = np.arange(1,37).reshape(6,6)
 weight_array = np.arange(1,37).reshape(6,6)
 
 
-buf_size = 12 * 8
+buf_size = 4 * 8
 data_size = 8
 
 R = 2

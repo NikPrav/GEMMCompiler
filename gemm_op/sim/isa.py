@@ -1,3 +1,13 @@
+from enum import IntEnum
+import torch
+
+# buffer ids
+class BufferIDs(IntEnum):
+    INPUT_BUFFER = 1
+    WEIGHT_BUFFER = 2
+    OUTPUT_BUFFER = 3
+
+
 class LoadCommand:
     def __init__(self, buf_id, mem_addr):
         self.buf_id = buf_id
@@ -31,14 +41,14 @@ class LoadCommand:
 # print("Generated bitstream:", load_cmd.generate_bitstream())
         
 class StoreCommand:
-    def __init__(self, buf_id, mem_addr, data):
+    def __init__(self, buf_id, mem_addr):
         self.buf_id = buf_id
         self.mem_addr = mem_addr
-        self.data = data
+        # self.data = data
 
-    def execute_command(self):
-        # Simulating storing data to memory
-        self.store_data_to_memory(self.mem_addr, self.data)
+    # def execute_command(self):
+    #     # Simulating storing data to memory
+    #     self.store_data_to_memory(self.mem_addr, self.data)
 
     def generate_bitstream(self):
         # Generate bitstream for the store command
@@ -54,23 +64,22 @@ class StoreCommand:
         memory[mem_addr] = data
         print(f"Stored data '{data}' to memory address {mem_addr}.")
 
-# Example usage
-store_cmd = StoreCommand(1, 0x200, 'Hello')
-store_cmd.execute_command()
-print("Generated bitstream:", store_cmd.generate_bitstream())
+
 
 class GEMMCommand:
-    def __init__(self, n, buf_id_A, buf_id_B, buf_id_C, mem_addr_A, mem_addr_B, mem_addr_C, M, N, K):
+    # def __init__(self, n, buf_id_A, buf_id_B, buf_id_C, mem_addr_A, mem_addr_B, mem_addr_C, M, N, K):
+    #     self.n = n
+    #     self.buf_id_A = buf_id_A
+    #     self.buf_id_B = buf_id_B
+    #     self.buf_id_C = buf_id_C
+    #     self.mem_addr_A = mem_addr_A
+    #     self.mem_addr_B = mem_addr_B
+    #     self.mem_addr_C = mem_addr_C
+    #     self.M = M
+    #     self.N = N
+    #     self.K = K
+    def __init__(self, n):
         self.n = n
-        self.buf_id_A = buf_id_A
-        self.buf_id_B = buf_id_B
-        self.buf_id_C = buf_id_C
-        self.mem_addr_A = mem_addr_A
-        self.mem_addr_B = mem_addr_B
-        self.mem_addr_C = mem_addr_C
-        self.M = M
-        self.N = N
-        self.K = K
 
     def execute_command(self):
         # Simulating GEMM operation
@@ -102,15 +111,11 @@ class GEMMCommand:
     def generate_bitstream(self):
         # Generate bitstream for the GEMM operation
         function_type = '0100'  # 4 bits for function type (GEMM operation)
-        num_exec_bits = format(self.K, '010b')  # 6 bits for K
+        num_exec_bits = format(self.n, '010b')  # 6 bits for number of executions
         bitstream = function_type + num_exec_bits
         return bitstream
 
 
-# Example usage
-gemm_op = GEMMCommand(3, 1, 2, 3, 0x100, 0x200, 0x300, 128, 128, 128)
-gemm_op.execute_command()
-print("Generated bitstream:", gemm_op.generate_bitstream())
 
 class DRAINSYSCommand:
     def __init__(self):
@@ -123,5 +128,15 @@ class DRAINSYSCommand:
         bitstream = function_type + num_exec_bits
         return bitstream
     
+# Example usage
+if __name__ == "__main__":
+    gemm_op = GEMMCommand(3, 1, 2, 3, 0x100, 0x200, 0x300, 128, 128, 128)
+    gemm_op.execute_command()
+    print("Generated bitstream:", gemm_op.generate_bitstream())
+    # Example usage
+    store_cmd = StoreCommand(1, 0x200)
+    store_cmd.execute_command()
+    print("Generated bitstream:", store_cmd.generate_bitstream())
+
 
 # Ideas for 
