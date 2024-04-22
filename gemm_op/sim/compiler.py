@@ -5,35 +5,44 @@ import isa
 import layer_nodes
 
 class GEMMCompiler:
-    def __init__(self, M, N, K, R, C, mem_size, i_buf_size, w_buf_size, o_buf_size, data_size=16, start_adr=0, sram_size=(1024*1024), i_buf_ptr = 0, w_buf_ptr=0, o_buf_ptr=0):
+    def __init__(self, M, N, K,sys_array, start_adr=0, i_buf_ptr = 0, w_buf_ptr=0, o_buf_ptr=0 ):
         self.M = M
         self.N = N
         self.K = K
-        self.R = R
-        self.C = C
-        self.mem_size = mem_size
-        self.i_buf_size = i_buf_size
-        self.w_buf_size = w_buf_size
-        self.o_buf_size = o_buf_size
-        self.data_size = data_size
-        self.sram_size = sram_size
+
+        self.R = sys_array.R
+        self.C = sys_array.C
+        self.mem_size = sys_array.mem_size
+        self.i_buf_size = sys_array.i_buf_size
+        self.w_buf_size = sys_array.w_buf_size
+        self.o_buf_size = sys_array.o_buf_size
+        self.data_size = sys_array.data_size
+        self.sram_size = sys_array.sram_size
+        self.inst_mem = sys_array.inst_mem
+
         self.i_buf_ptr = i_buf_ptr
         self.w_buf_ptr = w_buf_ptr
         self.o_buf_ptr = o_buf_ptr
+        # self.wt_end_ptr = 
+
+        # self.inst_mem = 16*500
 
         # Example memory code
         self.start_adr = start_adr
-        self.mem = torch.zeros(sram_size)
+        self.mem = torch.zeros(self.sram_size)
 
 
     def compile_matrices(self, matrix_A, matrix_B):
         # Generate input matrices for the systolic array
-        input_matrices = self.generate_input_matrices(matrix_A, matrix_B)
+        self.generate_input_matrices()
 
         # Generate machine code instructions based on input matrices
         # print(input_matrices[0])
         # print(input_matrices[1])
-        output_array, instruction_set = self.tile_systolic_array(input_matrices[0], input_matrices[1])
+        # self.mem_management(input_matrices[0], input_matrices[1], self.inst_mem)
+        self.mem_management(self.inst_mem)
+
+        output_array, instruction_set = self.tile_systolic_array()
         # self.mmap_init()
         machine_code = self.generate_machine_code(instruction_set)
         # print(len(machine_code)*16)
@@ -50,35 +59,41 @@ class GEMMCompiler:
 
         # Convert hexadecimal instructions to bytes and then to a torch tensor
         instruction_bytes = bytes.fromhex(''.join(hex_instructions))
-        self.mem[:len(instruction_bytes)] = torch.ByteTensor(list(instruction_bytes))
+        # self.mem[:len(instruction_bytes)] = torch.ByteTensor(list(instruction_bytes))
 
-        self.mem_management(matrix_A, matrix_B, output_array, len(machine_code))
+        
 
         return machine_code
 
-    def generate_input_matrices(self, matrix_A, matrix_B):
+    def generate_input_matrices(self):
+        # Pad the input matrices to match the systolic array dimensions
+        # Flatten the matrices to 1D arrays
+
         # Calculate the number of tiles required
         num_tiles_M = self.M // self.R + (1 if self.M % self.R != 0 else 0)
         num_tiles_K = self.K // self.C + (1 if self.K % self.C != 0 else 0)
 
+        num_tiles_N = self.N // (self.i_buf_size/(self.R*data_size)) + (1 if self.N % (self.i_buf_size/(self.R*data_size)) != 0 else 0)
+
         # Pad the last generated matrix with zeros if necessary
-        padded_M = num_tiles_M * self.R
-        padded_K = num_tiles_K * self.C
+        self.M = num_tiles_M * self.R
+        self.N = num_tiles_N * (self.i_buf_size/(self.R*data_size))
+        self.K = num_tiles_K * self.C
 
         # Pad matrices with zeros if necessary
-        padded_matrix_A = torch.nn.functional.pad(matrix_A, (0, 0, 0, padded_M - self.M))
-        padded_matrix_B = torch.nn.functional.pad(matrix_B, (0, padded_K - self.K, 0, 0))
+        # padded_matrix_A = torch.nn.functional.pad(matrix_A, (0, 0, 0, padded_M - self.M))
+        # padded_matrix_B = torch.nn.functional.pad(matrix_B, (0, padded_K - self.K, 0, 0))
 
         # Generate input matrices - these are before you account for buffer size
-        input_matrices_A_old = padded_matrix_A.split(self.R, dim=0)
-        input_matrices_B_old = padded_matrix_B.split(self.C, dim=1)
+        # input_matrices_A_old = padded_matrix_A.split(self.R, dim=0)
+        # input_matrices_B_old = padded_matrix_B.split(self.C, dim=1)
 
-        input_matrices_A = padded_matrix_A.flatten()
-        input_matrices_B = padded_matrix_B.T.flatten()
+        # input_matrices_A = padded_matrix_A.flatten()
+        # input_matrices_B = padded_matrix_B.T.flatten()
 
         
 
-        return input_matrices_A, input_matrices_B
+        return 
 
     def generate_machine_code(self, instruction_set):
         # Generate machine code instructions based on input matrices
@@ -93,7 +108,7 @@ class GEMMCompiler:
 
         return machine_code
     
-    def tile_systolic_array(self, input_array, weight_array):
+    def tile_systolic_array(self):
         # Tiling the input and weight arrays, and returning a 1D output array
         # Returns the instruction set, and the expected output of the GEMM (for now)
         # input_array: 1D numpy array padded to mach R dimensions
@@ -158,18 +173,18 @@ class GEMMCompiler:
                             offset_row = i_row_tile * n_cols * n_tiles_per_row
                             # LOAD INP_BUF offset_tile + offset_row + memory_offset
                             instruction_set.append(isa.LoadCommand(isa.BufferIDs.INPUT_BUFFER, offset_tile_input + offset_row + mem_offset_input))
-                            input_tile[i_row_tile, :] = input_array[offset_tile_input + offset_row:offset_tile_input + offset_row + n_cols]
+                            # input_tile[i_row_tile, :] = input_array[offset_tile_input + offset_row:offset_tile_input + offset_row + n_cols]
                             # input_tile = input_tile.reshape((R, n_cols))
 
                             # LOAD WT_BUF offset_tile + offset_row + memory_offset
                             instruction_set.append(isa.LoadCommand(isa.BufferIDs.WEIGHT_BUFFER, offset_tile_weight + offset_row + mem_offset_weight))
-                            weight_tile[:, i_row_tile] = weight_array[offset_tile_weight + offset_row:offset_tile_weight + offset_row + n_cols].T
+                            # weight_tile[:, i_row_tile] = weight_array[offset_tile_weight + offset_row:offset_tile_weight + offset_row + n_cols].T
                             # weight_tile = weight_tile.reshape((n_cols, C)).T
                         
                         # Perform the multiplication
                         # GEMM
                         instruction_set.append(isa.GEMMCommand(n_cols))
-                        output_tile += torch.matmul(input_tile, weight_tile) 
+                        # output_tile += torch.matmul(input_tile, weight_tile) 
 
                     # Drain the array 
                     # DRAIN         
@@ -182,7 +197,7 @@ class GEMMCompiler:
                         offset_tile = i_row * C * R * output_dim[0]//C  + i_col * C
                         # STR OP_BUF offset_tile + offset_row + memory_offset
                         instruction_set.append(isa.StoreCommand(isa.BufferIDs.OUTPUT_BUFFER, offset_tile + offset_row + mem_offset_output))
-                        output_array[offset_tile + offset_row:offset_tile + offset_row + C] = output_tile[i_row_tile, :] 
+                        # output_array[offset_tile + offset_row:offset_tile + offset_row + C] = output_tile[i_row_tile, :] 
 
                         # for k in range(output_tile.shape[0]):
                         
@@ -192,57 +207,76 @@ class GEMMCompiler:
         return output_array, instruction_set
 
     #Function to call for when you need to store memory 
-    def mem_management(self, i_mat, w_mat, o_mat, m_code_len):
+    def mem_management(self,m_code_len):
         # determine the size of the memory
         # place instructions into memory
         self.start_adr = m_code_len
 
         # store weight buffers in the matrix(do this at first index)
         self.w_buf_ptr = self.start_adr
-        print(i_mat.size())
+        # print(i_mat.size())
         # print(i_mat.flatten())
         # print(w_mat.flatten().size())
-        print(w_mat.size())
+        # print(w_mat.size())
         print(self.mem.size())
         # self.mem.extend([i_mat])
-        self.mem[m_code_len+1:m_code_len+1+len(w_mat.flatten())] = w_mat.flatten() # could do len(w_mat) instead of buf_size
+        # self.mem[m_code_len+1:m_code_len+1+self.N*self.K] = w_mat # could do len(w_mat) instead of buf_size
 
         # for first time calling function, set pointers for o and i
-        self.set_io_mats(i_mat,o_mat,len(w_mat.flatten())+2,len(w_mat.flatten())+2)
+        self.set_io_mats(self.N*self.K+2,self.N*self.K+2)
         # self.mem[:len(w_mat.flatten())] = w_mat.flatten()
     
-    def set_io_mats(self,i_mat, o_mat, start_ptr, i_ptr):
+    def set_io_mats(self, start_ptr, i_ptr):
         # calculate if you need to put memory after or before
         # if after then determine the addr after (one more than ouput)
         # if before then go back to the pointer
 
         if(start_ptr == i_ptr):
             #set inputs
-            self.mem[start_ptr:start_ptr+len(i_mat.flatten())] = i_mat.flatten()
+            # self.mem[start_ptr:start_ptr+self.M*self.N] = i_mat
             self.i_buf_ptr = start_ptr
 
             #set outputs
-            self.o_buf_ptr = start_ptr+len(i_mat.flatten())
-            self.mem[self.o_buf_ptr:self.o_buf_ptr+len(o_mat.flatten())] = o_mat.flatten()
+            self.o_buf_ptr = start_ptr+self.M*self.N
+            # self.mem[self.o_buf_ptr:self.o_buf_ptr+len(o_mat)] = o_mat
 
         else:
             #calc if output mem can fit inside old i mem
-            if(i_ptr-start_ptr >= len(o_mat.flatten())):
+            if(i_ptr-start_ptr >= self.M*self.K*self.data_size):
                 self.o_buf_ptr = start_ptr
             else:
-                self.o_buf_ptr = i_ptr+len(i_mat.flatten())
-                if(self.o_buf_ptr+len(o_mat.flatten())):
+                self.o_buf_ptr = i_ptr+self.M*self.K*self.data_size
+                if(self.o_buf_ptr+self.M*self.K*self.data_size):
                     #blow up
                     print("error: blew up-not enough mem to allocate the output buffer contiguously")
-                self.mem[self.o_buf_ptr:self.o_buf_ptr+len(o_mat.flatten())] = o_mat.flatten()
+                # self.mem[self.o_buf_ptr:self.o_buf_ptr+self.M*self.K]
 
             
             
 
 
-            return i_ptr+len(o_mat.flatten())
+            return i_ptr+self.M*self.K
         
 
+class SystolicArrayParams:
+    def __init__(self, R, C, mem_size, i_buf_size, w_buf_size, o_buf_size, data_size=16, sram_size=(1024*1024)):
+
+
+        self.R = R
+        self.C = C
+        self.mem_size = mem_size
+        self.i_buf_size = i_buf_size
+        self.w_buf_size = w_buf_size
+        self.o_buf_size = o_buf_size
+        self.data_size = data_size
+        self.sram_size = sram_size
+        self.inst_mem = 16*500
+
+
+        self.inst_mem = 16*500
+
+        self.mem = torch.zeros(sram_size)
+    
 # Example usage
 if __name__ in '__main__':
     M, N, K = 10, 12, 16  # Size of the input matrices
