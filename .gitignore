@@ -8,3 +8,4 @@ flex*.log
 example/VOC2007/
 example/ckpt/
 example/yolov2tiny/
+.venv
