@@ -2,9 +2,10 @@
 import torch
 import math
 import isa
+import layer_nodes
 
 class GEMMCompiler:
-    def __init__(self, M, N, K, R, C, mem_size, i_buf_size, w_buf_size, o_buf_size, data_size):
+    def __init__(self, M, N, K, R, C, mem_size, i_buf_size, w_buf_size, o_buf_size, data_size=16, start_adr=0, sram_size=(1024*1024), i_buf_ptr = 0, w_buf_ptr=0, o_buf_ptr=0):
         self.M = M
         self.N = N
         self.K = K
@@ -14,7 +15,16 @@ class GEMMCompiler:
         self.i_buf_size = i_buf_size
         self.w_buf_size = w_buf_size
         self.o_buf_size = o_buf_size
-        self.data_size = 16
+        self.data_size = data_size
+        self.sram_size = sram_size
+        self.i_buf_ptr = i_buf_ptr
+        self.w_buf_ptr = w_buf_ptr
+        self.o_buf_ptr = o_buf_ptr
+
+        # Example memory code
+        self.start_adr = start_adr
+        self.mem = torch.zeros(sram_size)
+
 
     def compile_matrices(self, matrix_A, matrix_B):
         # Generate input matrices for the systolic array
@@ -24,7 +34,25 @@ class GEMMCompiler:
         # print(input_matrices[0])
         # print(input_matrices[1])
         output_array, instruction_set = self.tile_systolic_array(input_matrices[0], input_matrices[1])
+        # self.mmap_init()
         machine_code = self.generate_machine_code(instruction_set)
+        # print(len(machine_code)*16)
+        # pass in machine code offset
+
+        #fill in instructions
+        # print(machine_code)
+        # self.mem[:len(machine_code)] = machine_code.flatten()
+        hex_instructions = []
+        for instruction in machine_code:
+            decimal_instruction = int(instruction, 2)  # Convert binary to decimal
+            hex_instruction = format(decimal_instruction, 'x')  # Convert decimal to hexadecimal
+            hex_instructions.append(hex_instruction)
+
+        # Convert hexadecimal instructions to bytes and then to a torch tensor
+        instruction_bytes = bytes.fromhex(''.join(hex_instructions))
+        self.mem[:len(instruction_bytes)] = torch.ByteTensor(list(instruction_bytes))
+
+        self.mem_management(matrix_A, matrix_B, output_array, len(machine_code))
 
         return machine_code
 
@@ -162,6 +190,58 @@ class GEMMCompiler:
                 
 
         return output_array, instruction_set
+
+    #Function to call for when you need to store memory 
+    def mem_management(self, i_mat, w_mat, o_mat, m_code_len):
+        # determine the size of the memory
+        # place instructions into memory
+        self.start_adr = m_code_len
+
+        # store weight buffers in the matrix(do this at first index)
+        self.w_buf_ptr = self.start_adr
+        print(i_mat.size())
+        # print(i_mat.flatten())
+        # print(w_mat.flatten().size())
+        print(w_mat.size())
+        print(self.mem.size())
+        # self.mem.extend([i_mat])
+        self.mem[m_code_len+1:m_code_len+1+len(w_mat.flatten())] = w_mat.flatten() # could do len(w_mat) instead of buf_size
+
+        # for first time calling function, set pointers for o and i
+        self.set_io_mats(i_mat,o_mat,len(w_mat.flatten())+2,len(w_mat.flatten())+2)
+        # self.mem[:len(w_mat.flatten())] = w_mat.flatten()
+    
+    def set_io_mats(self,i_mat, o_mat, start_ptr, i_ptr):
+        # calculate if you need to put memory after or before
+        # if after then determine the addr after (one more than ouput)
+        # if before then go back to the pointer
+
+        if(start_ptr == i_ptr):
+            #set inputs
+            self.mem[start_ptr:start_ptr+len(i_mat.flatten())] = i_mat.flatten()
+            self.i_buf_ptr = start_ptr
+
+            #set outputs
+            self.o_buf_ptr = start_ptr+len(i_mat.flatten())
+            self.mem[self.o_buf_ptr:self.o_buf_ptr+len(o_mat.flatten())] = o_mat.flatten()
+
+        else:
+            #calc if output mem can fit inside old i mem
+            if(i_ptr-start_ptr >= len(o_mat.flatten())):
+                self.o_buf_ptr = start_ptr
+            else:
+                self.o_buf_ptr = i_ptr+len(i_mat.flatten())
+                if(self.o_buf_ptr+len(o_mat.flatten())):
+                    #blow up
+                    print("error: blew up-not enough mem to allocate the output buffer contiguously")
+                self.mem[self.o_buf_ptr:self.o_buf_ptr+len(o_mat.flatten())] = o_mat.flatten()
+
+            
+            
+
+
+            return i_ptr+len(o_mat.flatten())
+        
 
 # Example usage
 if __name__ in '__main__':

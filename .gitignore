@@ -7,4 +7,5 @@ flex*.log
 .idea/
 example/VOC2007/
 example/ckpt/
+.venv
 example/yolov2tiny/
