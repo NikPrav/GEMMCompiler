@@ -33,7 +33,7 @@ class DRAM:
 
         return input_matrices_B
 
-    def InitialiseMemory(self, node_list, sys_params):
+    def mem_init(self, node_list, sys_params):
         weights = []
 
         # goes through each layer in the model
@@ -50,6 +50,10 @@ class DRAM:
         # leaves room for the instruction set
         self.data[:sys_params.inst_mem] = weights
         self.weights_size = sys_params.inst_mem + weights.size()
+
+        wt_ptr_end = sys_params.inst_mem + self.weights_size
+
+        return wt_ptr_end
 
     def write(self, addr, data):
         self.data[addr] = data
