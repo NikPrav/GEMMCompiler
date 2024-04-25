@@ -117,9 +117,9 @@ class GEMMCompiler:
         input_dim = [self.M, self.N]
         output_dim = [self.K, self.N]
 
-        mem_offset_input = 0
-        mem_offset_weight = 0
-        mem_offset_output = 0
+        mem_offset_input = self.i_buf_ptr
+        mem_offset_weight = self.w_buf_ptr
+        mem_offset_output = self.o_buf_ptr
 
         buf_size = self.i_buf_size
         data_size = self.data_size
@@ -168,7 +168,7 @@ class GEMMCompiler:
                         weight_tile = torch.zeros((n_cols,C))                                               
 
                         # Loading the inputs rowwise
-                         
+                        # [TODO] Change to Columnwise
                         for i_row_tile in range(0, R):
                             offset_row = i_row_tile * n_cols * n_tiles_per_row
                             # LOAD INP_BUF offset_tile + offset_row + memory_offset
