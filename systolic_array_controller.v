@@ -181,6 +181,7 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
                 end
                 else if (i_ctrl_state_to_ctrl == DRAIN)
                 begin
+                //changed
                 
                 end
                 end

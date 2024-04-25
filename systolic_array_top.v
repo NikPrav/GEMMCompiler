@@ -341,8 +341,8 @@ module systolic_array_top#(parameter NUM_ROW = 8,
     systolic_array_datapath#(
     .NUM_ROW                            (NUM_ROW),
     .NUM_COL                            (NUM_COL),
-    .DATA_WIDTH                         (DATA_WIDTH),
-    .ACCU_DATA_WIDTH                    (ACCU_DATA_WIDTH)
+    .SA_IN_DATA_WIDTH                   (DATA_WIDTH),  //changed when pe_os was added
+    .SA_OUT_DATA_WIDTH                  (ACCU_DATA_WIDTH) //changed when pe_os was added
     ) inst_sa_datapath(
     .clk                                (clk),
     .rst_n                              (rst_n),

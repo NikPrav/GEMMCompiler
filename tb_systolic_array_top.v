@@ -73,6 +73,28 @@ module tb_systolic_array_top();
     reg [DATA_WIDTH-1: 0] B[0:15];
     
     integer  i, j;
+
+    // Inst_reader variables //
+    parameter INST_WIDTH            = 16;
+    parameter INST_MEMORY_SIZE      = 4;
+
+    parameter OPCODE_WIDTH  = 4;
+    parameter BUF_ID_WIDTH  = 2;
+    parameter MEM_LOC_WIDTH = 10;
+
+    parameter MEM_LOC_ARRAY_INDEX   = MEM_LOC_WIDTH;
+    parameter BUF_ID_ARRAY_INDEX    = MEM_LOC_ARRAY_INDEX + BUF_ID_WIDTH;
+    parameter OPCODE_ARRAY_INDEX    = BUF_ID_ARRAY_INDEX + OPCODE_WIDTH;
+
+    parameter opcode_LD             = 4'b0010;
+    parameter opcode_ST             = 4'b0011;
+    parameter opcode_GEMM           = 4'b0100;
+    parameter opcode_DRAINSYS       = 4'b0101;
+
+    wire [OPCODE_WIDTH - 1: 0]   opcode;
+    wire [BUF_ID_WIDTH - 1: 0]   buf_id;
+    wire [MEM_LOC_WIDTH - 1: 0]  mem_loc;
+    // Inst_reader variables //
     
     initial
     begin
@@ -169,7 +191,7 @@ module tb_systolic_array_top();
         
         r_i_ctrl_state = STEADY;
         
-        
+
         $stop;
     end
     
@@ -181,7 +203,7 @@ module tb_systolic_array_top();
     .ACCU_DATA_WIDTH            (ACCU_DATA_WIDTH),
     .LOG2_SRAM_BANK_DEPTH       (LOG2_SRAM_BANK_DEPTH),
     .SKEW_TOP_INPUT_EN (0)
-    )inst_sa_datapath(
+    )inst_sa_array_top(
     .clk                        (clk),
     .rst_n                      (rst_n),
     .i_top_wr_en                (r_i_top_wr_en),
@@ -201,6 +223,28 @@ module tb_systolic_array_top();
     .i_down_sram_rd_start_addr  (r_i_down_sram_rd_start_addr),
     .i_down_sram_rd_end_addr    (r_i_down_sram_rd_end_addr)
     );
+
+    inst_reader #(
+        .INST_WIDTH             (INST_WIDTH),
+        .INST_MEMORY_SIZE       (INST_MEMORY_SIZE),
+        .OPCODE_WIDTH           (OPCODE_WIDTH),
+        .BUF_ID_WIDTH           (BUF_ID_WIDTH),
+        .MEM_LOC_WIDTH          (MEM_LOC_WIDTH),
+
+        .OPCODE_ARRAY_INDEX     (OPCODE_ARRAY_INDEX),
+        .BUF_ID_ARRAY_INDEX     (BUF_ID_ARRAY_INDEX),
+        .MEM_LOC_ARRAY_INDEX    (MEM_LOC_ARRAY_INDEX),
+
+        .opcode_LD              (opcode_LD),
+        .opcode_ST              (opcode_ST),
+        .opcode_GEMM            (opcode_GEMM),
+        .opcode_DRAINSYS        (opcode_DRAINSYS)
+    )inst_reader_in_tb(
+        .clk                    (clk),
+        .opcode                 (opcode),
+        .buf_id                 (buf_id),
+        .mem_loc                (mem_loc)
+);
     
     // Free running clk
     always #(`PERIOD/2) clk = ~clk;
