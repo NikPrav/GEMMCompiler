@@ -5,7 +5,7 @@ import isa
 import layer_nodes
 
 class GEMMCompiler:
-    def __init__(self, M, N, K,sys_array, start_adr=0, i_buf_ptr = 0, w_buf_ptr=0, o_buf_ptr=0 ):
+    def __init__(self, M, N, K,sys_array, i_ptr_cur = 0, w_ptr_cur=0, w_ptr_end=0):
         self.M = M
         self.N = N
         self.K = K
@@ -17,83 +17,47 @@ class GEMMCompiler:
         self.w_buf_size = sys_array.w_buf_size
         self.o_buf_size = sys_array.o_buf_size
         self.data_size = sys_array.data_size
-        self.sram_size = sys_array.sram_size
+        self.dram_size = sys_array.dram_size
         self.inst_mem = sys_array.inst_mem
 
-        self.i_buf_ptr = i_buf_ptr
-        self.w_buf_ptr = w_buf_ptr
-        self.o_buf_ptr = o_buf_ptr
-        # self.wt_end_ptr = 
+        # Get current pointers for input and weight
+        self.i_ptr_cur = i_ptr_cur
+        self.w_ptr_cur = w_ptr_cur
+        # self.o_ptr_cur = o_ptr_cur
 
-        # self.inst_mem = 16*500
-
-        # Example memory code
-        self.start_adr = start_adr
-        self.mem = torch.zeros(self.sram_size)
+        
+        # Getting the pointer correspondiing to last part of weight matrics
+        self.w_ptr_end = w_ptr_end
 
 
     def compile_matrices(self, matrix_A, matrix_B):
         # Generate input matrices for the systolic array
         self.generate_input_matrices()
 
-        # Generate machine code instructions based on input matrices
-        # print(input_matrices[0])
-        # print(input_matrices[1])
-        # self.mem_management(input_matrices[0], input_matrices[1], self.inst_mem)
-        self.mem_management(self.inst_mem)
+        # Setting the output pointer
+        self.set_io_mats()
 
+        # Generate machine code instructions based on input matrices
         output_array, instruction_set = self.tile_systolic_array()
-        # self.mmap_init()
         machine_code = self.generate_machine_code(instruction_set)
-        # print(len(machine_code)*16)
-        # pass in machine code offset
+        
 
         #fill in instructions
         # print(machine_code)
         # self.mem[:len(machine_code)] = machine_code.flatten()
-        hex_instructions = []
-        for instruction in machine_code:
-            decimal_instruction = int(instruction, 2)  # Convert binary to decimal
-            hex_instruction = format(decimal_instruction, 'x')  # Convert decimal to hexadecimal
-            hex_instructions.append(hex_instruction)
+        # hex_instructions = []
+        # for instruction in machine_code:
+        #     decimal_instruction = int(instruction, 2)  # Convert binary to decimal
+        #     hex_instruction = format(decimal_instruction, 'x')  # Convert decimal to hexadecimal
+        #     hex_instructions.append(hex_instruction)
 
-        # Convert hexadecimal instructions to bytes and then to a torch tensor
-        instruction_bytes = bytes.fromhex(''.join(hex_instructions))
+        # # Convert hexadecimal instructions to bytes and then to a torch tensor
+        # instruction_bytes = bytes.fromhex(''.join(hex_instructions))
         # self.mem[:len(instruction_bytes)] = torch.ByteTensor(list(instruction_bytes))
 
         
 
-        return machine_code
-
-    def generate_input_matrices(self):
-        # Pad the input matrices to match the systolic array dimensions
-        # Flatten the matrices to 1D arrays
-
-        # Calculate the number of tiles required
-        num_tiles_M = self.M // self.R + (1 if self.M % self.R != 0 else 0)
-        num_tiles_K = self.K // self.C + (1 if self.K % self.C != 0 else 0)
-
-        num_tiles_N = self.N // (self.i_buf_size/(self.R*data_size)) + (1 if self.N % (self.i_buf_size/(self.R*data_size)) != 0 else 0)
-
-        # Pad the last generated matrix with zeros if necessary
-        self.M = num_tiles_M * self.R
-        self.N = num_tiles_N * (self.i_buf_size/(self.R*data_size))
-        self.K = num_tiles_K * self.C
-
-        # Pad matrices with zeros if necessary
-        # padded_matrix_A = torch.nn.functional.pad(matrix_A, (0, 0, 0, padded_M - self.M))
-        # padded_matrix_B = torch.nn.functional.pad(matrix_B, (0, padded_K - self.K, 0, 0))
-
-        # Generate input matrices - these are before you account for buffer size
-        # input_matrices_A_old = padded_matrix_A.split(self.R, dim=0)
-        # input_matrices_B_old = padded_matrix_B.split(self.C, dim=1)
-
-        # input_matrices_A = padded_matrix_A.flatten()
-        # input_matrices_B = padded_matrix_B.T.flatten()
-
-        
-
-        return 
+        return machine_code, self.o_buf_ptr
 
     def generate_machine_code(self, instruction_set):
         # Generate machine code instructions based on input matrices
@@ -103,8 +67,6 @@ class GEMMCompiler:
         # convert to bitstream
         for instruction in instruction_set:
             machine_code.append(instruction.generate_bitstream())
-
-        
 
         return machine_code
     
@@ -204,62 +166,33 @@ class GEMMCompiler:
 
                 
 
-        return output_array, instruction_set
+        return instruction_set
 
-    #Function to call for when you need to store memory 
-    def mem_management(self,m_code_len):
-        # determine the size of the memory
-        # place instructions into memory
-        self.start_adr = m_code_len
-
-        # store weight buffers in the matrix(do this at first index)
-        self.w_buf_ptr = self.start_adr
-        # print(i_mat.size())
-        # print(i_mat.flatten())
-        # print(w_mat.flatten().size())
-        # print(w_mat.size())
-        print(self.mem.size())
-        # self.mem.extend([i_mat])
-        # self.mem[m_code_len+1:m_code_len+1+self.N*self.K] = w_mat # could do len(w_mat) instead of buf_size
-
-        # for first time calling function, set pointers for o and i
-        self.set_io_mats(self.N*self.K+2,self.N*self.K+2)
-        # self.mem[:len(w_mat.flatten())] = w_mat.flatten()
     
-    def set_io_mats(self, start_ptr, i_ptr):
+    def set_io_mats(self):
         # calculate if you need to put memory after or before
         # if after then determine the addr after (one more than ouput)
         # if before then go back to the pointer
 
-        if(start_ptr == i_ptr):
-            #set inputs
-            # self.mem[start_ptr:start_ptr+self.M*self.N] = i_mat
-            self.i_buf_ptr = start_ptr
-
+        if(self.w_ptr_end == self.i_ptr_cur):
             #set outputs
-            self.o_buf_ptr = start_ptr+self.M*self.N
+            self.o_buf_ptr = self.i_ptr_cur+self.M*self.N
             # self.mem[self.o_buf_ptr:self.o_buf_ptr+len(o_mat)] = o_mat
 
         else:
             #calc if output mem can fit inside old i mem
-            if(i_ptr-start_ptr >= self.M*self.K*self.data_size):
-                self.o_buf_ptr = start_ptr
+            if(self.w_ptr_end-self.i_ptr_cur >= self.M*self.K*self.data_size):
+                self.o_buf_ptr = self.w_ptr_end
             else:
-                self.o_buf_ptr = i_ptr+self.M*self.K*self.data_size
-                if(self.o_buf_ptr+self.M*self.K*self.data_size):
+                self.o_buf_ptr = self.i_ptr_cur+self.M*self.K*self.data_size
+                if(self.o_buf_ptr+self.M*self.K*self.data_size > self.dram_size):
                     #blow up
                     print("error: blew up-not enough mem to allocate the output buffer contiguously")
                 # self.mem[self.o_buf_ptr:self.o_buf_ptr+self.M*self.K]
 
-            
-            
-
-
-            return i_ptr+self.M*self.K
-        
-
+           
 class SystolicArrayParams:
-    def __init__(self, R, C, mem_size, i_buf_size, w_buf_size, o_buf_size, data_size=16, sram_size=(1024*1024)):
+    def __init__(self, R, C, mem_size, i_buf_size, w_buf_size, o_buf_size, data_size=16, dram_size=(1024*1024)):
 
 
         self.R = R
@@ -269,13 +202,13 @@ class SystolicArrayParams:
         self.w_buf_size = w_buf_size
         self.o_buf_size = o_buf_size
         self.data_size = data_size
-        self.sram_size = sram_size
+        self.dram_size = dram_size
         self.inst_mem = 16*500
 
 
         self.inst_mem = 16*500
 
-        self.mem = torch.zeros(sram_size)
+        self.mem = torch.zeros(dram_size)
     
 # Example usage
 if __name__ in '__main__':
