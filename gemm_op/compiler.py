@@ -135,7 +135,7 @@ class GEMMCompiler:
 
                         # Loading the inputs rowwise
                         # [TODO] Change to Columnwise
-                        for i_row_tile in range(0, R):
+                        for i_row_tile in range(0, n_cols):
                             offset_row = i_row_tile * input_dim[-2]
                             offset_col = i_row_tile * output_dim[-1]
                             # LOAD INP_BUF offset_tile + offset_row + memory_offset
