@@ -21,3 +21,12 @@
 # 13   0x0c9c9d4b: '<unknown (@0xc9c9d4b)>'
 # 14   0x09d9404b: '<unknown (@0x9d9404b)>'
 # 15   0x00006a5d: '<unknown (@0x6a5d)>'
+# Current time Fri Apr 26 16:19:18 2024
+# ModelSim - Intel FPGA Edition Stack Trace
+# Program = vish
+# Id = "10.5b"
+# Version = "2016.10"
+# Date = "Oct  5 2016"
+# Platform = win32pe
+
+Exception c0000005 has occurred at address 70009fcf. Traceback:

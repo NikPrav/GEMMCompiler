@@ -129,6 +129,9 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
         //assign  o_down_wr_data_from_ctrl    [(gc*OUT_DATA_WIDTH)    +:  OUT_DATA_WIDTH] = (i_sa_datapath_valid_down_to_ctrl[gc] == 1)   ?  w_o_data_down[(gc*OUT_DATA_WIDTH)    +:  OUT_DATA_WIDTH] : 0;
     end
     endgenerate
+
+    integer top_count, left_count;
+    reg top_read_done, left_read_done;
     
     
     always@(posedge clk or negedge rst_n)
@@ -141,24 +144,36 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
         begin
             if (i_ctrl_state_to_ctrl == IDLE)
             begin
-                r_top_rd_wr_en_from_ctrl  <= {NUM_COL{WRITE_ENABLE}}     ;
-                r_left_rd_wr_en_from_ctrl <= {NUM_ROW{WRITE_ENABLE}}     ;
+                r_top_rd_wr_en_from_ctrl  <= {NUM_COL{READ_ENABLE}}     ;
+                r_left_rd_wr_en_from_ctrl <= {NUM_ROW{READ_ENABLE}}     ;
                 r_i_down_wr_addr          <= 0;
                 
                 // CHANGE: SRAM pointers should point to the write address at start
                 r_top_rd_wr_addr_from_ctrl <= i_top_sram_rd_start_addr;
                 r_left_rd_wr_addr_from_ctrl <= i_left_sram_rd_start_addr;
+
+                top_count <= 0;
+                left_count <= 0;
+
+                top_read_done <= 0;
+                left_read_done <= 0;
             end
             // DELETED WARMUP STAGE
             else if (i_ctrl_state_to_ctrl == STEADY)
             
             begin
-            if (r_top_rd_wr_addr_from_ctrl   < i_top_sram_rd_end_addr)
+            
+            if (r_top_rd_wr_addr_from_ctrl < i_top_sram_rd_end_addr && (top_read_done != 1))
             begin
                 r_top_rd_wr_en_from_ctrl <= {NUM_COL{READ_ENABLE}};
                 r_valid_top_from_ctrl    <= ~0;
                 
-                r_top_rd_wr_addr_from_ctrl <= r_top_rd_wr_addr_from_ctrl + 1;
+                r_top_rd_wr_addr_from_ctrl <= (r_top_rd_wr_addr_from_ctrl == i_top_sram_rd_end_addr - 1) ? r_top_rd_wr_addr_from_ctrl :r_top_rd_wr_addr_from_ctrl + 1;
+            end
+            else if (top_count < 3) begin 
+                top_count = top_count + 1;
+                top_read_done <= 1;
+                r_top_rd_wr_addr_from_ctrl <= 0;
             end
             else
             begin
@@ -166,12 +181,17 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
                 r_valid_top_from_ctrl      <= 0;
             end
             
-            if (r_left_rd_wr_addr_from_ctrl   < i_left_sram_rd_end_addr)
+            if (r_left_rd_wr_addr_from_ctrl  < i_left_sram_rd_end_addr  && (left_read_done != 1))
             begin
                 r_left_rd_wr_en_from_ctrl <= {NUM_ROW{READ_ENABLE}};
                 r_valid_left_from_ctrl    <= ~0;
-                
-                r_left_rd_wr_addr_from_ctrl <= r_left_rd_wr_addr_from_ctrl + 1;
+
+                r_left_rd_wr_addr_from_ctrl <= (r_left_rd_wr_addr_from_ctrl == i_left_sram_rd_end_addr - 1) ? r_left_rd_wr_addr_from_ctrl :r_left_rd_wr_addr_from_ctrl + 1;
+            end
+            else if (left_count < 3) begin 
+                left_count = left_count + 1;
+                left_read_done <= 1;
+                r_left_rd_wr_addr_from_ctrl <= 0;
             end
             else
             begin
@@ -180,10 +200,23 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
             end
         end
         
-        //     else if (i_ctrl_state_to_ctrl == DRAIN)
-        //     begin
-                // r_i_down_wr_addr          <= 0;
-        //     end
+            // else if (i_ctrl_state_to_ctrl == DRAIN)
+            // begin
+            //     // Increment down write address according to timing of PE output
+            //     if (r_i_down_wr_addr   < i_top_sram_rd_end_addr)
+            // begin
+            //     r_dow <= {NUM_COL{READ_ENABLE}};
+            //     r_valid_top_from_ctrl    <= ~0;
+                
+            //     r_top_rd_wr_addr_from_ctrl <= r_top_rd_wr_addr_from_ctrl + 1;
+            // end
+            // else
+            // begin
+            //     r_top_rd_wr_addr_from_ctrl <= i_top_sram_rd_end_addr;
+            //     r_valid_top_from_ctrl      <= 0;
+            // end
+                
+            // end
     end
     end
     

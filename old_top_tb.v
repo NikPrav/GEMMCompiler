@@ -72,6 +72,7 @@ module old_top_tb();
     reg [DATA_WIDTH-1: 0] B[0:15];
     
     integer  i, j;
+    integer m_left, m_top;
 
     // Inst_reader variables //
     parameter INST_WIDTH            = 16;
@@ -116,71 +117,82 @@ module old_top_tb();
         // Enable
         r_i_left_wr_en = 1;
 
+        @(posedge  clk);
+
+        for (m_left = 0; m_left < NUM_COL + NUM_ROW - 1; m_left = m_left + 1) begin 
+            
+            r_i_left_wr_addr = m_left;   
+            @(posedge  clk);
+
+            for (j = 0; j < NUM_ROW; j = j + 1) begin
+                // Read value in B, send as data to SRAM
+                // Data is stored as NUM_COL * DATA_WIDTH
+                r_i_left_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = A[((m_left - j) * NUM_ROW) + j];
+
+                if (m_left < NUM_ROW - 1) begin
+                    if (j > m_left) begin 
+                        r_i_left_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = {DATA_WIDTH{1'b0}};
+                    end
+                end else if (m_left > NUM_ROW - 1) begin 
+                    if (j < m_left - NUM_ROW - 1) begin
+                        r_i_left_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = {DATA_WIDTH{1'b0}};
+                    end
+                end
+            end
+        end
+
         // Set the correct start and end address of the left buffer (in this case, 0)
         r_i_left_sram_rd_start_addr = 5'd0;
         r_i_left_sram_rd_end_addr   = 5'd4;
-
-        @(posedge  clk);
-        
-        for(i = 0; i < NUM_ROW; i = i + 1)
-        begin
-            r_i_left_wr_addr = i;
-            // Set the appropriate address in the SRAM
-            
-            // $display("addr   = %d\n", r_i_left_wr_addr);
-            
-            @(posedge  clk);
-            for (j = 0; j < NUM_COL; j = j + 1)
-            begin
-                // Read value in A, send as data to SRAM
-                // Data is stored as NUM_COL * DATA_WIDTH
-                r_i_left_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = A[i];
-                // $display("data, i, j                           = %d, %d, %d\n", A[i + j * NUM_COL], i, j);
-            end
-        end
         
         @(posedge  clk);//#(`PERIOD * 2)
         
         // Disable write and clear wires
         r_i_left_wr_en   = 0;
+        r_i_left_wr_addr = 0;
         @(posedge  clk);
         r_i_left_wr_data = 0;
-        r_i_left_wr_addr = 0;
-        
+        @(posedge  clk);      
         
         // ------------------------------------------------ Write data into the TOP BUFFER
         
         // Enable
         r_i_top_wr_en = 1;
+
+        for (m_top = 0; m_top < NUM_COL + NUM_ROW - 1; m_top = m_top + 1) begin 
+            
+            r_i_top_wr_addr = m_top;   
+            @(posedge  clk);
+
+            for (j = 0; j < NUM_COL; j = j + 1) begin
+                // Read value in B, send as data to SRAM
+                // Data is stored as NUM_COL * DATA_WIDTH
+                r_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = B[((m_top - j) * NUM_COL) + j];
+
+                if (m_top < NUM_COL - 1) begin
+                    if (j > m_top) begin 
+                        r_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = {DATA_WIDTH{1'b0}};
+                    end
+                end else if (m_top > NUM_COL - 1) begin 
+                    if (j < m_top - NUM_COL - 1) begin
+                        r_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = {DATA_WIDTH{1'b0}};
+                    end
+                end
+            end
+        end
         
         // Set the correct start and end address of the top buffer (in this case, 0)
         r_i_top_sram_rd_start_addr = 5'd0;
         r_i_top_sram_rd_end_addr   = 5'd4;
-
-        @(posedge  clk);
-        
-        for(i = 0; i <  NUM_COL; i = i + 1) begin
-            
-            r_i_top_wr_addr = i;   
-            // Set the appropriate address in the SRAM
-            @(posedge  clk);
-            for (j = 0; j < NUM_ROW; j = j + 1) begin
-                // Read value in A, send as data to SRAM
-                // Data is stored as NUM_COL * DATA_WIDTH
-                r_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = B[i];
-            end
-        end
     
         @(posedge  clk);
         
         // Disable write and clear wires
         r_i_top_wr_en   = 0;
-        @(posedge  clk);
         r_i_top_wr_addr = 0;
-        r_i_top_wr_data = 0;
+        @(posedge  clk);   
+        r_i_top_wr_data = 0;  
         @(posedge  clk);
-        @(posedge  clk);
-        
         
         // ------------------------------------------------
         // ------------------------------------------------ WARMUP stage
@@ -195,6 +207,15 @@ module old_top_tb();
         @(posedge  clk);
         @(posedge  clk);
         @(posedge  clk);
+        @(posedge  clk);
+        @(posedge  clk);
+        @(posedge  clk);
+        @(posedge  clk);
+        @(posedge  clk);
+        @(posedge  clk);
+
+        r_i_ctrl_state = DRAIN;
+
         @(posedge  clk);
         @(posedge  clk);
         @(posedge  clk);
