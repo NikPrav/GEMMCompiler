@@ -91,8 +91,8 @@ module systolic_array_top#(parameter NUM_ROW = 8,
     
     wire    [DATA_WIDTH             : 0]                      w_i_top_wr_data     [0 : NUM_COL-1] ; // Changed to DATAWIDTH+1
     wire    [DATA_WIDTH             : 0]                      w_o_top_rd_data     [0 : NUM_COL-1] ; // Changed to DATAWIDTH+1
-    wire    [DATA_WIDTH             -1: 0]                      w_i_left_wr_data    [0 : NUM_ROW-1] ;
-    wire    [DATA_WIDTH             -1: 0]                      w_o_left_rd_data    [0 : NUM_ROW-1] ;
+    wire    [DATA_WIDTH             : 0]                      w_i_left_wr_data    [0 : NUM_ROW-1] ; // Changed to DATAWIDTH+1
+    wire    [DATA_WIDTH             : 0]                      w_o_left_rd_data    [0 : NUM_ROW-1] ; // Changed to DATAWIDTH+1
     wire                                                        w_top_rd_wr_en_from_ctrl            ;   // should this be array
     wire    [LOG2_SRAM_BANK_DEPTH   -1: 0]                      w_top_rd_wr_addr_from_ctrl          ;
     wire                                                        w_left_rd_wr_en_from_ctrl           ;   // should this be array
@@ -107,6 +107,11 @@ module systolic_array_top#(parameter NUM_ROW = 8,
      inner logics
      ToDo: Wrap all underlying modules into this top module.
      */
+
+    // Added flush wire
+    wire w_cmd_top_flsh;
+
+    assign w_cmd_top_flsh = (i_ctrl_state == 3) ? 1: 0;
     
     integer  i_r, i_c;
     genvar   gr, gc;
@@ -231,7 +236,7 @@ module systolic_array_top#(parameter NUM_ROW = 8,
         
         for(gr = 0; gr<NUM_ROW; gr = gr+1)
             begin : sram_bank_left
-            assign  w_i_left_wr_data [gr] = {0, i_left_wr_data[gr*DATA_WIDTH +:  DATA_WIDTH]};
+            assign  w_i_left_wr_data [gr] = {1, i_left_wr_data[gr*DATA_WIDTH +:  DATA_WIDTH]};
             sram_bank_sp#(
             .SRAM_BANK_DATA_WIDTH   (DATA_WIDTH+1),  // +1 for the CMD
             .SRAM_BANK_ADDR_WIDTH   (LOG2_SRAM_BANK_DEPTH),
@@ -269,7 +274,7 @@ module systolic_array_top#(parameter NUM_ROW = 8,
     
     for(gr = 0; gr<NUM_ROW; gr = gr+1)
         begin : sram_bank_sp_left
-        assign  w_i_left_wr_data [gr] = {0, i_left_wr_data[gr*DATA_WIDTH +:  DATA_WIDTH]};
+        assign  w_i_left_wr_data [gr] = {1, i_left_wr_data[gr*DATA_WIDTH +:  DATA_WIDTH]};
         sram_bank_sp#(
         .SRAM_BANK_DATA_WIDTH   (DATA_WIDTH+1),  // +1 for the CMD
         .SRAM_BANK_ADDR_WIDTH   (LOG2_SRAM_BANK_DEPTH),
@@ -310,7 +315,7 @@ module systolic_array_top#(parameter NUM_ROW = 8,
     endgenerate
     
     generate
-    wire    [NUM_COL                    -1: 0]  w_i_cmd_top_to_sa       ;
+    wire    [NUM_COL*2                  -1: 0]  w_i_cmd_top_to_sa       ; // Added *2
     wire    [NUM_COL                    -1: 0]  w_i_valid_top_to_sa     ;
     wire    [NUM_COL*ACCU_DATA_WIDTH    -1: 0]  w_i_data_top_to_sa      ;
     wire    [NUM_ROW                    -1: 0]  w_i_cmd_left_to_sa      ;
@@ -319,7 +324,10 @@ module systolic_array_top#(parameter NUM_ROW = 8,
     
     for(gc = 0; gc<NUM_COL; gc = gc+1)
         begin : w_i_gc
-        assign  w_i_cmd_top_to_sa       [gc]                                          = w_o_top_rd_data         [gc][DATA_WIDTH];
+        // assign  w_i_cmd_top_to_sa     [0][gc]                                          = w_o_top_rd_data         [gc][DATA_WIDTH];
+        // assign  w_i_cmd_top_to_sa [1][gc] = w_cmd_top_flsh; // Added
+        assign  w_i_cmd_top_to_sa[gc*2 +: 2] = {w_cmd_top_flsh ,w_o_top_rd_data [gc][DATA_WIDTH]};
+        
         assign  w_i_valid_top_to_sa     [gc]                                          = w_top_valid_from_ctrl   [gc];
         assign  w_i_data_top_to_sa      [(gc*ACCU_DATA_WIDTH)    +:  ACCU_DATA_WIDTH] = {0, w_o_top_rd_data     [gc][0  +:  DATA_WIDTH]};
     
