@@ -30,15 +30,15 @@ class GEMMCompiler:
         self.w_ptr_end = w_ptr_end
 
 
-    def compile_matrices(self, matrix_A, matrix_B):
+    def compile_matrices(self):
         # Generate input matrices for the systolic array
-        self.generate_input_matrices()
+        # self.generate_input_matrices()
 
         # Setting the output pointer
         self.set_io_mats()
 
         # Generate machine code instructions based on input matrices
-        output_array, instruction_set = self.tile_systolic_array()
+        instruction_set = self.tile_systolic_array()
         machine_code = self.generate_machine_code(instruction_set)
         
 
@@ -79,8 +79,8 @@ class GEMMCompiler:
         input_dim = [self.M, self.N]
         output_dim = [self.K, self.N]
 
-        mem_offset_input = self.i_buf_ptr
-        mem_offset_weight = self.w_buf_ptr
+        mem_offset_input = self.i_ptr_cur
+        mem_offset_weight = self.w_ptr_cur
         mem_offset_output = self.o_buf_ptr
 
         buf_size = self.i_buf_size
@@ -176,15 +176,15 @@ class GEMMCompiler:
 
         if(self.w_ptr_end == self.i_ptr_cur):
             #set outputs
-            self.o_buf_ptr = self.i_ptr_cur+self.M*self.N
+            self.o_buf_ptr = self.i_ptr_cur+self.M*self.N*self.data_size
             # self.mem[self.o_buf_ptr:self.o_buf_ptr+len(o_mat)] = o_mat
 
         else:
             #calc if output mem can fit inside old i mem
-            if(self.w_ptr_end-self.i_ptr_cur >= self.M*self.K*self.data_size):
+            if(self.i_ptr_cur - self.w_ptr_end >= self.M*self.K*self.data_size):
                 self.o_buf_ptr = self.w_ptr_end
             else:
-                self.o_buf_ptr = self.i_ptr_cur+self.M*self.K*self.data_size
+                self.o_buf_ptr = self.i_ptr_cur+self.M*self.N*self.data_size
                 if(self.o_buf_ptr+self.M*self.K*self.data_size > self.dram_size):
                     #blow up
                     print("error: blew up-not enough mem to allocate the output buffer contiguously")

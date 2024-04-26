@@ -1,9 +1,10 @@
 import torch
+import numpy as np
 
 class DRAM:
     def __init__(self, size):
         self.size = size
-        self.data = torch.zeros(size)
+        self.data = np.zeros(size)
         self.weights_size = 0
     
     def generate_weight_matrix(self, matrix_B, sys_params):
@@ -20,7 +21,7 @@ class DRAM:
 
         # Pad matrices with zeros if necessary
         # padded_matrix_A = torch.nn.functional.pad(matrix_A, (0, 0, 0, padded_M - self.M))
-        padded_matrix_B = torch.nn.functional.pad(matrix_B, (0, padded_K - self.K, 0, 0))
+        padded_matrix_B = torch.nn.functional.pad(matrix_B, (0, padded_K - matrix_B.shape, 0, 0))
 
         # Generate input matrices - these are before you account for buffer size
         # input_matrices_A_old = padded_matrix_A.split(self.R, dim=0)
@@ -42,14 +43,14 @@ class DRAM:
             M = node.input_size[-2]
             N = node.input_size[-1]
             K = node.weight_size[-2]
-            weights.append(self.generate_weight_matrix(node.weights, sys_params))
+            weights.append(node.weights.T.flatten().detach().numpy())
 
             # cp = GEMMCompiler(M, N, K, sys_params)
         
-        torch.cat(weights, dim=0)
+        weights = np.concatenate(weights)
         # leaves room for the instruction set
-        self.data[:sys_params.inst_mem] = weights
-        self.weights_size = sys_params.inst_mem + weights.size()
+        self.data[sys_params.inst_mem:sys_params.inst_mem+weights.shape[0]] = weights
+        self.weights_size = weights.shape[0]*sys_params.data_size
 
         wt_ptr_end = sys_params.inst_mem + self.weights_size
 
