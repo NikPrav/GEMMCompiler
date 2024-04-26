@@ -12,6 +12,7 @@ class LoadCommand:
     def __init__(self, buf_id, mem_addr):
         self.buf_id = buf_id
         self.mem_addr = mem_addr
+        self.name = "LD"
 
     def execute_command(self):
         # Simulating loading data from memory
@@ -44,6 +45,7 @@ class StoreCommand:
     def __init__(self, buf_id, mem_addr):
         self.buf_id = buf_id
         self.mem_addr = mem_addr
+        self.name = "STR"
         # self.data = data
 
     # def execute_command(self):
@@ -69,6 +71,7 @@ class StoreCommand:
 class GEMMCommand:
     def __init__(self, n):
         self.n = n
+        self.name = "GEMM"
 
     def execute_command(self):
         # Simulating GEMM operation
@@ -93,7 +96,7 @@ class GEMMCommand:
 
 class DRAINSYSCommand:
     def __init__(self):
-        print("you initiliazed the drain sys command")
+        self.name = "DRAINSYS"
 
     def generate_bitstream(self):
         # Generate bitstream for the GEMM operation

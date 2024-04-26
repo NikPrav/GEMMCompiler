@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
+import fpga
 
 from memory_handler import DRAM
 from layer_nodes import LayerNode
@@ -51,7 +52,8 @@ w_ptr_end = Dram_content.mem_init(node_list, sys_params)
 i_ptr_cur = w_ptr_end
 w_ptr_cur = sys_params.inst_mem
 
-instuction_list = []
+instruction_list = []
+instruction_list_test = []
 
 for node in node_list:
     M = node.input_size[-2]
@@ -60,8 +62,15 @@ for node in node_list:
 
     gemm = GEMMCompiler(M, N, K, sys_params, i_ptr_cur, w_ptr_cur, w_ptr_end)
 
-    instructions, i_ptr_cur = gemm.compile_matrices() 
-    instuction_list.append(instructions)
+    instructions, i_ptr_cur, instructions_test = gemm.compile_matrices() 
+    instruction_list.append(instructions)
+    instruction_list_test.append(instructions_test)
     w_ptr_cur = w_ptr_cur + node.weight_size[0]*node.weight_size[1]*sys_params.data_size
 
-print(x)
+# Create FPGA
+fpga_test = fpga.FPGA(sys_params, Dram_content)
+# print(instruction_list_test)
+fpga_test.flash(instruction_list_test)
+
+
+# print(x)

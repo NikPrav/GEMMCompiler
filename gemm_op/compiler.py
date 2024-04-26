@@ -57,7 +57,7 @@ class GEMMCompiler:
 
         
 
-        return machine_code, self.o_buf_ptr
+        return machine_code, self.o_buf_ptr, instruction_set
 
     def generate_machine_code(self, instruction_set):
         # Generate machine code instructions based on input matrices
@@ -98,6 +98,7 @@ class GEMMCompiler:
 
         # Initializing the instruction array
         instruction_set = []
+        instruction_names = []
         
         # Calculating number of columns per tile
         n_cols = int(buf_size / (R * data_size))
@@ -166,9 +167,6 @@ class GEMMCompiler:
                         # output_array[offset_tile + offset_row:offset_tile + offset_row + C] = output_tile[i_row_tile, :] 
 
                         # for k in range(output_tile.shape[0]):
-                        
-
-                
 
         return instruction_set
 
