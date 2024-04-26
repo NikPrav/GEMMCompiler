@@ -1,43 +1,11 @@
-# DnnWeaver v2.0
-
-**DnnWeaver v2.0** is an open-source framework for accelerating Deep Neural Networks (DNNs) on FPGAs.
-
-## Citing us
-If you use this work, please cite our paper published in The 49th Annual IEEE/ACM International Symposium on Microarchitecture (MICRO), 2016.
-
-```
-H. Sharma, J. Park, D. Mahajan, E. Amaro, J. K. Kim, C. Shao, A. Mishra, H. Esmaeilzadeh, "From High-Level Deep Neural Models to FPGAs", in the Proceedings of the 49th Annual IEEE/ACM International Symposium on Microarchitecture (MICRO), 2016.
-```
-
-## Build Instructions
-
-Python dependencies:
-```
-pip install -r requirements.txt
-```
-
-Vivado Tool version:
-```
-Vivado 2018.2
-```
-
-## Examples
-dnnweaver2-tutorial.ipynb provides a tutorial on how to use the tool
-
-Dependencies:
-```
-darkflow (https://github.com/thtrieu/darkflow)
-OpenCV (cv2)
-```
-
-Here's a sample project that uses DnnWeaver v2.0 to perform real-time image recognition with a drone
-https://github.com/ardorem/dnnweaver2.drone
+# MODEL to ACCELERATOR
+This repo contains code to compile torch models to code for a custom accelerator with a systolic array
 
 
 ## License
 
 ```
-Copyright 2018 Hadi Esmaeilzadeh
+Copyright 2023 Paul Cucchiara, Nikhil Praveen
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -53,4 +21,5 @@ limitations under the License.
 ```
 
 ## Maintained By
-Hardik Sharma (*hsharma@gatech.edu*)
+Nikhil Praveen (np97@gatech.edu)
+Paul Cucchiara (pcucchiara3@gatech.edu)
