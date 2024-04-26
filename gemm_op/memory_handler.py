@@ -6,6 +6,11 @@ class DRAM:
         self.size = size
         self.data = np.zeros(size)
         self.weights_size = 0
+
+    def flash_inputs(self, input_array, in_ptr):
+        # Takes in 1D array, appends it to memory at in_ptr
+        in_ptr = in_ptr//16
+        self.data[in_ptr:in_ptr+input_array.shape[0]] = input_array
     
     def generate_weight_matrix(self, matrix_B, sys_params):
         # Pad the input matrices to match the systolic array dimensions
@@ -49,7 +54,7 @@ class DRAM:
         
         weights = np.concatenate(weights)
         # leaves room for the instruction set
-        self.data[sys_params.inst_mem:sys_params.inst_mem+weights.shape[0]] = weights
+        self.data[sys_params.inst_mem//sys_params.data_size:sys_params.inst_mem//sys_params.data_size+weights.shape[0]] = weights
         self.weights_size = weights.shape[0]*sys_params.data_size
 
         wt_ptr_end = sys_params.inst_mem + self.weights_size

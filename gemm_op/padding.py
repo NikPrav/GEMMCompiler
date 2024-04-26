@@ -52,3 +52,24 @@ def padding_func(l,system_params):
     return l
 
     # l.output_size = l(x).size()
+
+def padding_func_ip(matrix,system_params):
+    # input_weights = generate_weight_matrix(l.weights, system_params)
+    # l.weights = input_weights
+    # l.weight_size = input_weights.shape
+
+    # Updating new input size
+    num_tiles_M = matrix.shape[-2] // system_params.R + (1 if matrix.shape[-2] % system_params.R != 0 else 0)
+    num_tiles_N = matrix.shape[-1] // (system_params.i_buf_size/(system_params.R*system_params.data_size)) + (1 if matrix.shape[-1] % (system_params.i_buf_size/(system_params.R*system_params.data_size)) != 0 else 0)
+    # num_tiles_K = l.weights.shape[-2] // system_params.C + (1 if l.weights.shape[-2] % system_params.C != 0 else 0)
+
+    # Pad the last generated matrix with zeros if necessary
+    M = num_tiles_M * system_params.R
+    N = int(num_tiles_N * (system_params.i_buf_size/(system_params.C*system_params.data_size)))
+    # K = num_tiles_K * system_params.C
+
+    # l.weights = torch.nn.functional.pad(l.weights, (0,  N - l.weights.shape[-1], 0, K - l.weights.shape[-2]))
+    # l.weight_size = l.weights.shape
+    matrix= torch.nn.functional.pad(matrix, (0,  N - matrix.shape[-1], 0, M - matrix.shape[-2]))
+
+    return matrix

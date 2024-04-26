@@ -131,20 +131,20 @@ class GEMMCompiler:
                         # weight_tile = torch.zeros((n_cols,C))                                               
 
                         offset_tile_input = i_tile*(input_dim[-2])*n_cols + i_row*R
-                        offset_tile_weight = i_col*(output_dim[-1])*C + i_tile*n_rows
+                        offset_tile_weight = i_col*C + i_tile*n_rows*output_dim[-2]
 
                         # Loading the inputs rowwise
                         # [TODO] Change to Columnwise
                         for i_row_tile in range(0, n_cols):
                             offset_row = i_row_tile * input_dim[-2]
-                            offset_col = i_row_tile * output_dim[-1]
+                            offset_col = i_row_tile * output_dim[-2]
                             # LOAD INP_BUF offset_tile + offset_row + memory_offset
-                            instruction_set.append(isa.LoadCommand(isa.BufferIDs.INPUT_BUFFER, offset_tile_input + offset_row + mem_offset_input))
+                            instruction_set.append(isa.LoadCommand(isa.BufferIDs.INPUT_BUFFER, (offset_tile_input + offset_row)*self.data_size + mem_offset_input))
                             # input_tile[i_row_tile, :] = input_array[offset_tile_input + offset_row:offset_tile_input + offset_row + n_cols]
                             # input_tile = input_tile.reshape((R, n_cols))
 
                             # LOAD WT_BUF offset_tile + offset_row + memory_offset
-                            instruction_set.append(isa.LoadCommand(isa.BufferIDs.WEIGHT_BUFFER, offset_tile_weight + offset_col + mem_offset_weight))
+                            instruction_set.append(isa.LoadCommand(isa.BufferIDs.WEIGHT_BUFFER, (offset_tile_weight + offset_col)*self.data_size + mem_offset_weight))
                             # weight_tile[:, i_row_tile] = weight_array[offset_tile_weight + offset_row:offset_tile_weight + offset_row + n_cols].T
                             # weight_tile = weight_tile.reshape((n_cols, C)).T
                         
@@ -160,10 +160,10 @@ class GEMMCompiler:
                     # Store the result in the output array
                     
                     for i_row_tile in range(0, R):
-                        offset_row = i_row_tile * input_dim[-1]
-                        offset_tile = i_row * R  + i_col * C * input_dim[-1]
+                        offset_row = i_row_tile * input_dim[-2]
+                        offset_tile = i_row * R  + i_col * C * input_dim[-2]
                         # STR OP_BUF offset_tile + offset_row + memory_offset
-                        instruction_set.append(isa.StoreCommand(isa.BufferIDs.OUTPUT_BUFFER, offset_tile + offset_row + mem_offset_output))
+                        instruction_set.append(isa.StoreCommand(isa.BufferIDs.OUTPUT_BUFFER, (offset_tile + offset_row)*self.data_size + mem_offset_output))
                         # output_array[offset_tile + offset_row:offset_tile + offset_row + C] = output_tile[i_row_tile, :] 
 
                         # for k in range(output_tile.shape[0]):
