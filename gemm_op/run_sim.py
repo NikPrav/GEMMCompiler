@@ -13,14 +13,14 @@ from itertools import chain
 
 # x = Variable(torch.randn(1,7,7))
 
-x = torch.tensor([[1,2,3,4,5,6],[7,8,9,10,11,12],[13,14,15,16,17,18]], dtype=torch.float16)
+x = torch.tensor([[1,2,3,4,5,6],[7,8,9,10,11,12],[13,14,15,16,17,18]], dtype=torch.int16)
 input = x
 
 # Initialize an empty list to store the layer info objects
 node_list = []
 
 # Create the model
-model = nn.Sequential(nn.Linear(6, 4, dtype=torch.float16), nn.Linear(4, 4, dtype=torch.float16))
+model = nn.Sequential(nn.Linear(6, 4, dtype=torch.int16), nn.Linear(4, 4, dtype=torch.int16))
 
 output = model(x)
 print(output.size())
@@ -35,8 +35,8 @@ o_buf_size = R*C*data_size  # Output buffer size of the FPGA
 
 sys_params = SystolicArrayParams(R, C, mem_size, i_buf_size, w_buf_size, o_buf_size, data_size)
 
-model[0].weight = nn.Parameter(data=torch.tensor([[1,2,3,4,5,6],[7,8,9,10,11,12],[13,14,15,16,17,18], [19, 20, 21, 22, 23, 24]], dtype=torch.float16))
-model[1].weight = nn.Parameter(data=torch.tensor([[1,2,3,4],[5,6,7,8],[9,10,11,12], [13,14,15,16]], dtype=torch.float16))
+model[0].weight = nn.Parameter(data=torch.tensor([[1,2,3,4,5,6],[7,8,9,10,11,12],[13,14,15,16,17,18], [19, 20, 21, 22, 23, 24]], dtype=torch.int16))
+model[1].weight = nn.Parameter(data=torch.tensor([[1,2,3,4],[5,6,7,8],[9,10,11,12], [13,14,15,16]], dtype=torch.int16))
 
 
 # Loop through each layer in the model and padding

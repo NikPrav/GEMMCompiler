@@ -1,6 +1,8 @@
 import torch
 import numpy as np
 
+DATA_SIZE = 16
+
 class DRAM:
     def __init__(self, size):
         self.size = size
@@ -9,7 +11,7 @@ class DRAM:
 
     def flash_inputs(self, input_array, in_ptr):
         # Takes in 1D array, appends it to memory at in_ptr
-        in_ptr = in_ptr//16
+        in_ptr = in_ptr//DATA_SIZE
         self.data[in_ptr:in_ptr+input_array.shape[0]] = input_array
     
     def generate_weight_matrix(self, matrix_B, sys_params):
@@ -63,6 +65,11 @@ class DRAM:
 
     def write(self, addr, data):
         self.data[addr] = data
+    
+    def write_to_text(self, filename):
+        with open(filename, "w") as f:
+            for i in range(self.size):
+                f.write(str(self.data[i]) + "\n")
 
     def read(self, addr):
         return self.data[addr]
