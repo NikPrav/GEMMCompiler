@@ -34,40 +34,46 @@ class FPGA:
         # self.dram.data[0:(instructions.size)*16] = dram
         self.instr_list = instructions
     
+    def extract(self, i_ptr, shape):
+        return self.dram.data[i_ptr//self.sys_params.data_size:i_ptr//self.sys_params.data_size+shape[0]*shape[1]].reshape(shape).T
+
     def execute(self, instruction_list):
         i_buf_col = 0
         w_buf_row = 0
         o_buf_col = 0
         for pc, instr in zip(range(len(instruction_list)), instruction_list):
             if (instr.name == "LD"):
-                if (self.buf_id == 1):
-                    self.i_buf[:, i_buf_col] = self.dram[instr.mem_addr:instr.mem_addr + self.sys_params.R ].T
+                instr.mem_addr = instr.mem_addr // self.sys_params.data_size
+                if (instr.buf_id == 1):
+                    self.i_buf[:, i_buf_col] = self.dram.data[instr.mem_addr:instr.mem_addr + self.sys_params.R ].T
                     # for i in range(self.sys_params.i_buf_size/self.R):
                     # self.i_buf[:, i] = self.dram[instr.mem_addr + i*self.sys_params.R:instr.mem_addr + self.sys_params.R + self.sys_params*i ].T
 
                     i_buf_col += 1
-                if (self.buf_id == 2):
+                if (instr.buf_id == 2):
                     # for i in range(self.sys_params.w_buf_size/self.C):
                     # self.w_buf[i, :] = self.dram[instr.mem_addr + self.sys_params.C*i:instr.mem_addr + self.sys_params.C + self.sys_params.C*i ]
 
-                    self.w_buf[w_buf_row, :] = self.dram[instr.mem_addr:instr.mem_addr + self.sys_params.C ]
+                    self.w_buf[w_buf_row, :] = self.dram.data[instr.mem_addr:instr.mem_addr + self.sys_params.C ]
                     w_buf_row += 1
-                if (self.buf_id == 3):
+                if (instr.buf_id == 3):
                     # for i in range(self.sys_params.i_buf_size/self.R):
                     # self.o_buf[:, i] = self.dram[instr.mem_addr + i*self.sys_params.R:instr.mem_addr + self.sys_params.R + self.sys_params*i ].T
-                    self.o_buf[:, i] = self.dram[instr.mem_addr:instr.mem_addr + self.sys_params.R ].T
+                    self.o_buf[:, o_buf_col] = self.dram.data[instr.mem_addr:instr.mem_addr + self.sys_params.R ].T
                     o_buf_col += 1
 
 
                     # self.i_buf[:, i_buf_col] = self.dram[instr.mem_addr:instr.mem_addr + self.sys_params.R ]
        
             elif (instr.name == "STR"):
-                if (self.buf_id == 3):
-                    for i in range(self.sys_params.o_buf_size/self.sys_params.R):
-                        self.dram[instr.mem_addr + i*self.sys_params.R:instr.mem_addr + self.R + i*self.sys_params.R] = self.o_buf[:, i]
+                instr.mem_addr = instr.mem_addr // self.sys_params.data_size
+                if (instr.buf_id == 3):
+                    # for i in range(self.sys_params.o_buf_size/self.sys_params.R):
+                    self.dram.data[instr.mem_addr:instr.mem_addr + self.sys_params.R] = self.o_buf[:, o_buf_col]
+                    o_buf_col += 1
 
             elif (instr.name == "GEMM"):
-                sys_array += self.i_buf @ self.w_buf.T
+                self.sys_array += self.i_buf @ self.w_buf
                 i_buf_col = 0
                 w_buf_row = 0
                 o_buf_col = 0

@@ -1,12 +1,19 @@
 import torch
 import numpy as np
 
+DATA_SIZE = 16
+
 class DRAM:
     def __init__(self, size):
         self.size = size
         self.data = np.zeros(size)
         self.instructions = np.zeros(size)
         self.weights_size = 0
+
+    def flash_inputs(self, input_array, in_ptr):
+        # Takes in 1D array, appends it to memory at in_ptr
+        in_ptr = in_ptr//DATA_SIZE
+        self.data[in_ptr:in_ptr+input_array.shape[0]] = input_array
     
     def generate_weight_matrix(self, matrix_B, sys_params):
         # Pad the input matrices to match the systolic array dimensions
@@ -50,7 +57,11 @@ class DRAM:
         print(weights[0])
         weights = np.concatenate(weights)
         # leaves room for the instruction set
+<<<<<<< HEAD
         self.data[0:0+weights.shape[0]] = weights
+=======
+        self.data[sys_params.inst_mem//sys_params.data_size:sys_params.inst_mem//sys_params.data_size+weights.shape[0]] = weights
+>>>>>>> a1715656c2a1df026ec0a073a31aa8fc9a57c959
         self.weights_size = weights.shape[0]*sys_params.data_size
 
         wt_ptr_end = sys_params.inst_mem + self.weights_size
@@ -59,6 +70,11 @@ class DRAM:
 
     def write(self, addr, data):
         self.data[addr] = data
+    
+    def write_to_text(self, filename):
+        with open(filename, "w") as f:
+            for i in range(self.size):
+                f.write(str(self.data[i]) + "\n")
 
     def read(self, addr):
         return self.data[addr]
