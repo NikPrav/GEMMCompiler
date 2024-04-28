@@ -5,6 +5,7 @@ class DRAM:
     def __init__(self, size):
         self.size = size
         self.data = np.zeros(size)
+        self.instructions = np.zeros(size)
         self.weights_size = 0
     
     def generate_weight_matrix(self, matrix_B, sys_params):
@@ -46,10 +47,10 @@ class DRAM:
             weights.append(node.weights.T.flatten().detach().numpy())
 
             # cp = GEMMCompiler(M, N, K, sys_params)
-        
+        print(weights[0])
         weights = np.concatenate(weights)
         # leaves room for the instruction set
-        self.data[sys_params.inst_mem:sys_params.inst_mem+weights.shape[0]] = weights
+        self.data[0:0+weights.shape[0]] = weights
         self.weights_size = weights.shape[0]*sys_params.data_size
 
         wt_ptr_end = sys_params.inst_mem + self.weights_size

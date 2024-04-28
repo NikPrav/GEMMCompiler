@@ -23,7 +23,11 @@ class LoadCommand:
         # Generate bitstream for the load command
         function_type = '0010'  # 4 bits for function type (load command)
         buf_id_bits = format(self.buf_id, '02b')  # 2 bits for buf_id
-        mem_addr_bits = format(self.mem_addr, '010b')  # 10 bits for mem_addr
+        mem_addr_bits = format(self.mem_addr, '026b')  # 26 bits for mem_addr
+        print(self.mem_addr)
+        print(len(function_type))
+        print(len(buf_id_bits))
+        print(len(mem_addr_bits))
         bitstream = function_type + buf_id_bits + mem_addr_bits
         return bitstream
 
@@ -56,7 +60,7 @@ class StoreCommand:
         # Generate bitstream for the store command
         function_type = '0011'  # 4 bits for function type (store command)
         buf_id_bits = format(self.buf_id, '02b')  # 2 bits for buf_id
-        mem_addr_bits = format(self.mem_addr, '010b')  # 10 bits for mem_addr
+        mem_addr_bits = format(self.mem_addr, '026b')  # 26 bits for mem_addr
         bitstream = function_type + buf_id_bits + mem_addr_bits
         return bitstream
 
@@ -88,7 +92,7 @@ class GEMMCommand:
     def generate_bitstream(self):
         # Generate bitstream for the GEMM operation
         function_type = '0100'  # 4 bits for function type (GEMM operation)
-        num_exec_bits = format(self.n, '010b')  # 6 bits for number of executions
+        num_exec_bits = format(self.n, '028b')  # 28 bits for number of executions
         bitstream = function_type + num_exec_bits
         return bitstream
 
@@ -101,7 +105,7 @@ class DRAINSYSCommand:
     def generate_bitstream(self):
         # Generate bitstream for the GEMM operation
         function_type = '0101'  # 4 bits for function type (DRAINSYS command)
-        num_exec_bits = format(0, '012b')  # 12 bits for nothing
+        num_exec_bits = format(0, '028b')  # 28 bits for nothing
         bitstream = function_type + num_exec_bits
         return bitstream
     
