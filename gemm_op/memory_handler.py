@@ -56,7 +56,7 @@ class DRAM:
             weights.append(node.weights.T.flatten().detach().numpy())
 
             # cp = GEMMCompiler(M, N, K, sys_params)
-        # print(weights[0])
+
         weights = np.concatenate(weights)
         # leaves room for the instruction set
         self.data[0:0+weights.shape[0]] = weights
@@ -76,6 +76,23 @@ class DRAM:
 
     def read(self, addr):
         return self.data[addr]
+    
+    def generate_lists(self,instruction_list):
+        # writing the instructions into the DRAM
+        with open("instruction_list.txt", "w") as file:
+            # Iterate through each element in the list
+            for row in instruction_list:
+                for element in row:
+                    # Write the element to the file
+                    file.write(str(element) + "\n")  # Add a newline character to separate elements
+
+        # Change this for actual FPGA
+        cur_entry_mem = 0
+        with open("data_list.txt", "w") as file:
+            # Iterate through each element in the list
+            for weight_entry in self.data:
+                file.write(str(format(int(weight_entry),f'0{16}b')) + "\n")  # Add a newline character to separate elements
+                cur_entry_mem += 1
 
     def __str__(self):
         return str(self.data)
