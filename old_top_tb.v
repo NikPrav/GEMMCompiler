@@ -300,23 +300,34 @@ module old_top_tb();
 
         // Set Address and enable 
         r_i_down_rd_en = 0;
-        r_i_down_rd_addr = 0;
+        r_i_down_rd_addr = 1; //changed from 0 
 
         @(posedge  clk);
         r_i_down_rd_en = 1;
         // @(posedge  clk);
         
-        // Read each row of the buffer output and transform into columnwsie
-        for (i = 0; i < NUM_ROW + 1 ; i = i + 1) begin 
-            
+        // Read each row of the buffer output and transform into columnwise
+
+        for (i = 1; i < NUM_ROW + 1 ; i = i + 1) begin  
+            @(posedge  clk); 
             r_i_down_rd_addr = i + 1;
             @(posedge  clk);
-
             for (j = 0; j < NUM_COL; j = j + 1) begin
-                C[j * NUM_COL + (i-1)] = w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH];
-                // $display("%d", w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH]);
+                C[j * NUM_COL + i-1] = w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH];
+                $display("%d", w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH]);
             end
         end
+
+        // for (i = 0; i < NUM_ROW + 1 ; i = i + 1) begin 
+            
+        //     r_i_down_rd_addr = i + 1;
+        //     @(posedge  clk);
+
+        //     for (j = 0; j < NUM_COL; j = j + 1) begin
+        //         C[j * NUM_COL + (i-1)] = w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH];
+        //         // $display("%d", w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH]);
+        //     end
+        // end
 
         @(posedge  clk);
         r_i_down_rd_en = 0;

@@ -2,9 +2,6 @@ module inst_reader #(
         parameter INST_WIDTH                    = 16,
         parameter INST_MEMORY_SIZE              = 1024,
         parameter LOG2_INST_MEMORY_SIZE         = 10,
-        parameter A_OFFSET                      = 1024,
-        parameter B_OFFSET                      = 2048,
-        parameter C_OFFSET                      = 3072,
 
         parameter OPCODE_WIDTH                  = 4,
         parameter BUF_ID_WIDTH                  = 2,
@@ -96,7 +93,7 @@ module inst_reader #(
                         begin
                                 if (buf_id == 2'b00)            // Load to left buffer
                                 begin
-                                        start = A_OFFSET + mem_loc;
+                                        start = mem_loc;
                                         finish = start + NUM_COL + NUM_ROW - 1;
                                         r_i_left_wr_en = 1;
 
@@ -147,7 +144,7 @@ module inst_reader #(
 
                                 else if (buf_id == 2'b01)       // Load to top buffer
                                 begin
-                                        start = B_OFFSET + mem_loc;
+                                        start = mem_loc;
                                         finish = start + NUM_COL + NUM_ROW - 1;
                                         r_i_top_wr_en = 1;
 
