@@ -7,14 +7,14 @@ DATA_SIZE = 16
 class DRAM:
     def __init__(self, size, sys_params: compiler.SystolicArrayParams):
         self.size = size
-        self.data = np.zeros(size)
-        self.instructions = np.zeros(size)
+        self.data = np.zeros(size - sys_params.inst_mem)
+        self.instructions = np.zeros(sys_params.inst_mem)
         self.weights_size = 0
         self.sys_params = sys_params
 
     def flash_inputs(self, input_array, in_ptr):
         # Takes in 1D array, appends it to memory at in_ptr
-        in_ptr = (in_ptr-self.sys_params.inst_mem)//DATA_SIZE
+        in_ptr = (in_ptr-self.sys_params.inst_mem)//self.sys_params.data_size
         self.data[in_ptr:in_ptr+input_array.shape[0]] = input_array
     
     def generate_weight_matrix(self, matrix_B, sys_params):

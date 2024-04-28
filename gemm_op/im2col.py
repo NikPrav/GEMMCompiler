@@ -143,6 +143,8 @@ if __name__ == '__main__':
         w_ptr_cur = w_ptr_cur + node.weight_size[0]*node.weight_size[1]*sys_params.data_size
 
 
+    # Writing to text file
+    Dram_content.generate_lists(instruction_list)
 
     # Create FPGA
     fpga_test = fpga.FPGA(sys_params, Dram_content)
