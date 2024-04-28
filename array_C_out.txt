@@ -1,3 +1,6 @@
+// memory data file (do not edit the following line - required for mem load use)
+// instance=/old_top_tb/C
+// format=bin addressradix=h dataradix=b version=1.0 wordsperline=1 noaddress
 00000000000000000000000000011100
 00000000000000000000000000100000
 00000000000000000000000000100100

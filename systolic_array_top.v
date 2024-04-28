@@ -79,7 +79,7 @@ module systolic_array_top#(parameter NUM_ROW = 8,
     
     input                                                       i_down_rd_en   ;
     input   [LOG2_SRAM_BANK_DEPTH   -1: 0]                      i_down_rd_addr ;
-    output  [NUM_COL*OUT_DATA_WIDTH -1: 0]                      o_down_rd_data ;
+    output  [NUM_COL * OUT_DATA_WIDTH -1: 0]                              o_down_rd_data ;
     
     input   [CTRL_WIDTH             -1: 0]                      i_ctrl_state              ;
     input   [LOG2_SRAM_BANK_DEPTH   -1: 0]                      i_top_sram_rd_start_addr  ;
@@ -313,7 +313,7 @@ module systolic_array_top#(parameter NUM_ROW = 8,
     end
     
     endgenerate
-    
+
     generate
     wire    [NUM_COL*2                  -1: 0]  w_i_cmd_top_to_sa       ; // Added *2
     wire    [NUM_COL                    -1: 0]  w_i_valid_top_to_sa     ;
@@ -335,7 +335,7 @@ module systolic_array_top#(parameter NUM_ROW = 8,
     assign  w_i_down_wr_data        [gc] = w_o_data_down_from_sa   [(gc*OUT_DATA_WIDTH)    +:  OUT_DATA_WIDTH];
     
     // ADDED: Assign rd_out of bottom SRAM to the output port of the top module, might need reordering of indices
-    assign o_down_rd_data [gc] = w_o_down_rd_data[gc];
+    assign o_down_rd_data [OUT_DATA_WIDTH * gc +: OUT_DATA_WIDTH] = w_o_down_rd_data[gc];
     end
     
     for(gr = 0; gr<NUM_ROW; gr = gr+1)

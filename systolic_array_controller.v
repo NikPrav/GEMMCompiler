@@ -112,27 +112,28 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
     reg     [LOG2_SRAM_BANK_DEPTH   -1: 0]  r_top_rd_wr_addr_from_ctrl  ;
     reg                                     r_left_rd_wr_en_from_ctrl   ;
     reg     [LOG2_SRAM_BANK_DEPTH   -1: 0]  r_left_rd_wr_addr_from_ctrl ;
+    reg                                     r_down_rd_wr_en_from_ctrl;
+
     reg     [NUM_COL                -1: 0]  r_valid_top_from_ctrl       ;
     reg     [NUM_ROW                -1: 0]  r_valid_left_from_ctrl      ;
     wire                                    w_sa_output_rdy;
     
-    assign  w_sa_output_rdy             = (|(i_sa_datapath_valid_down_to_ctrl));
-    assign  o_down_rd_wr_addr_from_ctrl = w_sa_output_rdy ?  r_i_down_wr_addr    :   i_down_rd_addr_to_ctrl;
+    // assign  w_sa_output_rdy             = (|(i_sa_datapath_valid_down_to_ctrl));
     
-    generate
-    for(gc = 0; gc<NUM_COL; gc = gc+1)
-        begin : SA_valid_high
-        // prioritizing SA write to SRAM over read from top
-        // and writing only the data whose valid is high
-        assign  o_down_rd_wr_en_from_ctrl   [gc] = (i_ctrl_state_to_ctrl < 2)                 ?   i_down_rd_en_to_ctrl    :   (
-        (i_sa_datapath_valid_down_to_ctrl[gc] == 1)   ?   1   :   0);
-        //assign  o_down_wr_data_from_ctrl    [(gc*OUT_DATA_WIDTH)    +:  OUT_DATA_WIDTH] = (i_sa_datapath_valid_down_to_ctrl[gc] == 1)   ?  w_o_data_down[(gc*OUT_DATA_WIDTH)    +:  OUT_DATA_WIDTH] : 0;
-    end
-    endgenerate
+    // generate
+    // for(gc = 0; gc<NUM_COL; gc = gc+1)
+    //     begin : SA_valid_high
+    //      assign  o_down_rd_wr_en_from_ctrl   [gc] = (i_ctrl_state_to_ctrl < 2)? i_down_rd_en_to_ctrl:((i_sa_datapath_valid_down_to_ctrl[gc] == 1)   ?   1   :   0);
+    //     // prioritizing SA write to SRAM over read from top
+    //     // and writing only the data whose valid is high
+    //     // assign  o_down_rd_wr_en_from_ctrl   [gc] = (i_ctrl_state_to_ctrl < 2)                 ?   i_down_rd_en_to_ctrl    :   (
+    //     // (i_sa_datapath_valid_down_to_ctrl[gc] == 1)   ?   1   :   0);
+    //     //assign  o_down_wr_data_from_ctrl    [(gc*OUT_DATA_WIDTH)    +:  OUT_DATA_WIDTH] = (i_sa_datapath_valid_down_to_ctrl[gc] == 1)   ?  w_o_data_down[(gc*OUT_DATA_WIDTH)    +:  OUT_DATA_WIDTH] : 0;
+    // end
+    // endgenerate
 
-    integer top_count, left_count;
+    integer top_count, left_count, down_count;
     reg top_read_done, left_read_done;
-    
     
     always@(posedge clk or negedge rst_n)
     begin
@@ -154,6 +155,7 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
 
                 top_count <= 0;
                 left_count <= 0;
+                down_count <= 0;
 
                 top_read_done <= 0;
                 left_read_done <= 0;
@@ -167,17 +169,22 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
             begin
                 r_top_rd_wr_en_from_ctrl <= {NUM_COL{READ_ENABLE}};
                 r_valid_top_from_ctrl    <= ~0;
-                
-                r_top_rd_wr_addr_from_ctrl <= (r_top_rd_wr_addr_from_ctrl == i_top_sram_rd_end_addr - 1) ? r_top_rd_wr_addr_from_ctrl :r_top_rd_wr_addr_from_ctrl + 1;
+
+                if (r_top_rd_wr_addr_from_ctrl == i_top_sram_rd_end_addr - 1) begin 
+                    r_top_rd_wr_addr_from_ctrl <= r_top_rd_wr_addr_from_ctrl;
+                    top_read_done <= 1;
+                end 
+                else begin 
+                    r_top_rd_wr_addr_from_ctrl <=  r_top_rd_wr_addr_from_ctrl + 1;
+                end
             end
-            else if (top_count < 3) begin 
-                top_count = top_count + 1;
-                top_read_done <= 1;
-                r_top_rd_wr_addr_from_ctrl <= 0;
-            end
+            // else if (r_top_rd_wr_addr_from_ctrl == i_top_sram_rd_end_addr-1 && top_count < 2) begin 
+            //     top_count <= top_count + 1;
+            //     r_top_rd_wr_addr_from_ctrl <= 0;
+            // end
             else
             begin
-                r_top_rd_wr_addr_from_ctrl <= i_top_sram_rd_end_addr;
+                r_top_rd_wr_addr_from_ctrl <= 0;
                 r_valid_top_from_ctrl      <= 0;
             end
             
@@ -186,37 +193,46 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
                 r_left_rd_wr_en_from_ctrl <= {NUM_ROW{READ_ENABLE}};
                 r_valid_left_from_ctrl    <= ~0;
 
-                r_left_rd_wr_addr_from_ctrl <= (r_left_rd_wr_addr_from_ctrl == i_left_sram_rd_end_addr - 1) ? r_left_rd_wr_addr_from_ctrl :r_left_rd_wr_addr_from_ctrl + 1;
+                if (r_left_rd_wr_addr_from_ctrl == i_left_sram_rd_end_addr - 1) begin 
+                    r_left_rd_wr_addr_from_ctrl <= r_left_rd_wr_addr_from_ctrl;
+                    left_read_done <= 1;
+                end 
+                else begin 
+                    r_left_rd_wr_addr_from_ctrl <=  r_left_rd_wr_addr_from_ctrl + 1;
+                end
             end
-            else if (left_count < 3) begin 
-                left_count = left_count + 1;
-                left_read_done <= 1;
-                r_left_rd_wr_addr_from_ctrl <= 0;
-            end
+            // else if (r_left_rd_wr_addr_from_ctrl == i_left_sram_rd_end_addr-1  && left_count < 2) begin 
+            //     left_count <= left_count + 1;
+            //     r_left_rd_wr_addr_from_ctrl <= 0;
+            // end
             else
             begin
-                r_left_rd_wr_addr_from_ctrl <= i_top_sram_rd_end_addr;
+                r_left_rd_wr_addr_from_ctrl <= 0;
                 r_valid_left_from_ctrl      <= 0;
             end
         end
         
-            // else if (i_ctrl_state_to_ctrl == DRAIN)
-            // begin
-            //     // Increment down write address according to timing of PE output
-            //     if (r_i_down_wr_addr   < i_top_sram_rd_end_addr)
-            // begin
-            //     r_dow <= {NUM_COL{READ_ENABLE}};
-            //     r_valid_top_from_ctrl    <= ~0;
-                
-            //     r_top_rd_wr_addr_from_ctrl <= r_top_rd_wr_addr_from_ctrl + 1;
-            // end
-            // else
-            // begin
-            //     r_top_rd_wr_addr_from_ctrl <= i_top_sram_rd_end_addr;
-            //     r_valid_top_from_ctrl      <= 0;
-            // end
-                
-            // end
+            else if (i_ctrl_state_to_ctrl == DRAIN)
+            begin
+
+                // Wait for all the data to drain; takes NUM_ROW clock cycles 
+                if (i_sa_datapath_valid_down_to_ctrl[NUM_COL -1] == 1 && down_count < NUM_ROW - 1) begin 
+                    down_count <= down_count + 1;
+                    r_i_down_wr_addr <= r_i_down_wr_addr - 1;
+                    r_down_rd_wr_en_from_ctrl <= {NUM_COL{WRITE_ENABLE}};
+
+                end else if (down_count == NUM_ROW - 1) begin
+                    down_count <= down_count + 1;
+
+                    r_down_rd_wr_en_from_ctrl <= {NUM_COL{READ_ENABLE}};
+                end else if (down_count == NUM_ROW) begin
+                    r_i_down_wr_addr <= 0;
+                end
+                else begin 
+                    r_i_down_wr_addr <= NUM_ROW;
+                    r_down_rd_wr_en_from_ctrl <= {NUM_COL{READ_ENABLE}};
+                end
+            end
     end
     end
     
@@ -232,5 +248,10 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
     
     assign  o_valid_top_from_ctrl  = r_valid_top_from_ctrl;
     assign  o_valid_left_from_ctrl = r_valid_left_from_ctrl;
+
+    assign  o_down_rd_wr_en_from_ctrl = (down_count == NUM_ROW - 1) ? r_down_rd_wr_en_from_ctrl : ((i_sa_datapath_valid_down_to_ctrl[NUM_COL-1] == 1)?1:0);
+
+    // assign  o_down_rd_wr_en_from_ctrl = (i_ctrl_state_to_ctrl == IDLE) ? i_down_rd_en_to_ctrl : r_down_rd_wr_en_from_ctrl; 
+    assign  o_down_rd_wr_addr_from_ctrl = (i_down_rd_en_to_ctrl == 0) ?  r_i_down_wr_addr    :   i_down_rd_addr_to_ctrl;
     
 endmodule

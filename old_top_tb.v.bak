@@ -72,7 +72,6 @@ module old_top_tb();
     // Changed the following: Add temp memories for
     reg [DATA_WIDTH-1: 0] A[0:15];
     reg [DATA_WIDTH-1: 0] B[0:15];
-    reg [ACCU_DATA_WIDTH-1 : 0] C [0:15];
     
     integer  i, j;
     integer m_left, m_top;
@@ -174,7 +173,7 @@ module old_top_tb();
 
         for (m_left = 0; m_left < NUM_COL + NUM_ROW - 1; m_left = m_left + 1) begin 
             
-            r_i_left_wr_addr = m_left + 1;   
+            r_i_left_wr_addr = m_left;   
             @(posedge  clk);
 
             for (j = 0; j < NUM_ROW; j = j + 1) begin
@@ -196,7 +195,7 @@ module old_top_tb();
 
         // Set the correct start and end address of the left buffer (in this case, 0)
         r_i_left_sram_rd_start_addr = 5'd0;
-        r_i_left_sram_rd_end_addr   = 5'd5;
+        r_i_left_sram_rd_end_addr   = 5'd4;
         
         @(posedge  clk);//#(`PERIOD * 2)
         
@@ -214,7 +213,7 @@ module old_top_tb();
 
         for (m_top = 0; m_top < NUM_COL + NUM_ROW - 1; m_top = m_top + 1) begin 
             
-            r_i_top_wr_addr = m_top + 1;   
+            r_i_top_wr_addr = m_top;   
             @(posedge  clk);
 
             for (j = 0; j < NUM_COL; j = j + 1) begin
@@ -236,7 +235,7 @@ module old_top_tb();
         
         // Set the correct start and end address of the top buffer (in this case, 0)
         r_i_top_sram_rd_start_addr = 5'd0;
-        r_i_top_sram_rd_end_addr   = 5'd5;
+        r_i_top_sram_rd_end_addr   = 5'd4;
     
         @(posedge  clk);
         
@@ -266,7 +265,6 @@ module old_top_tb();
         @(posedge  clk);
         @(posedge  clk);
         @(posedge  clk);
-        @(posedge  clk);
 
         // ------------------------------------------------
         // ------------------------------------------------ DRAIN stage
@@ -280,48 +278,7 @@ module old_top_tb();
         @(posedge  clk);
         @(posedge  clk);
         @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-
-
-        // ------------------------------------------------
-        // ------------------------------------------------ WRITE OUTPUT TO FILE
-        // ------------------------------------------------
         
-        r_i_ctrl_state = IDLE;
-
-        @(posedge  clk);
-        @(posedge  clk);
-
-        // Set Address and enable 
-        r_i_down_rd_en = 0;
-        r_i_down_rd_addr = 0;
-
-        @(posedge  clk);
-        r_i_down_rd_en = 1;
-        // @(posedge  clk);
-        
-        // Read each row of the buffer output and transform into columnwsie
-        for (i = 0; i < NUM_ROW + 1 ; i = i + 1) begin 
-            
-            r_i_down_rd_addr = i + 1;
-            @(posedge  clk);
-
-            for (j = 0; j < NUM_COL; j = j + 1) begin
-                C[j * NUM_COL + (i-1)] = w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH];
-                // $display("%d", w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH]);
-            end
-        end
-
-        @(posedge  clk);
-        r_i_down_rd_en = 0;
-
-        $writememb("array_C_out.txt", C);
 
         $stop;
     end
@@ -354,6 +311,29 @@ module old_top_tb();
     .i_down_sram_rd_start_addr  (r_i_down_sram_rd_start_addr),
     .i_down_sram_rd_end_addr    (r_i_down_sram_rd_end_addr)
     );
+
+    inst_reader #(
+        .INST_WIDTH             (INST_WIDTH),
+        .INST_MEMORY_SIZE       (INST_MEMORY_SIZE),
+        .LOG2_INST_MEMORY_SIZE  (LOG2_INST_MEMORY_SIZE),
+        .OPCODE_WIDTH           (OPCODE_WIDTH),
+        .BUF_ID_WIDTH           (BUF_ID_WIDTH),
+        .MEM_LOC_WIDTH          (MEM_LOC_WIDTH),
+
+        .OPCODE_ARRAY_INDEX     (OPCODE_ARRAY_INDEX),
+        .BUF_ID_ARRAY_INDEX     (BUF_ID_ARRAY_INDEX),
+        .MEM_LOC_ARRAY_INDEX    (MEM_LOC_ARRAY_INDEX),
+
+        .opcode_LD              (opcode_LD),
+        .opcode_ST              (opcode_ST),
+        .opcode_GEMM            (opcode_GEMM),
+        .opcode_DRAINSYS        (opcode_DRAINSYS)
+    )inst_reader_in_tb(
+        .clk                    (clk),
+        .opcode                 (opcode),
+        .buf_id                 (buf_id),
+        .mem_loc                (mem_loc)
+);
     
     // Free running clk
     always #(`PERIOD/2) clk = ~clk;

@@ -39,6 +39,21 @@ def decimal_to_fixed_point_binary(number):
     return fixed_point_binary
 
 
+def convert_to_binary(number, width):
+    """
+    Converts an integer to a binary number of specified width.
+
+    Args:
+        number (int): The integer to convert.
+        width (int): The desired width of the binary representation.
+
+    Returns:
+        str: Binary representation of the number with leading zeros to match the specified width.
+    """
+    binary = bin(number)[2:]  # Convert to binary and remove the '0b' prefix
+    return binary.zfill(width)  # Add leading zeros to match the width
+
+
 if os.path.exists("array_A_fi.txt"):
     os.remove("array_A_fi.txt")
 
@@ -48,34 +63,56 @@ if os.path.exists("array_B_fi.txt"):
 if os.path.exists("array_C_fi.txt"):
     os.remove("array_C_fi.txt")
 
+
 # Randomly generate input arrays
-A = 2 * np.random.random([M, N])
-B = 2 * np.random.random([N, K])
+# A = 2 * np.random.random([M, N])
+# B = 2 * np.random.random([N, K])
 
+# Custom input to the arrays 
+
+
+B = np.array([ [  1,  5, 10, 15],
+                [  1, 20, 25, 30],
+                                [  1, 35, 40, 45],
+                                [  1, 50, 55, 60]])
+A = np.array([ [  1,  5,  9, 13],
+                                [  2,  6, 10, 14],
+                                [  3,  7, 11, 15],
+                                [  4,  8, 12, 16]])
+
+# wmam = np.matmul(wm, am) = 
+#                 [
+#                     [ 101  225  349  473]
+#                     [ 236  540  844 1148]
+#                     [ 371  855 1339 1823]
+#                     [ 506 1170 1834 2498]
+#                 ]
 C = np.matmul(A, B)
+print(C)
 
-A_flat = A.flatten()
+
+A_flat = A.flatten(order="F")
 A_list = A_flat.tolist()
 A_bin = []
 
 for item in A_list:
-    temp = decimal_to_fixed_point_binary(item)
+    temp = convert_to_binary(item, 8)
     A_bin.append(temp)
 
-B_flat = B.flatten(order="F")
+B_flat = B.flatten()
 B_list = B_flat.tolist()
 B_bin = []
 
 for x in B_list:
-    temp = decimal_to_fixed_point_binary(x)
+    temp = convert_to_binary(x, 8)
     B_bin.append(temp)
 
-C_flat = C.flatten()
+C_flat = C.flatten(order="F")
 C_list = C_flat.tolist()
 C_bin = []
 
 for x in C_list:
-    temp = decimal_to_fixed_point_binary(x)
+    temp = convert_to_binary(x, 32)
     C_bin.append(temp)
 
 file = open("array_A_fi.txt", "a")
