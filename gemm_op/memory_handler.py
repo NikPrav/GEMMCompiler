@@ -57,11 +57,7 @@ class DRAM:
         print(weights[0])
         weights = np.concatenate(weights)
         # leaves room for the instruction set
-<<<<<<< HEAD
         self.data[0:0+weights.shape[0]] = weights
-=======
-        self.data[sys_params.inst_mem//sys_params.data_size:sys_params.inst_mem//sys_params.data_size+weights.shape[0]] = weights
->>>>>>> a1715656c2a1df026ec0a073a31aa8fc9a57c959
         self.weights_size = weights.shape[0]*sys_params.data_size
 
         wt_ptr_end = sys_params.inst_mem + self.weights_size
