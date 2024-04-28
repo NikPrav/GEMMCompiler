@@ -56,7 +56,7 @@ class DRAM:
             weights.append(node.weights.T.flatten().detach().numpy())
 
             # cp = GEMMCompiler(M, N, K, sys_params)
-        print(weights[0])
+        # print(weights[0])
         weights = np.concatenate(weights)
         # leaves room for the instruction set
         self.data[0:0+weights.shape[0]] = weights

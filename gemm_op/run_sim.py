@@ -91,13 +91,16 @@ for node in node_list:
 
 # print(np.array(instruction_list).shape)
     
-# layer_num = 0
-# for i in instruction_list:
-#     print(i)
-#     # Dram_content.instructions[(instruction_num* ):(len(instruction_list[layer_num])+instruction_num)] = i
-#     Dram_content.instructions[(instruction_num*len(instructions[0])):(len(instruction_list[layer_num])+instruction_num)*len(instructions[0])] = np.array(i)
-#     instruction_num+=len(instruction_list[layer_num])
-#     layer_num += 1
+layer_num = 0
+for i in instruction_list:
+    # print(i)
+    # Dram_content.instructions[(instruction_num* ):(len(instruction_list[layer_num])+instruction_num)] = i
+
+    Dram_content.instructions[(instruction_num):(len(instruction_list[layer_num])+instruction_num)] = np.array(i)
+
+    # Dram_content.instructions[(instruction_num*len(instructions[0])):(len(instruction_list[layer_num])+instruction_num)*len(instructions[0])] = np.array(i)
+    instruction_num+=len(instruction_list[layer_num])
+    layer_num += 1
     
 
     # instruction_num+=len(instruction_list[0])
@@ -106,8 +109,20 @@ for node in node_list:
 
 
 # writing the instructions into the DRAM
+with open("instruction_list.txt", "w") as file:
+    # Iterate through each element in the list
+    for row in instruction_list:
+        for element in row:
+            # Write the element to the file
+            file.write(str(element) + "\n")  # Add a newline character to separate elements
 
-# print(instructions_test)
+# Change this for actual FPGA
+cur_entry_mem = 0
+with open("data_list.txt", "w") as file:
+    # Iterate through each element in the list
+    for weight_entry in Dram_content.data:
+        file.write(str(format(int(weight_entry),f'0{16}b')) + "\n")  # Add a newline character to separate elements
+        cur_entry_mem += 1
 
 
 # Create FPGA
