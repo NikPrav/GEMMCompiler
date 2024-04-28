@@ -34,14 +34,13 @@
 
 `define PERIOD 10
 
-
 module old_top_tb();
-    parameter                                       NUM_ROW              = 4  ;
-    parameter                                       NUM_COL              = 4  ;
-    parameter                                       DATA_WIDTH           = 8  ;
-    parameter                                       ACCU_DATA_WIDTH      = 32 ;
+    parameter                                       NUM_ROW              = 16 ;
+    parameter                                       NUM_COL              = 16 ;
+    parameter                                       DATA_WIDTH           = 16  ; 
+    parameter                                       ACCU_DATA_WIDTH      = 16 ; 
     parameter                                       OUT_DATA_WIDTH       = ACCU_DATA_WIDTH ;
-    parameter                                       LOG2_SRAM_BANK_DEPTH = 5 ;
+    parameter                                       LOG2_SRAM_BANK_DEPTH = 9 ;
     parameter                                       CTRL_WIDTH           = 4 ;
     parameter                                       SKEW_TOP_INPUT_EN    = 1 ;
     parameter                                       SKEW_LEFT_INPUT_EN   = 1 ;
@@ -68,14 +67,17 @@ module old_top_tb();
     parameter IDLE   = 0;
     parameter STEADY = 1;
     parameter DRAIN  = 3;
+
+    // Might need to add another parameter D - data depth 
     
     // Changed the following: Add temp memories for
-    reg [DATA_WIDTH-1: 0] A[0:15];
-    reg [DATA_WIDTH-1: 0] B[0:15];
-    reg [ACCU_DATA_WIDTH-1 : 0] C [0:15];
+    reg [DATA_WIDTH-1: 0] A[0:NUM_ROW*NUM_COL-1];
+    reg [DATA_WIDTH-1: 0] B[0:NUM_ROW*NUM_COL-1];
+    reg [ACCU_DATA_WIDTH-1 : 0] C [0: NUM_ROW * NUM_COL - 1];
     
     integer  i, j;
     integer m_left, m_top;
+    integer gemm_counter, drain_counter; 
 
     // // Inst_reader variables //
     // parameter INST_WIDTH            = 16;
@@ -196,7 +198,7 @@ module old_top_tb();
 
         // Set the correct start and end address of the left buffer (in this case, 0)
         r_i_left_sram_rd_start_addr = 5'd0;
-        r_i_left_sram_rd_end_addr   = 5'd5;
+        r_i_left_sram_rd_end_addr   = NUM_COL + 1;
         
         @(posedge  clk);//#(`PERIOD * 2)
         
@@ -236,7 +238,7 @@ module old_top_tb();
         
         // Set the correct start and end address of the top buffer (in this case, 0)
         r_i_top_sram_rd_start_addr = 5'd0;
-        r_i_top_sram_rd_end_addr   = 5'd5;
+        r_i_top_sram_rd_end_addr   = NUM_ROW + 1;
     
         @(posedge  clk);
         
@@ -254,19 +256,24 @@ module old_top_tb();
         // ------------------------------------------------ Perform the GEMM
 
         r_i_ctrl_state = STEADY;
+
+        for(gemm_counter = 0; gemm_counter < (NUM_ROW + NUM_COL + NUM_ROW); gemm_counter = gemm_counter + 1) 
+        begin 
+            @(posedge  clk);
+        end
         
         // Let the filling happen
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
 
         // ------------------------------------------------
         // ------------------------------------------------ DRAIN stage
@@ -274,19 +281,24 @@ module old_top_tb();
 
         r_i_ctrl_state = DRAIN;
 
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
-        @(posedge  clk);
+        for(drain_counter = 0; drain_counter < NUM_ROW + NUM_COL ; drain_counter = drain_counter + 1) 
+        begin 
+            @(posedge  clk);
+        end
+
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
+        // @(posedge  clk);
 
 
         // ------------------------------------------------
@@ -317,17 +329,6 @@ module old_top_tb();
                 $display("%d", w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH]);
             end
         end
-
-        // for (i = 0; i < NUM_ROW + 1 ; i = i + 1) begin 
-            
-        //     r_i_down_rd_addr = i + 1;
-        //     @(posedge  clk);
-
-        //     for (j = 0; j < NUM_COL; j = j + 1) begin
-        //         C[j * NUM_COL + (i-1)] = w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH];
-        //         // $display("%d", w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH]);
-        //     end
-        // end
 
         @(posedge  clk);
         r_i_down_rd_en = 0;

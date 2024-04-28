@@ -1,9 +1,9 @@
 import os
 import numpy as np
 
-M = 4
-N = 4
-K = 4
+M = 16
+N = 16
+K = 16
 
 DATA_WIDTH = 8
 FRAC_BITS = 4
@@ -65,20 +65,20 @@ if os.path.exists("array_C_fi.txt"):
 
 
 # Randomly generate input arrays
-# A = 2 * np.random.random([M, N])
-# B = 2 * np.random.random([N, K])
+A = np.random.randint(50, size=(M,N))
+B = np.random.randint(50, size=(N,K))
 
 # Custom input to the arrays 
 
 
-B = np.array([ [  1,  5, 10, 15],
-                [  1, 20, 25, 30],
-                                [  1, 35, 40, 45],
-                                [  1, 50, 55, 60]])
-A = np.array([ [  1,  5,  9, 13],
-                                [  2,  6, 10, 14],
-                                [  3,  7, 11, 15],
-                                [  4,  8, 12, 16]])
+# B = np.array([ [  1,  5, 10, 15],
+#                 [  1, 20, 25, 30],
+#                                 [  1, 35, 40, 45],
+#                                 [  1, 50, 55, 60]])
+# A = np.array([ [  1,  5,  9, 13],
+#                                 [  2,  6, 10, 14],
+#                                 [  3,  7, 11, 15],
+#                                 [  4,  8, 12, 16]])
 
 # wmam = np.matmul(wm, am) = 
 #                 [

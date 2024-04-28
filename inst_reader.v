@@ -64,6 +64,7 @@ module inst_reader #(
         integer                                 buffer_counter_A, buffer_counter_B, buffer_counter_C;
         integer                                 i, j;
         integer                                 m_left, m_top, start, finish;
+        integer                                 delay_counter_LD, delay_counter_ST, delay_counter_GEMM, delay_counter_DRAINSYS;
         // Local variables //
 
         initial 
@@ -76,6 +77,10 @@ module inst_reader #(
                 j = 0;
                 m_left = 0;
                 m_top = 0;
+                delay_counter_LD = 0;
+                delay_counter_ST = 0;
+                delay_counter_GEMM = 0;
+                delay_counter_DRAINSYS = 0;
                 
                 $readmemb("inst.txt", inst_memory);        
         end
@@ -86,7 +91,6 @@ module inst_reader #(
                 opcode = inst[OPCODE_ARRAY_INDEX - 1    : BUF_ID_ARRAY_INDEX];
                 buf_id = inst[BUF_ID_ARRAY_INDEX - 1    : MEM_LOC_ARRAY_INDEX];
                 mem_loc = inst[MEM_LOC_ARRAY_INDEX - 1  : 0];
-                PC = PC + 1;
 
                 case (opcode)
                         opcode_LD: 
@@ -102,7 +106,7 @@ module inst_reader #(
                                         for (m_left = start; m_left < finish; m_left = m_left + 1) 
                                         begin 
                                                 r_i_left_wr_addr = m_left;   
-                                                @(posedge  clk);
+                                                @(posedge clk);
 
                                                 for (j = 0; j < NUM_ROW; j = j + 1) 
                                                 begin
@@ -135,7 +139,7 @@ module inst_reader #(
                                         @(posedge clk);        //#(`PERIOD * 2)
                                         
                                         // Disable write and clear wires
-                                        r_i_left_wr_en   = 0;
+                                        r_i_left_wr_en   = 0;[]
                                         r_i_left_wr_addr = 0;
                                         @(posedge clk);
                                         r_i_left_wr_data = 0;
@@ -193,7 +197,7 @@ module inst_reader #(
                                 PC = PC + 1;
                         end
 
-                        opcode_ST: // TODO: Find store address
+                        opcode_ST:
                         begin
                                 r_i_ctrl_state = IDLE;
 
@@ -212,7 +216,7 @@ module inst_reader #(
 
                                         for (j = 0; j < NUM_COL; j = j + 1) 
                                         begin
-                                                A[j * NUM_ROW + i] = w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH];
+                                                A[mem_loc + (j * NUM_ROW + i)] = w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH];
                                         end
                                 end
 
@@ -253,10 +257,8 @@ module inst_reader #(
                                 PC = PC + 1;
                         end
 
-                        default:
+                        default: PC = PC + 1;
                 endcase
-
-        
         end
         
 endmodule

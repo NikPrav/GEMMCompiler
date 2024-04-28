@@ -216,15 +216,15 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
             begin
 
                 // Wait for all the data to drain; takes NUM_ROW clock cycles 
-                if (i_sa_datapath_valid_down_to_ctrl[NUM_COL -1] == 1 && down_count < NUM_ROW - 1) begin 
-                    down_count <= down_count + 1;
+                if (i_sa_datapath_valid_down_to_ctrl[NUM_COL -1] == 1 && down_count < NUM_ROW) begin 
+                    if (down_count == NUM_ROW - 1) begin
+                        r_down_rd_wr_en_from_ctrl <= {NUM_COL{READ_ENABLE}};
+                    end else begin 
+                        r_down_rd_wr_en_from_ctrl <= {NUM_COL{WRITE_ENABLE}};
+                        down_count <= down_count + 1;
+                    end
+
                     r_i_down_wr_addr <= r_i_down_wr_addr - 1;
-                    r_down_rd_wr_en_from_ctrl <= {NUM_COL{WRITE_ENABLE}};
-
-                end else if (down_count == NUM_ROW - 1) begin
-                    down_count <= down_count + 1;
-
-                    r_down_rd_wr_en_from_ctrl <= {NUM_COL{READ_ENABLE}};
                 end else if (down_count == NUM_ROW) begin
                     r_i_down_wr_addr <= 0;
                 end
@@ -249,7 +249,7 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
     assign  o_valid_top_from_ctrl  = r_valid_top_from_ctrl;
     assign  o_valid_left_from_ctrl = r_valid_left_from_ctrl;
 
-    assign  o_down_rd_wr_en_from_ctrl = (down_count == NUM_ROW - 1) ? r_down_rd_wr_en_from_ctrl : ((i_sa_datapath_valid_down_to_ctrl[NUM_COL-1] == 1)?1:0);
+    assign  o_down_rd_wr_en_from_ctrl = ((down_count !== 0) && (down_count <= NUM_ROW - 1)) ? r_down_rd_wr_en_from_ctrl : (((i_ctrl_state_to_ctrl == DRAIN) && (i_sa_datapath_valid_down_to_ctrl[NUM_COL-1] == 1))?1:0);
 
     // assign  o_down_rd_wr_en_from_ctrl = (i_ctrl_state_to_ctrl == IDLE) ? i_down_rd_en_to_ctrl : r_down_rd_wr_en_from_ctrl; 
     assign  o_down_rd_wr_addr_from_ctrl = (i_down_rd_en_to_ctrl == 0) ?  r_i_down_wr_addr    :   i_down_rd_addr_to_ctrl;
