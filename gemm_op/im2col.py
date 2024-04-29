@@ -37,7 +37,7 @@ def read_image(path):
 if __name__ == '__main__':
 
     # Setting Systolic Array Parameters
-    R, C = 16, 16  # Size of the systolic array
+    R, C = 10, 10  # Size of the systolic array
     mem_size = 1096*1096  # Memory size of the FPGA
     data_size = 16
     i_buf_size = 16*16*data_size  # Input buffer size of the FPGA
@@ -146,7 +146,7 @@ if __name__ == '__main__':
 
     print("Simulating and verifying generated instructions...")
     # Create FPGA
-    fpga_test = fpga.FPGA(sys_params, Dram_content, M*sys_params.data_size, N*sys_params.data_size)
+    fpga_test = fpga.FPGA(sys_params, Dram_content, M*sys_params.data_size, K*sys_params.data_size)
     # print(instruction_list_test)
     # fpga_test.flash(instruction_list_test)
 
