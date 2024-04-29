@@ -14,13 +14,6 @@ Top level modules:
 End time: 17:26:04 on Apr 28,2024, Elapsed time: 0:00:00
 Errors: 0, Warnings: 5
 
-} {} {}} {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v} {1 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v}
-Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module systolic_array_controller
-
-Top level modules:
-	systolic_array_controller
-
 } {} {}} {{D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v}} {1 {vlog -work work {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v}
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
 Start time: 17:26:04 on Apr 28,2024
@@ -33,14 +26,6 @@ Top level modules:
 End time: 17:26:04 on Apr 28,2024, Elapsed time: 0:00:00
 Errors: 0, Warnings: 1
 
-} {} {}} {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v} {2 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v}
-Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module systolic_array_pe_os
-** Warning: (vlog-2121) D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_pe.v(182): Illegal concatenation of an unsized constant. Will treat it as a 32-bit value.
-
-Top level modules:
-	systolic_array_pe_os
-
 } {} {}} {{D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v}} {1 {vlog -work work {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v}
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
 Start time: 17:26:04 on Apr 28,2024
@@ -51,20 +36,6 @@ Top level modules:
 	systolic_array_datapath
 End time: 17:26:04 on Apr 28,2024, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
-
-} {} {}} {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v} {1 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_datapath.v}
-Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module systolic_array_datapath
-
-Top level modules:
-	systolic_array_datapath
-
-} {} {}} {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/new_tb.v} {1 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/new_tb.v}
-Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module new_tb
-
-Top level modules:
-	new_tb
 
 } {} {}} {{D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/new_tb.v}} {0 {vlog -work work {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/new_tb.v}
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
@@ -118,19 +89,7 @@ vlog -reportprogress 300 -work work D:/GT-ece/Spring 2024/ECE8803_HML/project/De
 End time: 17:26:05 on Apr 28,2024, Elapsed time: 0:00:00
 Errors: 20, Warnings: 0
 
-} {6.0 26.0} {}} {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v} {2 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v}
-Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module systolic_array_top
-** Warning: (vlog-2121) D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v(152): Illegal concatenation of an unsized constant. Will treat it as a 32-bit value.
-** Warning: (vlog-2121) D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v(188): Illegal concatenation of an unsized constant. Will treat it as a 32-bit value.
-** Warning: (vlog-2121) D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v(239): Illegal concatenation of an unsized constant. Will treat it as a 32-bit value.
-** Warning: (vlog-2121) D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v(277): Illegal concatenation of an unsized constant. Will treat it as a 32-bit value.
-** Warning: (vlog-2121) D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_top.v(332): Illegal concatenation of an unsized constant. Will treat it as a 32-bit value.
-
-Top level modules:
-	systolic_array_top
-
-} {} {}} {{D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v}} {1 {vlog -work work {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v}
+} {6.0 26.0} {}} {{D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v}} {1 {vlog -work work {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v}
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
 Start time: 17:26:04 on Apr 28,2024
 vlog -reportprogress 300 -work work D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/systolic_array_controller.v 
@@ -140,12 +99,5 @@ Top level modules:
 	systolic_array_controller
 End time: 17:26:04 on Apr 28,2024, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
-
-} {} {}} {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v} {1 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v}
-Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module sram_bank_sp
-
-Top level modules:
-	sram_bank_sp
 
 } {} {}}
