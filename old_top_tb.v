@@ -261,19 +261,6 @@ module old_top_tb();
         begin 
             @(posedge  clk);
         end
-        
-        // Let the filling happen
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
 
         // ------------------------------------------------
         // ------------------------------------------------ DRAIN stage
@@ -285,22 +272,6 @@ module old_top_tb();
         begin 
             @(posedge  clk);
         end
-
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-        // @(posedge  clk);
-
-
         // ------------------------------------------------
         // ------------------------------------------------ WRITE OUTPUT TO FILE
         // ------------------------------------------------

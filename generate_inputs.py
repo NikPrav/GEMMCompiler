@@ -1,9 +1,9 @@
 import os
 import numpy as np
 
-M = 16
-N = 16
-K = 16
+M = 4
+N = 4
+K = 4
 
 DATA_WIDTH = 8
 FRAC_BITS = 4
@@ -96,7 +96,7 @@ A_list = A_flat.tolist()
 A_bin = []
 
 for item in A_list:
-    temp = convert_to_binary(item, 8)
+    temp = convert_to_binary(item, 16)
     A_bin.append(temp)
 
 B_flat = B.flatten()
@@ -104,7 +104,7 @@ B_list = B_flat.tolist()
 B_bin = []
 
 for x in B_list:
-    temp = convert_to_binary(x, 8)
+    temp = convert_to_binary(x, 16)
     B_bin.append(temp)
 
 C_flat = C.flatten(order="F")
@@ -112,7 +112,7 @@ C_list = C_flat.tolist()
 C_bin = []
 
 for x in C_list:
-    temp = convert_to_binary(x, 32)
+    temp = convert_to_binary(x, 16)
     C_bin.append(temp)
 
 file = open("array_A_fi.txt", "a")

@@ -53,18 +53,47 @@ module inst_reader #(
         output  [LOG2_SRAM_BANK_DEPTH   -1: 0]  i_left_sram_rd_start_addr,
         output  [LOG2_SRAM_BANK_DEPTH   -1: 0]  i_left_sram_rd_end_addr,
         output  [LOG2_SRAM_BANK_DEPTH   -1: 0]  i_down_sram_rd_start_addr,
-        output  [LOG2_SRAM_BANK_DEPTH   -1: 0]  i_down_sram_rd_end_addr
+        output  [LOG2_SRAM_BANK_DEPTH   -1: 0]  i_down_sram_rd_end_addr,
+
+        input   [NUM_COL * ACCU_DATA_WIDTH-1: 0] o_down_rd_data
         // To controller //
 );
+        parameter IDLE   = 0;
+        parameter STEADY = 1;
+        parameter DRAIN  = 3;
 
         // Local variables //
         reg [INST_WIDTH - 1 : 0]                inst;
-        reg [INST_WIDTH - 1 : 0]                inst_memory[INST_MEMORY_SIZE - 1 : 0];
+        reg [INST_WIDTH - 1 : 0]                inst_memory[0: INST_MEMORY_SIZE - 1];
+        reg [DATA_WIDTH - 1 : 0]                A[0 : 1023];
         reg [LOG2_INST_MEMORY_SIZE - 1 : 0]     PC;
         integer                                 buffer_counter_A, buffer_counter_B, buffer_counter_C;
         integer                                 i, j;
         integer                                 m_left, m_top, start, finish;
         integer                                 delay_counter_LD, delay_counter_ST, delay_counter_GEMM, delay_counter_DRAINSYS;
+        
+        reg                                     inst_start = 0;
+        reg inst_start_top = 0;
+        reg inst_start_st = 0;
+
+        reg                                     reg_i_top_wr_en = 0;
+        reg  [LOG2_SRAM_BANK_DEPTH   -1: 0]     reg_i_top_wr_addr = 0;
+        reg  [NUM_COL*DATA_WIDTH     -1: 0]     reg_i_top_wr_data = 0;
+        
+        reg                                     reg_i_left_wr_en;
+        reg  [LOG2_SRAM_BANK_DEPTH   -1: 0]     reg_i_left_wr_addr = 0;
+        reg  [NUM_ROW*DATA_WIDTH     -1: 0]     reg_i_left_wr_data = 0;
+        
+        reg                                     reg_i_down_rd_en = 0;
+        reg  [LOG2_SRAM_BANK_DEPTH   -1: 0]     reg_i_down_rd_addr = 0;
+        
+        reg  [CTRL_WIDTH             -1: 0]     reg_i_ctrl_state = 0;
+        reg  [LOG2_SRAM_BANK_DEPTH   -1: 0]     reg_i_top_sram_rd_start_addr = 0;
+        reg  [LOG2_SRAM_BANK_DEPTH   -1: 0]     reg_i_top_sram_rd_end_addr = 0;
+        reg  [LOG2_SRAM_BANK_DEPTH   -1: 0]     reg_i_left_sram_rd_start_addr = 0;
+        reg  [LOG2_SRAM_BANK_DEPTH   -1: 0]     reg_i_left_sram_rd_end_addr = 0;
+        reg  [LOG2_SRAM_BANK_DEPTH   -1: 0]     reg_i_down_sram_rd_start_addr = 0;
+        reg  [LOG2_SRAM_BANK_DEPTH   -1: 0]     reg_i_down_sram_rd_end_addr = 0;
         // Local variables //
 
         initial 
@@ -81,184 +110,281 @@ module inst_reader #(
                 delay_counter_ST = 0;
                 delay_counter_GEMM = 0;
                 delay_counter_DRAINSYS = 0;
+                inst_start = 0;
                 
-                $readmemb("inst.txt", inst_memory);        
-        end
+                $readmemb("inst.txt", inst_memory); 
+                $readmemb("data.txt", A);       
+        end 
+              
 
-        always@(posedge clk)
+        always@(posedge clk or negedge rst_n)
         begin
-                inst = inst_memory[PC];
-                opcode = inst[OPCODE_ARRAY_INDEX - 1    : BUF_ID_ARRAY_INDEX];
-                buf_id = inst[BUF_ID_ARRAY_INDEX - 1    : MEM_LOC_ARRAY_INDEX];
-                mem_loc = inst[MEM_LOC_ARRAY_INDEX - 1  : 0];
+        if (!rst_n)
+            begin
+                inst <= 0;
+                opcode <= 0;
+                buf_id <= 0;
+                mem_loc <= 0;     
+                inst_start <= 0;
+                inst_start_top <= 0;
+                inst_start_st <= 0;
+
+                PC <= 0;  
+                reg_i_ctrl_state = 0;      
+
+                reg_i_left_wr_en <= 0;
+                reg_i_left_wr_addr <= 0;   
+
+            end
+        else
+        begin
+                inst <= inst_memory[PC];
+                opcode <= inst[OPCODE_ARRAY_INDEX - 1    : BUF_ID_ARRAY_INDEX];
+                buf_id <= inst[BUF_ID_ARRAY_INDEX - 1    : MEM_LOC_ARRAY_INDEX];
+                mem_loc <= inst[MEM_LOC_ARRAY_INDEX - 1  : 0];
 
                 case (opcode)
                         opcode_LD: 
                         begin
                                 if (buf_id == 2'b00)            // Load to left buffer
                                 begin
-                                        start = mem_loc;
-                                        finish = start + NUM_COL + NUM_ROW - 1;
-                                        r_i_left_wr_en = 1;
+                                        if (inst_start == 0)
+                                        begin
+                                                start <= mem_loc;
+                                                finish <= mem_loc + NUM_COL + NUM_ROW - 1;
 
-                                        @(posedge clk);
-
-                                        for (m_left = start; m_left < finish; m_left = m_left + 1) 
+                                                m_left <= mem_loc;
+                                                reg_i_left_wr_en <= 1;
+                                                inst_start <= 1;
+                                        end 
+        
+                                        else 
                                         begin 
-                                                r_i_left_wr_addr = m_left;   
-                                                @(posedge clk);
-
-                                                for (j = 0; j < NUM_ROW; j = j + 1) 
+                                                if (m_left < finish)
                                                 begin
-                                                        // Read value in A, send as data to SRAM
-                                                        // Data is stored as NUM_COL * DATA_WIDTH
-                                                        r_i_left_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = A[((m_left - j) * NUM_ROW) + j];
+                                                        reg_i_left_wr_addr <= m_left;   
 
-                                                        if (m_left < NUM_ROW - 1) 
+                                                        for (j = 0; j < NUM_ROW; j = j + 1) 
                                                         begin
-                                                                if (j > m_left) 
-                                                                begin 
-                                                                        r_i_left_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = {DATA_WIDTH{1'b0}};
-                                                                end
-                                                        end 
-                                                        
-                                                        else if (m_left > NUM_ROW - 1) 
-                                                        begin 
-                                                                if (j < m_left - NUM_ROW - 1) 
+                                                                // Read value in A, send as data to SRAM
+                                                                // Data is stored as NUM_COL * DATA_WIDTH
+                                                                reg_i_left_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= A[((m_left - j) * NUM_ROW) + j];
+
+                                                                if (m_left < start + NUM_ROW - 1) 
                                                                 begin
-                                                                        r_i_left_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = {DATA_WIDTH{1'b0}};
+                                                                        if (j > m_left - start) 
+                                                                        begin 
+                                                                                reg_i_left_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= {DATA_WIDTH{1'b0}};
+                                                                        end
+                                                                end 
+                                                                
+                                                                else if (m_left > start + NUM_ROW - 1) 
+                                                                begin 
+                                                                        if (j < m_left - start - NUM_ROW - 1) 
+                                                                        begin
+                                                                                reg_i_left_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= {DATA_WIDTH{1'b0}};
+                                                                        end
                                                                 end
                                                         end
-                                                end
-                                        end
+                                                        
+                                                        m_left <= m_left + 1;
+                                                end 
+                                                else if (m_left == finish && delay_counter_LD == 0) 
+                                                begin 
+                                                        // Set the correct start and end address of the left buffer (in this case, 0)
+                                                        reg_i_left_sram_rd_start_addr <= 0;
+                                                        reg_i_left_sram_rd_end_addr   <= NUM_COL + 1;
+                                                        
+                                                        // Disable write and clear wires
+                                                        reg_i_left_wr_en   <= 0;
+                                                        reg_i_left_wr_addr <= 0;
 
-                                        // Set the correct start and end address of the left buffer (in this case, 0)
-                                        r_i_left_sram_rd_start_addr = start;
-                                        r_i_left_sram_rd_end_addr   = finish;
-                                        
-                                        @(posedge clk);        //#(`PERIOD * 2)
-                                        
-                                        // Disable write and clear wires
-                                        r_i_left_wr_en   = 0;[]
-                                        r_i_left_wr_addr = 0;
-                                        @(posedge clk);
-                                        r_i_left_wr_data = 0;
-                                        @(posedge clk);                     
+                                                        delay_counter_LD <= delay_counter_LD + 1;
+                                                end 
+                                                else if(m_left == finish && delay_counter_LD == 1) 
+                                                begin 
+                                                        reg_i_left_wr_data <= 0;
+
+                                                        PC <= PC + 1;
+                                                        inst_start <= 0;
+                                                        delay_counter_LD <= 0;
+                                                end
+                                        end            
                                 end
 
                                 else if (buf_id == 2'b01)       // Load to top buffer
                                 begin
-                                        start = mem_loc;
-                                        finish = start + NUM_COL + NUM_ROW - 1;
-                                        r_i_top_wr_en = 1;
+                                        if (inst_start_top == 0)
+                                        begin
+                                                start <= mem_loc;
+                                                finish <= mem_loc + NUM_COL + NUM_ROW - 1;
 
-                                        for (m_top = start; m_top < finish; m_top = m_top + 1) 
+                                                m_top <= mem_loc;
+                                                reg_i_top_wr_en <= 1;
+                                                inst_start_top <= 1;
+                                        end 
+        
+                                        else 
                                         begin 
-                                                r_i_top_wr_addr = m_top;   
-                                                @(posedge clk);
-
-                                                for (j = 0; j < NUM_COL; j = j + 1) 
+                                                if (m_top < finish)
                                                 begin
-                                                        // Read value in B, send as data to SRAM
-                                                        // Data is stored as NUM_COL * DATA_WIDTH
-                                                        r_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = A[((m_top - j) * NUM_COL) + j];
+                                                        reg_i_top_wr_addr <= m_top - mem_loc;   
 
-                                                        if (m_top < NUM_COL - 1) 
+                                                        for (j = 0; j < NUM_COL; j = j + 1) 
                                                         begin
-                                                                if (j > m_top) 
-                                                                begin 
-                                                                        r_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = {DATA_WIDTH{1'b0}};
-                                                                end
-                                                        end 
-                                                        
-                                                        else if (m_top > NUM_COL - 1) 
-                                                        begin 
-                                                                if (j < m_top - NUM_COL - 1) 
+                                                                // Read value in A, send as data to SRAM
+                                                                // Data is stored as NUM_COL * DATA_WIDTH
+                                                                reg_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= A[(((m_top - mem_loc) - j) * NUM_COL) + j];
+
+                                                                if (m_top < start + NUM_COL - 1) 
                                                                 begin
-                                                                        r_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] = {DATA_WIDTH{1'b0}};
+                                                                        if (j > m_top - mem_loc) 
+                                                                        begin 
+                                                                                reg_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= {DATA_WIDTH{1'b0}};
+                                                                        end
+                                                                end 
+                                                                
+                                                                else if (m_top > start + NUM_COL - 1) 
+                                                                begin 
+                                                                        if (j < m_top - mem_loc - NUM_COL - 1) 
+                                                                        begin
+                                                                                reg_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= {DATA_WIDTH{1'b0}};
+                                                                        end
                                                                 end
                                                         end
+                                                        
+                                                        m_top <= m_top + 1;
+                                                end 
+                                                else if (m_top == finish && delay_counter_LD == 0) 
+                                                begin 
+                                                        // Set the correct start and end address of the top buffer (in this case, 0)
+                                                        reg_i_top_sram_rd_start_addr <= 0;
+                                                        reg_i_top_sram_rd_end_addr   <= NUM_ROW + 1;
+                                                        
+                                                        // Disable write and clear wires
+                                                        reg_i_top_wr_en   <= 0;
+                                                        reg_i_top_wr_addr <= 0;
+
+                                                        delay_counter_LD <= delay_counter_LD + 1;
+                                                end 
+                                                else if(m_top == finish && delay_counter_LD == 1) 
+                                                begin 
+                                                        reg_i_top_wr_data <= 0;
+
+                                                        PC <= PC + 1;
+                                                        inst_start_top <= 0;
+                                                        delay_counter_LD <= 0;
                                                 end
-                                        end
-                                        
-                                        // Set the correct start and end address of the top buffer (in this case, 0)
-                                        r_i_top_sram_rd_start_addr = start;
-                                        r_i_top_sram_rd_end_addr   = finish;
-                                
-                                        @(posedge clk);
-                                        
-                                        // Disable write and clear wires
-                                        r_i_top_wr_en   = 0;
-                                        r_i_top_wr_addr = 0;
-                                        @(posedge clk);   
-                                        r_i_top_wr_data = 0;  
-                                        @(posedge clk);
+                                        end     
                                 end
-                                PC = PC + 1;
                         end
 
                         opcode_ST:
                         begin
-                                r_i_ctrl_state = IDLE;
-
-                                // Set Address and enable 
-                                r_i_down_rd_en = 0;
-                                r_i_down_rd_addr = 0;
-
-                                @(posedge clk);
-                                r_i_down_rd_en = 1;
-
-                                // Read each row of the buffer output and transform into columnwsie
-                                for (i = 0; i < NUM_ROW; i = i + 1) 
+                                if (inst_start_st == 0) 
                                 begin 
-                                        r_i_down_rd_addr = i + 1;
-                                        @(posedge clk);
+                                        reg_i_ctrl_state <= IDLE;
+                                        inst_start_st <= inst_start_st + 1;
+                                end 
+                                
+                                else 
+                                begin 
+                                        if (delay_counter_DRAINSYS == 0) 
+                                        begin 
+                                                // Set Address and enable 
+                                                reg_i_down_rd_en <= 0;
+                                                reg_i_down_rd_addr <= 1; //changed from 0
+                                                delay_counter_DRAINSYS <= delay_counter_DRAINSYS + 1;
+                                        end 
+                                        
+                                        else if (delay_counter_DRAINSYS == 1) 
+                                        begin 
+                                                reg_i_down_rd_en <= 1;
+                                                delay_counter_DRAINSYS <= delay_counter_DRAINSYS + 1;
+                                        end 
+                                        
+                                        // CHANGE TO MAKE GOOD DRAIN
+                                        else if (delay_counter_DRAINSYS < NUM_ROW + 2) 
+                                        begin 
+                                                reg_i_down_rd_addr <= delay_counter_DRAINSYS;
 
-                                        for (j = 0; j < NUM_COL; j = j + 1) 
-                                        begin
-                                                A[mem_loc + (j * NUM_ROW + i)] = w_o_down_rd_data[OUT_DATA_WIDTH * j +: OUT_DATA_WIDTH];
+                                                for (j = 0; j < NUM_COL; j = j + 1) 
+                                                begin
+                                                        A[mem_loc + (j * NUM_COL + i-1)] <= o_down_rd_data[ACCU_DATA_WIDTH * j +: ACCU_DATA_WIDTH];
+                                                end
+                                        end 
+                                        
+                                        else 
+                                        begin 
+                                                $writememb("array_C_outs.txt", A);
+                                                reg_i_down_rd_en <= 0;
+                                                inst_start_st <= 0;
+                                                PC <= PC + 1;
                                         end
                                 end
-
-                                @(posedge clk);
-                                r_i_down_rd_en = 0;
-                                PC = PC + 1;
                         end
 
                         opcode_GEMM: 
                         begin
-                                r_i_ctrl_state = STEADY;
-        
-                                // Let the filling happen
-                                @(posedge clk);
-                                @(posedge clk);
-                                @(posedge clk);
-                                @(posedge clk);
-                                @(posedge clk);
-                                @(posedge clk);
-                                @(posedge clk);
-                                @(posedge clk);
-                                @(posedge clk);
-                                @(posedge clk);
-                                @(posedge clk);
-                                PC = PC + 1;
+                                if (delay_counter_GEMM == 0)
+                                begin
+                                        reg_i_ctrl_state = STEADY;
+                                        delay_counter_GEMM <= delay_counter_GEMM + 1;
+                                end
+
+                                else if (delay_counter_GEMM > 0 && delay_counter_GEMM < (2*NUM_ROW + NUM_COL))
+                                begin
+                                        delay_counter_GEMM = delay_counter_GEMM + 1;
+                                end
+
+                                else if (delay_counter_GEMM == 2*NUM_ROW + NUM_COL)
+                                begin
+                                        PC = PC + 1;
+                                        delay_counter_GEMM = 0;
+                                end
                         end
 
                         opcode_DRAINSYS: 
                         begin
-                                r_i_ctrl_state = DRAIN;
+                                if (delay_counter_DRAINSYS == 0)
+                                begin
+                                        reg_i_ctrl_state = DRAIN;
+                                        delay_counter_DRAINSYS <= delay_counter_DRAINSYS + 1;
+                                end
 
-                                @(posedge clk);
-                                @(posedge clk);
-                                @(posedge clk);
-                                @(posedge clk);
-                                @(posedge clk);
-                                @(posedge clk);
-                                PC = PC + 1;
+                                else if (delay_counter_DRAINSYS > 0 && delay_counter_DRAINSYS < (NUM_ROW + NUM_COL))
+                                begin
+                                        delay_counter_DRAINSYS = delay_counter_DRAINSYS + 1;
+                                end
+
+                                else if (delay_counter_DRAINSYS == NUM_ROW + NUM_COL)
+                                begin
+                                        PC = PC + 1;
+                                        delay_counter_DRAINSYS = 0;
+                                end
                         end
 
-                        default: PC = PC + 1;
+                        // default: PC = PC + 1;
                 endcase
         end
+        end
+
+        assign i_left_wr_en = reg_i_left_wr_en;
+        assign i_left_wr_addr = reg_i_left_wr_addr;
+        assign i_left_wr_data = reg_i_left_wr_data; 
+
+        assign i_left_sram_rd_start_addr = reg_i_left_sram_rd_start_addr;
+        assign i_left_sram_rd_end_addr = reg_i_left_sram_rd_end_addr; 
+       
+        assign i_top_wr_en = reg_i_top_wr_en; 
+        assign i_top_wr_addr = reg_i_top_wr_addr;
+        assign i_top_wr_data = reg_i_top_wr_data; 
+
+        assign i_top_sram_rd_start_addr = reg_i_top_sram_rd_start_addr;
+        assign i_top_sram_rd_end_addr = reg_i_top_sram_rd_end_addr; 
+
+        assign i_ctrl_state = reg_i_ctrl_state;
+        assign i_down_rd_en = reg_i_down_rd_en;
+        assign i_down_rd_addr = reg_i_down_rd_addr;
         
 endmodule
