@@ -1,5 +1,6 @@
 # Compiler Framework and Simulator for Systolic Array
 This repo contains code for a compiler for a custom systolic array hardware, along with a simulator to verify correctness of the generated instructions
+
 ![Overview](img/HML_Complier_flowchart.drawio.png)
 
 ![Example](img/Figure_1.png)
@@ -15,6 +16,7 @@ GEMM operations that fit into the Systolic array buffers. The tiling is done as 
 Due to the way the systolic array is addressed, the inputs are loaded in columnwise, while the weights rowwise. For ease of loading, inputs are stored as the transpose. The outputs are stored back into memory in transpose to ensure inter-layer compatibility.
 
 The compiler also creates a DRAM memory dump with the weights for all layer on one side and the first layer inputs on the other 
+
 ![DRAM Initialization](img/HML_memory_addressing.drawio.png)
 
 It has built-in support for multiple layers, with the output of the previous layer acting as the input for the next. 
