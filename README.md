@@ -1,6 +1,31 @@
-# MODEL to ACCELERATOR
-This repo contains code to compile torch models to code for a custom accelerator with a systolic array
+# Compiler Framework and Simulator for Systolic Array
+This repo contains code for a compiler for a custom systolic array hardware, along with a simulator to verify correctness of the generated instructions
+![Overview](img/HML_Complier_flowchart.drawio.png)
 
+![Example](img/Figure_1.png)
+
+## Running the Code
+An example on how to run the code is given in `gemm_op/run_sim.py` and with convolutions in `gemm_op/im2col.py`
+
+## Compiler
+The compiler takes in a Pytorch model as input, and breaks the model down into 
+GEMM operations that fit into the Systolic array buffers. The tiling is done as follows:
+![Tiling](img/HML_Project_tiling_new.png)
+
+Due to the way the systolic array is addressed, the inputs are loaded in columnwise, while the weights rowwise. For ease of loading, inputs are stored as the transpose. The outputs are stored back into memory in transpose to ensure inter-layer compatibility.
+
+The compiler also creates a DRAM memory dump with the weights for all layer on one side and the first layer inputs on the other 
+![DRAM Initialization](img/HML_memory_addressing.drawio.png)
+
+It has built-in support for multiple layers, with the output of the previous layer acting as the input for the next. 
+
+Currently, the output is two text files: `data_list.txt` with the data, and `instruction_list.txt` with the instructions
+
+## Simulator
+A rudimentary simulator has been written to ensure the correctness of the memory map and the instructions generated. It abstracts the DRAM and the buffers as 1D arrays, and executes LOAD, STORE, GEMM and DRAIN commands analogous to hardware. 
+
+## Possible improvements
+Activation functions and Layer Normalisation is not implemented as hardware support for them are not available.
 
 ## License
 
