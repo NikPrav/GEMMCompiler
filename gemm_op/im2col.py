@@ -49,14 +49,16 @@ if __name__ == '__main__':
 
     # Read the image
     img = read_image('gemm_op/100.png')
-
-
     # Convert the image to a tensor
     img = torch.tensor(img, dtype=torch.int16)
+    print(f"Image shape: {img.shape}") 
 
 
-    # Creating an edge detection filter
-    edge_filter = torch.tensor([[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]], dtype=torch.float16)
+    # Creating a gaussian filter
+    # edge_filter = torch.tensor([[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]], dtype=torch.float16)
+    guassian_filter = torch.tensor([[1, 2, 1], [2, 4, 2], [1, 2, 1]], dtype=torch.float16)
+    edge_filter = guassian_filter
+    print(f"Filter shape: {edge_filter.shape}")
 
     # Reshaping the filter and image to the correct format
     edge_filter = edge_filter.reshape(1, 1, edge_filter.shape[1], edge_filter.shape[0])
@@ -70,17 +72,8 @@ if __name__ == '__main__':
     # Converting the image and filter to im2col format
     img_unfolded, edge_filter = im2col(img, edge_filter)
 
-    print(img_unfolded.shape)
-    print(edge_filter.shape)
-
-
-    out_unf = img_unfolded.float().matmul(edge_filter.float())
-    out_unf = out_unf.reshape(1,1,26,26)
-    # Display the edge detected image
-    # plt.imshow(out_unf.squeeze(0).squeeze(0).detach().numpy(), cmap='gray')
-    # plt.show()
-
-
+    print(f"GEMM input shape: {img_unfolded.shape}")
+    print(f"GEMM filter shape: {edge_filter.shape}")
 
     # Initialize an empty list to store the layer info objects
     node_list = []
@@ -145,26 +138,43 @@ if __name__ == '__main__':
         instruction_list_test.append(instructions_test)
         w_ptr_cur = w_ptr_cur + node.weight_size[0]*node.weight_size[1]*sys_params.data_size
 
+    print(f"Instructions generated: {len(list(chain.from_iterable(instruction_list_test)))}")
 
+    print(f"Writing to text file...")
     # Writing to text file
     Dram_content.generate_lists(instruction_list)
 
+    print("Simulating and verifying generated instructions...")
     # Create FPGA
     fpga_test = fpga.FPGA(sys_params, Dram_content, M*sys_params.data_size, N*sys_params.data_size)
     # print(instruction_list_test)
-    fpga_test.flash(instruction_list_test)
+    # fpga_test.flash(instruction_list_test)
 
     fpga_test.execute(list(chain.from_iterable(instruction_list_test)))
 
-    # plotting all the images
-    fig, axs = plt.subplots(1,3, figsize=(15,5))
-    axs[0].imshow(img.squeeze(0).squeeze(0).detach().numpy(), cmap='gray')
-    axs[1].imshow(edge_detected.squeeze(0).squeeze(0).detach().numpy(), cmap='gray')
-    axs[2].imshow(fpga_test.extract(i_ptr_cur-sys_params.inst_mem, (26,26)).T, cmap='gray')
-    axs[0].set_title('Original Image')
-    axs[1].set_title('Edge Detected Image')
-    axs[2].set_title('Edge Detected Image from the FPGA')
+    # # Show the plot
+    # plt.show()
+
+    # Create subplots
+    fig = plt.figure(figsize=(10,10))
+
+    # Add subplots
+    ax1 = fig.add_subplot(2, 2, (1, 2))  # top row, span across two columns
+    ax2 = fig.add_subplot(2, 2, 3)  # bottom row, first column
+    ax3 = fig.add_subplot(2, 2, 4)  # bottom row, second column
+
+    # Display images
+    ax1.imshow(img.squeeze(0).squeeze(0).detach().numpy(), cmap='gray')
+    # ax1.axis('off')  # to hide the axis
+    ax2.imshow(edge_detected.squeeze(0).squeeze(0).detach().numpy(), cmap='gray')
+    # ax2.axis('off')  # to hide the axis
+    ax3.imshow(fpga_test.extract(i_ptr_cur-sys_params.inst_mem, (26,26)).T, cmap='gray')
+    # ax3.axis('off')  # to hide the axis
+
+    ax1.set_title('Original Image')
+    ax2.set_title('Expected Gaussian Blurred Image')
+    ax3.set_title('Gaussian Blurred Image from the FPGA Simulator')
+
+    # Show the plot
     plt.show()
     
-
-    print(x)

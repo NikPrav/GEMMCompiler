@@ -24,10 +24,6 @@ class LoadCommand:
         function_type = '0010'  # 4 bits for function type (load command)
         buf_id_bits = format(self.buf_id, '02b')  # 2 bits for buf_id
         mem_addr_bits = format(self.mem_addr, '026b')  # 26 bits for mem_addr
-        print(self.mem_addr)
-        print(len(function_type))
-        print(len(buf_id_bits))
-        print(len(mem_addr_bits))
         bitstream = function_type + buf_id_bits + mem_addr_bits
         return bitstream
 
@@ -120,4 +116,3 @@ if __name__ == "__main__":
     print("Generated bitstream:", store_cmd.generate_bitstream())
 
 
-# Ideas for 
