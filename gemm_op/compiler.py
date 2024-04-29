@@ -133,20 +133,25 @@ class GEMMCompiler:
                         offset_tile_input = i_tile*(input_dim[-2])*n_cols + i_row*R
                         offset_tile_weight = i_col*C + i_tile*n_rows*output_dim[-2]
 
-                        # Loading the inputs rowwise
-                        # [TODO] Change to Columnwise
-                        for i_row_tile in range(0, n_cols):
-                            offset_row = i_row_tile * input_dim[-2]
-                            offset_col = i_row_tile * output_dim[-2]
-                            # LOAD INP_BUF offset_tile + offset_row + memory_offset
-                            instruction_set.append(isa.LoadCommand(isa.BufferIDs.INPUT_BUFFER, (offset_tile_input + offset_row)*self.data_size + mem_offset_input))
-                            # input_tile[i_row_tile, :] = input_array[offset_tile_input + offset_row:offset_tile_input + offset_row + n_cols]
-                            # input_tile = input_tile.reshape((R, n_cols))
+                        # Passing beginning point of input and weight arrays
+                        instruction_set.append(isa.LoadCommand(isa.BufferIDs.INPUT_BUFFER, (offset_tile_input)*self.data_size + mem_offset_input))
+                        instruction_set.append(isa.LoadCommand(isa.BufferIDs.WEIGHT_BUFFER, (offset_tile_weight)*self.data_size + mem_offset_weight))
 
-                            # LOAD WT_BUF offset_tile + offset_row + memory_offset
-                            instruction_set.append(isa.LoadCommand(isa.BufferIDs.WEIGHT_BUFFER, (offset_tile_weight + offset_col)*self.data_size + mem_offset_weight))
-                            # weight_tile[:, i_row_tile] = weight_array[offset_tile_weight + offset_row:offset_tile_weight + offset_row + n_cols].T
-                            # weight_tile = weight_tile.reshape((n_cols, C)).T
+                        
+
+                        # # Loading the inputs rowwise
+                        # for i_row_tile in range(0, n_cols):
+                        #     offset_row = i_row_tile * input_dim[-2]
+                        #     offset_col = i_row_tile * output_dim[-2]
+                        #     # LOAD INP_BUF offset_tile + offset_row + memory_offset
+                        #     instruction_set.append(isa.LoadCommand(isa.BufferIDs.INPUT_BUFFER, (offset_tile_input + offset_row)*self.data_size + mem_offset_input))
+                        #     # input_tile[i_row_tile, :] = input_array[offset_tile_input + offset_row:offset_tile_input + offset_row + n_cols]
+                        #     # input_tile = input_tile.reshape((R, n_cols))
+
+                        #     # LOAD WT_BUF offset_tile + offset_row + memory_offset
+                        #     instruction_set.append(isa.LoadCommand(isa.BufferIDs.WEIGHT_BUFFER, (offset_tile_weight + offset_col)*self.data_size + mem_offset_weight))
+                        #     # weight_tile[:, i_row_tile] = weight_array[offset_tile_weight + offset_row:offset_tile_weight + offset_row + n_cols].T
+                        #     # weight_tile = weight_tile.reshape((n_cols, C)).T
                         
                         # Perform the multiplication
                         # GEMM
@@ -158,13 +163,16 @@ class GEMMCompiler:
                     instruction_set.append(isa.DRAINSYSCommand())
 
                     # Store the result in the output array
+                    # Passing begining point of tile
+                    offset_tile = i_row * R  + i_col * C * input_dim[-2]
+                    instruction_set.append(isa.StoreCommand(isa.BufferIDs.OUTPUT_BUFFER, (offset_tile)*self.data_size + mem_offset_output))
                     
-                    for i_row_tile in range(0, R):
-                        offset_row = i_row_tile * input_dim[-2]
-                        offset_tile = i_row * R  + i_col * C * input_dim[-2]
-                        # STR OP_BUF offset_tile + offset_row + memory_offset
-                        instruction_set.append(isa.StoreCommand(isa.BufferIDs.OUTPUT_BUFFER, (offset_tile + offset_row)*self.data_size + mem_offset_output))
-                        # output_array[offset_tile + offset_row:offset_tile + offset_row + C] = output_tile[i_row_tile, :] 
+                    # for i_row_tile in range(0, R):
+                    #     offset_row = i_row_tile * input_dim[-2]
+                    #     offset_tile = i_row * R  + i_col * C * input_dim[-2]
+                    #     # STR OP_BUF offset_tile + offset_row + memory_offset
+                    #     instruction_set.append(isa.StoreCommand(isa.BufferIDs.OUTPUT_BUFFER, (offset_tile + offset_row)*self.data_size + mem_offset_output))
+                    #     # output_array[offset_tile + offset_row:offset_tile + offset_row + C] = output_tile[i_row_tile, :] 
 
                         # for k in range(output_tile.shape[0]):
 

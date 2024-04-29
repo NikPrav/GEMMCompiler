@@ -37,10 +37,10 @@ def read_image(path):
 if __name__ == '__main__':
 
     # Setting Systolic Array Parameters
-    R, C = 2, 2  # Size of the systolic array
+    R, C = 16, 16  # Size of the systolic array
     mem_size = 1096*1096  # Memory size of the FPGA
     data_size = 16
-    i_buf_size = 16*data_size  # Input buffer size of the FPGA
+    i_buf_size = 16*16*data_size  # Input buffer size of the FPGA
     w_buf_size = i_buf_size  # Weight buffer size of the FPGA
     o_buf_size = R*C*data_size  # Output buffer size of the FPGA
 
@@ -129,6 +129,9 @@ if __name__ == '__main__':
     instruction_num = 0
 
     op_ptr = 0
+    M = 0
+    N = 0
+    K = 0
 
     for node in node_list:
         M = node.input_size[-2]
@@ -147,7 +150,7 @@ if __name__ == '__main__':
     Dram_content.generate_lists(instruction_list)
 
     # Create FPGA
-    fpga_test = fpga.FPGA(sys_params, Dram_content)
+    fpga_test = fpga.FPGA(sys_params, Dram_content, M*sys_params.data_size, N*sys_params.data_size)
     # print(instruction_list_test)
     fpga_test.flash(instruction_list_test)
 
