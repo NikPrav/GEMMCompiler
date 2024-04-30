@@ -68,13 +68,13 @@ module new_tb();
         parameter DRAIN  = 3;
 
         // Inst_reader variables //
-        parameter INST_WIDTH            = 16;
+        parameter INST_WIDTH            = 32;
         parameter INST_MEMORY_SIZE      = 6;
-        parameter LOG2_INST_MEMORY_SIZE = 2;
+        parameter LOG2_INST_MEMORY_SIZE = 3;
 
         parameter OPCODE_WIDTH          = 4;
         parameter BUF_ID_WIDTH          = 2;
-        parameter MEM_LOC_WIDTH         = 10;
+        parameter MEM_LOC_WIDTH         = 26;
 
         parameter MEM_LOC_ARRAY_INDEX   = MEM_LOC_WIDTH;
         parameter BUF_ID_ARRAY_INDEX    = MEM_LOC_ARRAY_INDEX + BUF_ID_WIDTH;

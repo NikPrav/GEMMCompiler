@@ -3,7 +3,7 @@ import numpy as np
 
 M = 4
 N = 4
-K = 4
+K = 8
 
 DATA_WIDTH = 8
 FRAC_BITS = 4
@@ -65,13 +65,14 @@ if os.path.exists("array_C_fi.txt"):
 
 
 # Randomly generate input arrays
-A = np.random.randint(50, size=(M,N))
+A = np.random.randint(50, size=(M,K))
 print("A:")
-print(A)
+print(repr(A))
 print("\n")
-B = np.random.randint(50, size=(N,K))
+B = np.random.randint(50, size=(K,N))
+B_T = np.transpose(B)
 print("B:")
-print(B)
+print(repr(B_T))
 print("\n")
 
 # Custom input to the arrays 
@@ -95,7 +96,7 @@ print("\n")
 #                 ]
 C = np.matmul(A, B)
 print("C:")
-print(C)
+print(repr(C))
 print("\n")
 
 

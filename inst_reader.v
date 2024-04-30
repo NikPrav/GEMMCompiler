@@ -150,7 +150,7 @@ module inst_reader #(
                         case (opcode)
                                 opcode_LD: 
                                 begin
-                                        if (buf_id == 2'b00)            // Load to left buffer
+                                        if (buf_id == 2'b01)            // Load to left buffer
                                         begin
                                                 if (inst_start == 0)
                                                 begin
@@ -221,7 +221,7 @@ module inst_reader #(
                                                 end            
                                         end
 
-                                        else if (buf_id == 2'b01)       // Load to top buffer
+                                        else if (buf_id == 2'b10)       // Load to top buffer
                                         begin
                                                 if (inst_start_top == 0)
                                                 begin
