@@ -155,7 +155,7 @@ module inst_reader #(
                                                 if (inst_start == 0)
                                                 begin
                                                         start <= mem_loc;
-                                                        finish <= mem_loc + NUM_COL + NUM_ROW - 1;
+                                                        finish <= mem_loc + NUM_COL + NUM_ROW - 1;      // TODO: Change for D
 
                                                         m_left <= mem_loc;
                                                         reg_i_left_wr_en <= 1;
@@ -205,7 +205,7 @@ module inst_reader #(
 
                                                                 delay_counter_LD <= 2;
                                                         end 
-                                                        else if(m_left == finish && delay_counter_LD == 2 ) 
+                                                        else if(m_left == finish && delay_counter_LD == 2)         // TODO: Change for D
                                                         begin 
                                                                 reg_i_left_wr_data <= 0;
                                                                 PC <= PC + 1;
@@ -213,7 +213,7 @@ module inst_reader #(
                                                                 delay_counter_LD <= delay_counter_LD + 1;
                                                         end
 
-                                                        else if(m_left == finish && delay_counter_LD == 3 ) 
+                                                        else if(m_left == finish && delay_counter_LD == 3) 
                                                         begin 
                                                                 inst_start <= 0;
                                                                 delay_counter_LD <= 0;
@@ -226,7 +226,7 @@ module inst_reader #(
                                                 if (inst_start_top == 0)
                                                 begin
                                                         start <= mem_loc;
-                                                        finish <= mem_loc + NUM_COL + NUM_ROW - 1;
+                                                        finish <= mem_loc + NUM_COL + NUM_ROW - 1;      // TODO: Change for D
 
                                                         m_top <= mem_loc;
                                                         reg_i_top_wr_en <= 1;
@@ -275,7 +275,7 @@ module inst_reader #(
 
                                                                 delay_counter_LD <= 2;
                                                         end 
-                                                        else if(m_top == finish && delay_counter_LD == 2) 
+                                                        else if(m_top == finish && delay_counter_LD == 2)       // TODO: Change for D
                                                         begin 
                                                                 reg_i_top_wr_data <= 0;
                                                                 PC <= PC + 1;
@@ -283,7 +283,7 @@ module inst_reader #(
                                                                 delay_counter_LD <= delay_counter_LD + 1;
                                                         end
 
-                                                        else if(m_top == finish && delay_counter_LD == 3) 
+                                                        else if(m_top == finish && delay_counter_LD == 3)       // TODO: Change for D
                                                         begin 
                                                                 inst_start_top <= 0;
                                                                 delay_counter_LD <= 0;
@@ -302,31 +302,42 @@ module inst_reader #(
                                         
                                         else 
                                         begin 
-                                                if (delay_counter_DRAINSYS == 0) 
+                                                if (delay_counter_ST == 0) 
                                                 begin 
                                                         // Set Address and enable 
                                                         reg_i_down_rd_en <= 0;
-                                                        reg_i_down_rd_addr <= 1; //changed from 0
-                                                        delay_counter_DRAINSYS <= delay_counter_DRAINSYS + 1;
+                                                        reg_i_down_rd_addr <= 0; 
+                                                        delay_counter_ST <= delay_counter_ST + 1;
                                                 end 
                                                 
-                                                else if (delay_counter_DRAINSYS == 1) 
+                                                else if (delay_counter_ST == 1) 
                                                 begin 
                                                         reg_i_down_rd_en <= 1;
-                                                        delay_counter_DRAINSYS <= delay_counter_DRAINSYS + 1;
+                                                        i <= 0; 
+                                                        delay_counter_ST <= delay_counter_ST + 1;
                                                 end 
                                                 
-                                                else if (delay_counter_DRAINSYS < NUM_ROW + 2) 
+                                                else if (i < NUM_ROW) 
                                                 begin 
-                                                        reg_i_down_rd_addr <= delay_counter_DRAINSYS;
-
-                                                        for (j = 0; j < NUM_COL; j = j + 1) 
-                                                        begin
-                                                                A[mem_loc + (j * NUM_COL + i-1)] <= o_down_rd_data[ACCU_DATA_WIDTH * j +: ACCU_DATA_WIDTH];
+                                                        if(delay_counter_ST < NUM_ROW + 2) 
+                                                        begin 
+                                                                reg_i_down_rd_addr <= reg_i_down_rd_addr + 1;
                                                         end
+                                                        
+                                                        if (delay_counter_ST > 4)  
+                                                        begin
+                                                                if(delay_counter_ST == NUM_ROW + 2) begin 
+                                                                       reg_i_down_rd_en <= 0 ;  
+                                                                end
+                                                                for (j = 0; j < NUM_COL; j = j + 1) 
+                                                                        begin
+                                                                                A[mem_loc + (j * NUM_COL + i)] <= o_down_rd_data[ACCU_DATA_WIDTH * j +: ACCU_DATA_WIDTH];
+                                                                        end
+                                                                i <= i + 1; 
+                                                        end
+                                                        delay_counter_ST <= delay_counter_ST + 1; 
                                                 end 
-                                                
-                                                else 
+                                                else if (reg_i_down_rd_addr == NUM_ROW && i == NUM_ROW) 
                                                 begin 
                                                         $writememb("array_C_outs.txt", A);
                                                         reg_i_down_rd_en <= 0;
@@ -340,19 +351,19 @@ module inst_reader #(
                                 begin
                                         if (delay_counter_GEMM == 0)
                                         begin
-                                                reg_i_ctrl_state = STEADY;
+                                                reg_i_ctrl_state <= STEADY;
                                                 delay_counter_GEMM <= delay_counter_GEMM + 1;
                                         end
 
                                         else if (delay_counter_GEMM > 0 && delay_counter_GEMM < (2*NUM_ROW + NUM_COL)) //change counter value to include data depth
                                         begin
-                                                delay_counter_GEMM = delay_counter_GEMM + 1;
+                                                delay_counter_GEMM <= delay_counter_GEMM + 1;
                                         end
 
                                         else if (delay_counter_GEMM == 2*NUM_ROW + NUM_COL)
                                         begin
-                                                PC = PC + 1;
-                                                delay_counter_GEMM = 0;
+                                                PC <= PC + 1;
+                                                delay_counter_GEMM <= 0;
                                         end
                                 end
 
@@ -360,19 +371,19 @@ module inst_reader #(
                                 begin
                                         if (delay_counter_DRAINSYS == 0)
                                         begin
-                                                reg_i_ctrl_state = DRAIN;
+                                                reg_i_ctrl_state <= DRAIN;
                                                 delay_counter_DRAINSYS <= delay_counter_DRAINSYS + 1;
                                         end
 
                                         else if (delay_counter_DRAINSYS > 0 && delay_counter_DRAINSYS < (NUM_ROW + NUM_COL))
                                         begin
-                                                delay_counter_DRAINSYS = delay_counter_DRAINSYS + 1;
+                                                delay_counter_DRAINSYS <= delay_counter_DRAINSYS + 1;
                                         end
 
                                         else if (delay_counter_DRAINSYS == NUM_ROW + NUM_COL)
                                         begin
-                                                PC = PC + 1;
-                                                delay_counter_DRAINSYS = 0;
+                                                PC <= PC + 1;
+                                                delay_counter_DRAINSYS <= 0;
                                         end
                                 end
 
