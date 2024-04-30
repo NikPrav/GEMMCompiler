@@ -59,13 +59,6 @@ Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  
 Top level modules:
 	systolic_array_datapath
 
-} {} {}} {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/new_tb.v} {1 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/new_tb.v}
-Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module new_tb
-
-Top level modules:
-	new_tb
-
 } {} {}} {{D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/new_tb.v}} {0 {vlog -work work {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/new_tb.v}
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
 Start time: 17:26:05 on Apr 28,2024
@@ -79,7 +72,14 @@ vlog -reportprogress 300 -work work D:/GT-ece/Spring 2024/ECE8803_HML/project/De
 End time: 17:26:05 on Apr 28,2024, Elapsed time: 0:00:00
 Errors: 5, Warnings: 0
 
-} {6.0 11.0} {}} {{D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v}} {1 {vlog -work work {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v}
+} {6.0 11.0} {}} {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/inst_reader.v} {1 {vlog -work work -stats=none {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/inst_reader.v}
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module inst_reader
+
+Top level modules:
+	inst_reader
+
+} {} {}} {{D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v}} {1 {vlog -work work {D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v}
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
 Start time: 17:26:04 on Apr 28,2024
 vlog -reportprogress 300 -work work D:/GT-ece/Spring 2024/ECE8803_HML/project/Dense_SA-main/sram_bank_sp.v 

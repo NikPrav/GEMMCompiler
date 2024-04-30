@@ -70,8 +70,8 @@ module new_tb();
 
         // Inst_reader variables //
         parameter INST_WIDTH            = 32;
-        parameter INST_MEMORY_SIZE      = 6;
-        parameter LOG2_INST_MEMORY_SIZE = 3;
+        parameter INST_MEMORY_SIZE      = 16;
+        parameter LOG2_INST_MEMORY_SIZE = 4;
 
         parameter OPCODE_WIDTH          = 4;
         parameter BUF_ID_WIDTH          = 2;

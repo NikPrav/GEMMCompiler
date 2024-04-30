@@ -339,12 +339,17 @@ module inst_reader #(
                                                         end
                                                         delay_counter_ST <= delay_counter_ST + 1; 
                                                 end 
-                                                else if (reg_i_down_rd_addr == NUM_ROW && i == NUM_ROW) 
+                                                else if (reg_i_down_rd_addr == NUM_ROW && i == NUM_ROW && delay_counter_ST == 9) 
                                                 begin 
                                                         $writememb("array_C_outs.txt", A);
                                                         reg_i_down_rd_en <= 0;
-                                                        inst_start_st <= 0;
+                                                        delay_counter_ST <= delay_counter_ST + 1;
                                                         PC <= PC + 1;
+                                                end
+                                                else if (delay_counter_ST == 10)
+                                                begin 
+                                                        inst_start_st <= 0;
+                                                        delay_counter_ST <= 0;
                                                 end
                                         end
                                 end
@@ -365,6 +370,11 @@ module inst_reader #(
                                         else if (delay_counter_GEMM == NUM_ROW + NUM_COL + SRAM_BANK_DEPTH) //prev, 2*NUM_ROW + NUM_COL
                                         begin
                                                 PC <= PC + 1;
+                                                delay_counter_GEMM <= delay_counter_GEMM + 1;
+                                                
+                                        end
+                                        else if(delay_counter_GEMM == NUM_ROW + NUM_COL + SRAM_BANK_DEPTH + 1)
+                                        begin 
                                                 delay_counter_GEMM <= 0;
                                         end
                                 end
@@ -385,8 +395,13 @@ module inst_reader #(
                                         else if (delay_counter_DRAINSYS == NUM_ROW + NUM_COL)
                                         begin
                                                 PC <= PC + 1;
-                                                delay_counter_DRAINSYS <= 0;
+                                                delay_counter_DRAINSYS <= delay_counter_DRAINSYS + 1;
+                                                
                                         end
+                                        else if (delay_counter_DRAINSYS == NUM_ROW + NUM_COL + 1)
+                                        begin 
+                                                delay_counter_DRAINSYS <= 0; 
+                                        end 
                                 end
 
                                 // default: PC = PC + 1;

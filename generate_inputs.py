@@ -5,7 +5,7 @@ M = 4
 N = 4
 K = 8
 
-DATA_WIDTH = 8
+DATA_WIDTH = 16
 FRAC_BITS = 4
 INT_BITS = 4
 
@@ -64,28 +64,19 @@ if os.path.exists("array_C_fi.txt"):
     os.remove("array_C_fi.txt")
 
 
-# Randomly generate input arrays
-A = np.random.randint(50, size=(M,K))
-print("A:")
-print(repr(A))
-print("\n")
-B = np.random.randint(50, size=(K,N))
-B_T = np.transpose(B)
-print("B:")
-print(repr(B_T))
-print("\n")
+
 
 # Custom input to the arrays 
 
 
-# B = np.array([ [  1,  5, 10, 15],
-#                 [  1, 20, 25, 30],
-#                                 [  1, 35, 40, 45],
-#                                 [  1, 50, 55, 60]])
-# A = np.array([ [  1,  5,  9, 13],
-#                                 [  2,  6, 10, 14],
-#                                 [  3,  7, 11, 15],
-#                                 [  4,  8, 12, 16]])
+B = np.array([[36, 47, 22,  3, 12,  8, 33, 21],
+       [34, 42, 14, 33, 41, 35,  0, 29],
+       [49, 16,  4, 47, 49, 12, 42, 42],
+       [ 8, 48, 28,  1,  7, 36, 41, 14]])
+A = np.array([[3799, 4419, 5296, 5449],
+       [4549, 7859, 5867, 6447],
+       [5637, 9566, 8223, 9169],
+       [3426, 4143, 4289, 4675]])
 
 # wmam = np.matmul(wm, am) = 
 #                 [
@@ -94,6 +85,18 @@ print("\n")
 #                     [ 371  855 1339 1823]
 #                     [ 506 1170 1834 2498]
 #                 ]
+
+# Randomly generate input arrays
+#A = np.random.randint(50, size=(M,K))
+print("A:")
+print(repr(A))
+print("\n")
+#B = np.random.randint(50, size=(K,N))
+B_T = np.transpose(B)
+print("B:")
+print(repr(B_T))
+print("\n")
+
 C = np.matmul(A, B)
 print("C:")
 print(repr(C))
