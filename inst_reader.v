@@ -113,7 +113,6 @@ module inst_reader #(
                 delay_counter_DRAINSYS = 0;
                 inst_start = 0;
       
-                
                 $readmemb("inst.txt", inst_memory); 
                 $readmemb("data.txt", A);       
         end 
@@ -161,22 +160,15 @@ module inst_reader #(
                                                         m_left <= mem_loc;
                                                         reg_i_left_wr_en <= 1;
                                                         inst_start <= 1;
+                                                        reg_i_left_wr_addr <= 1; 
                                                 end 
                 
                                                 else 
                                                 begin 
                                                         if (m_left < finish)
                                                         begin
-                                                                if (delay_counter_LD == 0) 
-                                                                begin 
-                                                                        // Increment address
-                                                                        reg_i_left_wr_addr <= m_left - mem_loc + 1;  
-                                                                        delay_counter_LD <= delay_counter_LD + 1;
-                                                                end 
-                                                                
-                                                                else if (delay_counter_LD == 1) 
-                                                                begin 
-                                                                        for (j = 0; j < NUM_ROW; j = j + 1) 
+                                                                reg_i_left_wr_addr <= reg_i_left_wr_addr + 1; 
+                                                                for (j = 0; j < NUM_ROW; j = j + 1) 
                                                                         begin
                                                                                 // Read value in A, send as data to SRAM
                                                                                 // Data is stored as NUM_COL * DATA_WIDTH
@@ -199,9 +191,7 @@ module inst_reader #(
                                                                                 end
                                                                         end
                                                                         
-                                                                        m_left <= m_left + 1;
-                                                                        delay_counter_LD <= 0; 
-                                                                end
+                                                                        m_left <= m_left + 1; 
                                                         end
                                                         else if (m_left == finish && delay_counter_LD !== 2 && delay_counter_LD !== 3) 
                                                         begin 
@@ -241,45 +231,37 @@ module inst_reader #(
                                                         m_top <= mem_loc;
                                                         reg_i_top_wr_en <= 1;
                                                         inst_start_top <= 1;
+                                                        reg_i_top_wr_addr <= 1;
                                                 end 
                                                 
                                                 else 
                                                 begin 
                                                         if (m_top < finish)
                                                         begin 
-                                                                if (delay_counter_LD == 0) 
-                                                                begin 
-                                                                        reg_i_top_wr_addr <= m_top - mem_loc + 1;
-                                                                        delay_counter_LD <= delay_counter_LD + 1;
-                                                                end
-                                                                
-                                                                else if (delay_counter_LD == 1) 
-                                                                begin 
-                                                                        for (j = 0; j < NUM_COL; j = j + 1) 
+                                                                reg_i_top_wr_addr <= reg_i_top_wr_addr + 1;
+                                                                for (j = 0; j < NUM_COL; j = j + 1) 
+                                                                        begin
+
+                                                                                reg_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= A[(((m_top - j - mem_loc) * NUM_COL) + j) +  mem_loc]; 
+                                                                        
+                                                                                if (m_top < start + NUM_COL - 1) 
                                                                                 begin
-        
-                                                                                        reg_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= A[(((m_top - j - mem_loc) * NUM_COL) + j) +  mem_loc]; //removed m_top - mem
-                                                                                
-                                                                                        if (m_top < start + NUM_COL - 1) 
-                                                                                        begin
-                                                                                                if (j > m_top - start) 
-                                                                                                begin 
-                                                                                                        reg_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= {DATA_WIDTH{1'b0}};
-                                                                                                end
-                                                                                        end 
-                                                                                        
-                                                                                        else if (m_top > start + NUM_COL - 1) 
+                                                                                        if (j > m_top - start) 
                                                                                         begin 
-                                                                                                if (j < m_top - start - NUM_COL - 1) 
-                                                                                                begin
-                                                                                                        reg_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= {DATA_WIDTH{1'b0}};
-                                                                                                end
+                                                                                                reg_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= {DATA_WIDTH{1'b0}};
+                                                                                        end
+                                                                                end 
+                                                                                
+                                                                                else if (m_top > start + NUM_COL - 1) 
+                                                                                begin 
+                                                                                        if (j < m_top - start - NUM_COL - 1) 
+                                                                                        begin
+                                                                                                reg_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= {DATA_WIDTH{1'b0}};
                                                                                         end
                                                                                 end
-                                                                        
-                                                                        m_top <= m_top + 1;    
-                                                                        delay_counter_LD <= 0;  
-                                                                end
+                                                                        end
+                                                                
+                                                                m_top <= m_top + 1;
                                                         end 
                                                         else if (m_top == finish && delay_counter_LD !== 2 && delay_counter_LD !== 3) 
                                                         begin 
@@ -362,7 +344,7 @@ module inst_reader #(
                                                 delay_counter_GEMM <= delay_counter_GEMM + 1;
                                         end
 
-                                        else if (delay_counter_GEMM > 0 && delay_counter_GEMM < (2*NUM_ROW + NUM_COL))
+                                        else if (delay_counter_GEMM > 0 && delay_counter_GEMM < (2*NUM_ROW + NUM_COL)) //change counter value to include data depth
                                         begin
                                                 delay_counter_GEMM = delay_counter_GEMM + 1;
                                         end

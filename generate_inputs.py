@@ -66,7 +66,13 @@ if os.path.exists("array_C_fi.txt"):
 
 # Randomly generate input arrays
 A = np.random.randint(50, size=(M,N))
+print("A:")
+print(A)
+print("\n")
 B = np.random.randint(50, size=(N,K))
+print("B:")
+print(B)
+print("\n")
 
 # Custom input to the arrays 
 
@@ -88,7 +94,9 @@ B = np.random.randint(50, size=(N,K))
 #                     [ 506 1170 1834 2498]
 #                 ]
 C = np.matmul(A, B)
+print("C:")
 print(C)
+print("\n")
 
 
 A_flat = A.flatten(order="F")
@@ -96,7 +104,7 @@ A_list = A_flat.tolist()
 A_bin = []
 
 for item in A_list:
-    temp = convert_to_binary(item, 16)
+    temp = convert_to_binary(item, DATA_WIDTH)
     A_bin.append(temp)
 
 B_flat = B.flatten()
@@ -104,7 +112,7 @@ B_list = B_flat.tolist()
 B_bin = []
 
 for x in B_list:
-    temp = convert_to_binary(x, 16)
+    temp = convert_to_binary(x, DATA_WIDTH)
     B_bin.append(temp)
 
 C_flat = C.flatten(order="F")
@@ -112,7 +120,7 @@ C_list = C_flat.tolist()
 C_bin = []
 
 for x in C_list:
-    temp = convert_to_binary(x, 16)
+    temp = convert_to_binary(x, DATA_WIDTH)
     C_bin.append(temp)
 
 file = open("array_A_fi.txt", "a")

@@ -178,10 +178,16 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
                     r_top_rd_wr_addr_from_ctrl <=  r_top_rd_wr_addr_from_ctrl + 1;
                 end
             end
+            //-----------------added delay-----------------//
             // else if (r_top_rd_wr_addr_from_ctrl == i_top_sram_rd_end_addr-1 && top_count < 2) begin 
             //     top_count <= top_count + 1;
+            //     //r_top_rd_wr_addr_from_ctrl <= 0;
+            // end
+            // else if (top_count == 2)
+            // begin 
             //     r_top_rd_wr_addr_from_ctrl <= 0;
             // end
+            //---------------------------------------------//
             else
             begin
                 r_top_rd_wr_addr_from_ctrl <= 0;
@@ -201,10 +207,12 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
                     r_left_rd_wr_addr_from_ctrl <=  r_left_rd_wr_addr_from_ctrl + 1;
                 end
             end
+            //-----------------added delay-----------------//
             // else if (r_left_rd_wr_addr_from_ctrl == i_left_sram_rd_end_addr-1  && left_count < 2) begin 
             //     left_count <= left_count + 1;
             //     r_left_rd_wr_addr_from_ctrl <= 0;
             // end
+            //---------------------------------------------//
             else
             begin
                 r_left_rd_wr_addr_from_ctrl <= 0;
