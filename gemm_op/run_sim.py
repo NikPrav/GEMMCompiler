@@ -22,7 +22,7 @@ node_list = []
 
 # Create the model
 # model = nn.Sequential(nn.Linear(7, 10, dtype=torch.float16, bias=False), nn.Linear(10, 5, dtype=torch.float16, bias=False))
-model = nn.Sequential(nn.Linear(6, 3, dtype=torch.float16, bias=False), nn.Linear(3, 4, dtype=torch.float16, bias=False))
+model = nn.Sequential(nn.Linear(6, 3, dtype=torch.float16, bias=False))
 
 output = model(x)
 print(output.size())
@@ -38,7 +38,7 @@ o_buf_size = R*C*data_size  # Output buffer size of the FPGA
 sys_params = SystolicArrayParams(R, C, mem_size, i_buf_size, w_buf_size, o_buf_size, data_size)
 
 model[0].weight = nn.Parameter(data=torch.tensor([[1,2,3,4,5,6],[7,8,9,10,11,12],[13,14,15,16,17,18]], dtype=torch.float16))
-model[1].weight = nn.Parameter(data=torch.tensor([[1,2,3],[5,6,7],[9,10,11], [13,14,15]], dtype=torch.float16))
+# model[1].weight = nn.Parameter(data=torch.tensor([[1,2,3],[5,6,7],[9,10,11], [13,14,15]], dtype=torch.float16))
 # model[0].bias = nn.Parameter(data=torch.tensor([0,0,0,0,0,0,0,0,0,0], dtype=torch.float16))
 # model[1].bias = nn.Parameter(data=torch.tensor([0,0,0,0,0], dtype=torch.float16))
 
@@ -90,7 +90,7 @@ Dram_content.generate_lists(instruction_list)
 
 
 # Create FPGA
-fpga_test = fpga.FPGA(sys_params, Dram_content, M*sys_params.data_size, M*sys_params.data_size)
+fpga_test = fpga.FPGA(sys_params, Dram_content, M*sys_params.data_size, K*sys_params.data_size)
 # print(instruction_list_test)
 fpga_test.flash(instruction_list_test)
 
