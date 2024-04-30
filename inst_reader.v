@@ -20,6 +20,7 @@ module inst_reader #(
         parameter NUM_COL                       = 8,
         parameter DATA_WIDTH                    = 8,
         parameter CTRL_WIDTH                    = 4,
+        parameter SRAM_BANK_DEPTH               = 32,
         parameter ACCU_DATA_WIDTH               = 32,
         parameter LOG2_SRAM_BANK_DEPTH          = 10,
         parameter SKEW_TOP_INPUT_EN             = 1,
@@ -155,7 +156,7 @@ module inst_reader #(
                                                 if (inst_start == 0)
                                                 begin
                                                         start <= mem_loc;
-                                                        finish <= mem_loc + NUM_COL + NUM_ROW - 1;      // TODO: Change for D
+                                                        finish <= mem_loc +  SRAM_BANK_DEPTH +  NUM_COL - 1; //prev, mem_loc + NUM_COL + NUM_ROW - 1;      
 
                                                         m_left <= mem_loc;
                                                         reg_i_left_wr_en <= 1;
@@ -173,8 +174,9 @@ module inst_reader #(
                                                                                 // Read value in A, send as data to SRAM
                                                                                 // Data is stored as NUM_COL * DATA_WIDTH
                                                                                 reg_i_left_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= A[((m_left - mem_loc - j) * NUM_ROW) + j + mem_loc];
+                                                                                $display("%d, %d, %d, %d\n", m_left, mem_loc, j , ((m_left - mem_loc - j) * NUM_ROW) + j + mem_loc ); 
 
-                                                                                if (m_left < start + NUM_ROW - 1) //start = 0 here
+                                                                                if (m_left < start + SRAM_BANK_DEPTH - 1) //start = 0 here
                                                                                 begin
                                                                                         if (j > m_left - start) 
                                                                                         begin 
@@ -182,9 +184,9 @@ module inst_reader #(
                                                                                         end
                                                                                 end 
                                                                                 
-                                                                                else if (m_left > start + NUM_ROW - 1) 
+                                                                                else if (m_left > start + SRAM_BANK_DEPTH - 1) 
                                                                                 begin 
-                                                                                        if (j < m_left - start - NUM_ROW - 1) 
+                                                                                        if (j < m_left - (start + SRAM_BANK_DEPTH - 1)) 
                                                                                         begin
                                                                                                 reg_i_left_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= {DATA_WIDTH{1'b0}};
                                                                                         end
@@ -197,7 +199,7 @@ module inst_reader #(
                                                         begin 
                                                                 // Set the correct start and end address of the left buffer (in this case, 0)
                                                                 reg_i_left_sram_rd_start_addr <= 0;
-                                                                reg_i_left_sram_rd_end_addr   <= NUM_COL + 1;
+                                                                reg_i_left_sram_rd_end_addr   <= SRAM_BANK_DEPTH + 1;  //prev, NUM_COL + 1 
                                                                 
                                                                 // Disable write and clear wires
                                                                 reg_i_left_wr_en   <= 0;
@@ -205,7 +207,7 @@ module inst_reader #(
 
                                                                 delay_counter_LD <= 2;
                                                         end 
-                                                        else if(m_left == finish && delay_counter_LD == 2)         // TODO: Change for D
+                                                        else if(m_left == finish && delay_counter_LD == 2)         
                                                         begin 
                                                                 reg_i_left_wr_data <= 0;
                                                                 PC <= PC + 1;
@@ -226,7 +228,7 @@ module inst_reader #(
                                                 if (inst_start_top == 0)
                                                 begin
                                                         start <= mem_loc;
-                                                        finish <= mem_loc + NUM_COL + NUM_ROW - 1;      // TODO: Change for D
+                                                        finish <= mem_loc + NUM_ROW + SRAM_BANK_DEPTH - 1;//prev, mem_loc + NUM_COL + NUM_ROW - 1;     
 
                                                         m_top <= mem_loc;
                                                         reg_i_top_wr_en <= 1;
@@ -244,7 +246,7 @@ module inst_reader #(
 
                                                                                 reg_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= A[(((m_top - j - mem_loc) * NUM_COL) + j) +  mem_loc]; 
                                                                         
-                                                                                if (m_top < start + NUM_COL - 1) 
+                                                                                if (m_top < start + SRAM_BANK_DEPTH - 1) 
                                                                                 begin
                                                                                         if (j > m_top - start) 
                                                                                         begin 
@@ -252,9 +254,9 @@ module inst_reader #(
                                                                                         end
                                                                                 end 
                                                                                 
-                                                                                else if (m_top > start + NUM_COL - 1) 
+                                                                                else if (m_top > start + SRAM_BANK_DEPTH - 1) 
                                                                                 begin 
-                                                                                        if (j < m_top - start - NUM_COL - 1) 
+                                                                                        if (j < m_top - (start + SRAM_BANK_DEPTH - 1)) 
                                                                                         begin
                                                                                                 reg_i_top_wr_data[DATA_WIDTH * j +: DATA_WIDTH] <= {DATA_WIDTH{1'b0}};
                                                                                         end
@@ -267,7 +269,7 @@ module inst_reader #(
                                                         begin 
                                                                 // Set the correct start and end address of the top buffer (in this case, 0)
                                                                 reg_i_top_sram_rd_start_addr <= 0; 
-                                                                reg_i_top_sram_rd_end_addr   <= NUM_ROW + 1;
+                                                                reg_i_top_sram_rd_end_addr   <= SRAM_BANK_DEPTH + 1;  //prev, NUM_ROW + 1
                                                                 
                                                                 // Disable write and clear wires
                                                                 reg_i_top_wr_en   <= 0;
@@ -275,7 +277,7 @@ module inst_reader #(
 
                                                                 delay_counter_LD <= 2;
                                                         end 
-                                                        else if(m_top == finish && delay_counter_LD == 2)       // TODO: Change for D
+                                                        else if(m_top == finish && delay_counter_LD == 2)       
                                                         begin 
                                                                 reg_i_top_wr_data <= 0;
                                                                 PC <= PC + 1;
@@ -283,7 +285,7 @@ module inst_reader #(
                                                                 delay_counter_LD <= delay_counter_LD + 1;
                                                         end
 
-                                                        else if(m_top == finish && delay_counter_LD == 3)       // TODO: Change for D
+                                                        else if(m_top == finish && delay_counter_LD == 3)       
                                                         begin 
                                                                 inst_start_top <= 0;
                                                                 delay_counter_LD <= 0;
@@ -355,12 +357,12 @@ module inst_reader #(
                                                 delay_counter_GEMM <= delay_counter_GEMM + 1;
                                         end
 
-                                        else if (delay_counter_GEMM > 0 && delay_counter_GEMM < (2*NUM_ROW + NUM_COL)) //change counter value to include data depth
+                                        else if (delay_counter_GEMM > 0 && delay_counter_GEMM < (NUM_ROW + NUM_COL + SRAM_BANK_DEPTH)) //prev, 2*NUM_ROW + NUM_COL
                                         begin
                                                 delay_counter_GEMM <= delay_counter_GEMM + 1;
                                         end
 
-                                        else if (delay_counter_GEMM == 2*NUM_ROW + NUM_COL)
+                                        else if (delay_counter_GEMM == NUM_ROW + NUM_COL + SRAM_BANK_DEPTH) //prev, 2*NUM_ROW + NUM_COL
                                         begin
                                                 PC <= PC + 1;
                                                 delay_counter_GEMM <= 0;

@@ -8,8 +8,9 @@ module new_tb();
         parameter                                       DATA_WIDTH           = 16;
         parameter                                       ACCU_DATA_WIDTH      = 16;
         parameter                                       OUT_DATA_WIDTH       = ACCU_DATA_WIDTH;
-        parameter                                       LOG2_SRAM_BANK_DEPTH = 5;
+        parameter                                       LOG2_SRAM_BANK_DEPTH = 6;
         parameter                                       CTRL_WIDTH           = 4;
+        parameter                                       SRAM_BANK_DEPTH      = 8; 
 
         reg                                              clk              = 0;
         reg                                              rst_n            = 0;
@@ -161,6 +162,7 @@ module new_tb();
                 .CTRL_WIDTH                     (CTRL_WIDTH),
                 .ACCU_DATA_WIDTH                (ACCU_DATA_WIDTH),
                 .LOG2_SRAM_BANK_DEPTH           (LOG2_SRAM_BANK_DEPTH),
+                .SRAM_BANK_DEPTH                (SRAM_BANK_DEPTH), 
                 .SKEW_TOP_INPUT_EN              (1),
                 .SKEW_LEFT_INPUT_EN             (1)
 
@@ -195,6 +197,7 @@ module new_tb();
                 .DATA_WIDTH                     (DATA_WIDTH),
                 .ACCU_DATA_WIDTH                (ACCU_DATA_WIDTH),
                 .LOG2_SRAM_BANK_DEPTH           (LOG2_SRAM_BANK_DEPTH),
+                .SRAM_BANK_DEPTH                (SRAM_BANK_DEPTH), 
                 .SKEW_TOP_INPUT_EN              (1) 
         )systolic_array_top_in_new_tb(
                 .clk                            (clk),

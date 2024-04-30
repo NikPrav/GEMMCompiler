@@ -37,7 +37,8 @@ module systolic_array_top#(parameter NUM_ROW = 8,
                            parameter ACCU_DATA_WIDTH = 32,
                            parameter LOG2_SRAM_BANK_DEPTH = 10,
                            parameter SKEW_TOP_INPUT_EN = 1,
-                           parameter SKEW_LEFT_INPUT_EN = 1)
+                           parameter SKEW_LEFT_INPUT_EN = 1,
+                           parameter SRAM_BANK_DEPTH = 8)
                           (clk,
                            rst_n,
                            i_top_wr_en,
@@ -349,8 +350,8 @@ module systolic_array_top#(parameter NUM_ROW = 8,
     systolic_array_datapath#(
     .NUM_ROW                            (NUM_ROW),
     .NUM_COL                            (NUM_COL),
-    .SA_IN_DATA_WIDTH                   (DATA_WIDTH),  //changed when pe_os was added
-    .SA_OUT_DATA_WIDTH                  (ACCU_DATA_WIDTH) //changed when pe_os was added
+    .SA_IN_DATA_WIDTH                   (DATA_WIDTH),  
+    .SA_OUT_DATA_WIDTH                  (ACCU_DATA_WIDTH) 
     ) inst_sa_datapath(
     .clk                                (clk),
     .rst_n                              (rst_n),
@@ -369,7 +370,8 @@ module systolic_array_top#(parameter NUM_ROW = 8,
     .NUM_COL                            (NUM_COL),
     .DATA_WIDTH                         (DATA_WIDTH),
     .ACCU_DATA_WIDTH                    (ACCU_DATA_WIDTH),
-    .LOG2_SRAM_BANK_DEPTH (LOG2_SRAM_BANK_DEPTH)
+    .LOG2_SRAM_BANK_DEPTH (LOG2_SRAM_BANK_DEPTH),
+    .SRAM_BANK_DEPTH(SRAM_BANK_DEPTH)
     ) inst_sa_controller(
     .clk                                (clk),
     .rst_n                              (rst_n),

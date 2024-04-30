@@ -38,6 +38,7 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
                                   parameter DATA_WIDTH = 8,
                                   parameter ACCU_DATA_WIDTH = 32,
                                   parameter LOG2_SRAM_BANK_DEPTH = 10,
+                                  parameter SRAM_BANK_DEPTH = 8, 
                                   parameter SKEW_TOP_INPUT_EN = 1,
                                   parameter SKEW_LEFT_INPUT_EN = 1)
                                  (clk,
@@ -78,9 +79,9 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
     input                                                       rst_n                               ;
     input   [CTRL_WIDTH             -1: 0]                      i_ctrl_state_to_ctrl                ;
     input                                                       i_top_wr_en_to_ctrl                 ;
-    input   [LOG2_SRAM_BANK_DEPTH     -1: 0]                      i_top_wr_addr_to_ctrl               ; // Change from NUMCOL*DW to LOG2
+    input   [LOG2_SRAM_BANK_DEPTH     -1: 0]                    i_top_wr_addr_to_ctrl               ; 
     input                                                       i_left_wr_en_to_ctrl                ;
-    input   [LOG2_SRAM_BANK_DEPTH    -1: 0]                      i_left_wr_addr_to_ctrl              ;// Change from NUMCOL*DW to LOG2
+    input   [LOG2_SRAM_BANK_DEPTH    -1: 0]                      i_left_wr_addr_to_ctrl             ;
     input                                                       i_down_rd_en_to_ctrl                ;
     input   [LOG2_SRAM_BANK_DEPTH   -1: 0]                      i_down_rd_addr_to_ctrl              ;
     
@@ -117,20 +118,6 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
     reg     [NUM_COL                -1: 0]  r_valid_top_from_ctrl       ;
     reg     [NUM_ROW                -1: 0]  r_valid_left_from_ctrl      ;
     wire                                    w_sa_output_rdy;
-    
-    // assign  w_sa_output_rdy             = (|(i_sa_datapath_valid_down_to_ctrl));
-    
-    // generate
-    // for(gc = 0; gc<NUM_COL; gc = gc+1)
-    //     begin : SA_valid_high
-    //      assign  o_down_rd_wr_en_from_ctrl   [gc] = (i_ctrl_state_to_ctrl < 2)? i_down_rd_en_to_ctrl:((i_sa_datapath_valid_down_to_ctrl[gc] == 1)   ?   1   :   0);
-    //     // prioritizing SA write to SRAM over read from top
-    //     // and writing only the data whose valid is high
-    //     // assign  o_down_rd_wr_en_from_ctrl   [gc] = (i_ctrl_state_to_ctrl < 2)                 ?   i_down_rd_en_to_ctrl    :   (
-    //     // (i_sa_datapath_valid_down_to_ctrl[gc] == 1)   ?   1   :   0);
-    //     //assign  o_down_wr_data_from_ctrl    [(gc*OUT_DATA_WIDTH)    +:  OUT_DATA_WIDTH] = (i_sa_datapath_valid_down_to_ctrl[gc] == 1)   ?  w_o_data_down[(gc*OUT_DATA_WIDTH)    +:  OUT_DATA_WIDTH] : 0;
-    // end
-    // endgenerate
 
     integer top_count, left_count, down_count;
     reg top_read_done, left_read_done;
@@ -149,7 +136,6 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
                 r_left_rd_wr_en_from_ctrl <= {NUM_ROW{READ_ENABLE}}     ;
                 r_i_down_wr_addr          <= 0;
                 
-                // CHANGE: SRAM pointers should point to the write address at start
                 r_top_rd_wr_addr_from_ctrl <= i_top_sram_rd_start_addr;
                 r_left_rd_wr_addr_from_ctrl <= i_left_sram_rd_start_addr;
 
@@ -178,16 +164,6 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
                     r_top_rd_wr_addr_from_ctrl <=  r_top_rd_wr_addr_from_ctrl + 1;
                 end
             end
-            //-----------------added delay-----------------//
-            // else if (r_top_rd_wr_addr_from_ctrl == i_top_sram_rd_end_addr-1 && top_count < 2) begin 
-            //     top_count <= top_count + 1;
-            //     //r_top_rd_wr_addr_from_ctrl <= 0;
-            // end
-            // else if (top_count == 2)
-            // begin 
-            //     r_top_rd_wr_addr_from_ctrl <= 0;
-            // end
-            //---------------------------------------------//
             else
             begin
                 r_top_rd_wr_addr_from_ctrl <= 0;
@@ -207,12 +183,6 @@ module systolic_array_controller#(parameter NUM_ROW = 8,
                     r_left_rd_wr_addr_from_ctrl <=  r_left_rd_wr_addr_from_ctrl + 1;
                 end
             end
-            //-----------------added delay-----------------//
-            // else if (r_left_rd_wr_addr_from_ctrl == i_left_sram_rd_end_addr-1  && left_count < 2) begin 
-            //     left_count <= left_count + 1;
-            //     r_left_rd_wr_addr_from_ctrl <= 0;
-            // end
-            //---------------------------------------------//
             else
             begin
                 r_left_rd_wr_addr_from_ctrl <= 0;
