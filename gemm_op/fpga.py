@@ -45,7 +45,7 @@ class FPGA:
         o_buf_col = 0
         for pc, instr in zip(range(len(instruction_list)), instruction_list):
             if (instr.name == "LD"):
-                instr.mem_addr = (instr.mem_addr-self.sys_params.inst_mem) // self.sys_params.data_size
+                instr.mem_addr = (instr.mem_addr) // self.sys_params.data_size
 
                 for i in range(self.sys_params.i_buf_size//(self.sys_params.R*self.sys_params.data_size)):
                     # self.i_buf[i, i_buf_col] = self.dram.data[instr.mem_addr + i]
@@ -75,7 +75,7 @@ class FPGA:
                     # self.i_buf[:, i_buf_col] = self.dram[instr.mem_addr:instr.mem_addr + self.sys_params.R ]
        
             elif (instr.name == "STR"):
-                instr.mem_addr = (instr.mem_addr-self.sys_params.inst_mem) // self.sys_params.data_size
+                instr.mem_addr = (instr.mem_addr) // self.sys_params.data_size
                 for i in range(self.sys_params.R):
                     if (instr.buf_id == 3):
                         offset = (self.offset_row//self.sys_params.data_size) * i

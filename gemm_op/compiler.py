@@ -216,7 +216,7 @@ class SystolicArrayParams:
         self.inst_mem = 16*500
 
 
-        self.inst_mem = 16*500
+        
 
         self.mem = torch.zeros(dram_size)
     

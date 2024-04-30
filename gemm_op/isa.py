@@ -1,6 +1,8 @@
 from enum import IntEnum
 import torch
 
+INST_MEM = 16*500
+
 # buffer ids
 class BufferIDs(IntEnum):
     INPUT_BUFFER = 1
@@ -11,7 +13,7 @@ class BufferIDs(IntEnum):
 class LoadCommand:
     def __init__(self, buf_id, mem_addr):
         self.buf_id = buf_id
-        self.mem_addr = mem_addr
+        self.mem_addr = mem_addr - INST_MEM
         self.name = "LD"
 
     def execute_command(self):
@@ -44,7 +46,7 @@ class LoadCommand:
 class StoreCommand:
     def __init__(self, buf_id, mem_addr):
         self.buf_id = buf_id
-        self.mem_addr = mem_addr
+        self.mem_addr = mem_addr - INST_MEM
         self.name = "STR"
         # self.data = data
 
