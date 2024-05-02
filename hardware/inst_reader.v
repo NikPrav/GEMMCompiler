@@ -1,8 +1,8 @@
 /* 
 Instruction Reader
 Function: Parse the memory snapshot obtained from compiler to find opcode, memory locations to write and read addresses from
-          Instructions are read from inst.txt 
-          Data is read from data.txt 
+          Instructions are read from instruction_list.txt  
+          Data is read from data_list.txt 
           Results and inputs are stored in A, dumped to output_buf.txt
 Opcodes: 
         1. Instruction -  LD 
@@ -156,8 +156,8 @@ module inst_reader #(
                 delay_counter_DRAINSYS = 0;
                 inst_start = 0;
       
-                $readmemb("inst.txt", inst_memory); 
-                $readmemb("data.txt", A);       
+                $readmemb("instruction_list.txt .txt", inst_memory); 
+                  $readmemb("data_list.txt", A);       
         end 
 
         assign opcode = inst[OPCODE_ARRAY_INDEX - 1    : BUF_ID_ARRAY_INDEX];
