@@ -39,7 +39,7 @@ buffers (opcode_LD), performing matrix multiplication (opcode_
 GEMM), or draining data from the systolic array (opcode_
 DRAINSYS).
 
-* Wrapper (testbench): systolic_array_tb around the systolic array
+* Wrapper (testbench): systolic_array_tb wraps around the systolic array
 top module which provides the necessary data
 and control signals while observing the output data.
 More importantly, the wrapper acts as a state machine
