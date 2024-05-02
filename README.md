@@ -93,6 +93,10 @@ To simulate this code (tested on ModelSim), use systolic_array_tb.v as the testb
 registers
 * Fastest Clock (Intel DE10): 180 MHz across 4 TV corners
 
+**Future work:** Adding an AXI DMA interface to the hardware backend
+would allow the compiler to talk directly to the FPGA
+backend and not use text files as intermediaries.
+
 # License
 
 ```
