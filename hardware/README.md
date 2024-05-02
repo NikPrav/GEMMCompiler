@@ -1,7 +1,9 @@
 # Dense Systolic Array (SA) for an End-to-end ML Accelerator Framework
-The major components in this project include:
+System Overview:
 
 <img title="System architecture" alt=" " src="/hardware/hardware backend.png">
+
+### Components 
 
 *  PE Grid (Datapath): Consists of all the MAC units that perform the GEMM operation on input data streams received from neighboring PEs (left and top) through ports in Output Stationary dataflow. 
 
@@ -52,3 +54,8 @@ To simulate this code, use systolic_array_tb.v as the testbench, and store the i
 * FPGA Synthesis Results: 212 ALMs,344 ALUTs, 204
 registers
 * Fastest Clock (Intel DE10): 180 MHz across 4 TV corners
+
+### Maintained By
+Spandan More (smore39@gatech.edu)
+Adithi Upadhya (aupadhya7@gatech.edu)
+Anirudh Tulasi (atulasi3@gatech.edu)
