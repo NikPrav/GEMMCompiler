@@ -1,7 +1,7 @@
 # Dense Systolic Array (SA) for an End-to-end ML Accelerator Framework
 The major components in this project include:
 
-<img title="System architecture" alt=" " src="/hardware backend.png">
+<img title="System architecture" alt=" " src="/hardware/hardware backend.png">
 
 *  PE Grid (Datapath): Consists of all the MAC units that perform the GEMM operation on input data streams received from neighboring PEs (left and top) through ports in Output Stationary dataflow. 
 
