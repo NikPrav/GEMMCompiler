@@ -1,0 +1,12 @@
+inst.bin
+.ipynb_checkpoints
+*.pyc
+.cache.mk
+flex*.log
+*.swp
+.idea/
+example/VOC2007/
+example/ckpt/
+.venv
+example/yolov2tiny/
+.venv
