@@ -104,6 +104,10 @@ fpga_test.flash(instruction_list_test)
 
 fpga_test.execute(list(chain.from_iterable(instruction_list_test)))
 
+# Add code to run verilog
+
+# Read back the text file
+# Dram_content.parse_generated_data("filename.txt")
 
 
 print(f"Output from FPGA:\n {fpga_test.extract(i_ptr_cur-sys_params.inst_mem, (M,K))}")
