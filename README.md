@@ -85,7 +85,8 @@ More importantly, the wrapper acts as a state machine
 for the unit, where each instruction corresponds to a
 controller state and is set by the wrapper accordingly.
 
-**NOTE:** The sizes of all the elements in the datapath (PE grid dimensions, SRAM buffer size, data width) are parameterized.
+## Simulation and Synthesis results
+The sizes of all the elements in the datapath (PE grid dimensions, SRAM buffer size, data width) are parameterized.
 To simulate this code (tested on ModelSim), use systolic_array_tb.v as the testbench, and store the instructions and data from the compiler in instruction_list.txt and data_list.txt respectively. Results and inputs are dumped to output_buf.txt for further use. 
 
 * FPGA Synthesis Results: 212 ALMs,344 ALUTs, 204
