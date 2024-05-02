@@ -1,5 +1,6 @@
 `timescale 1ns / 1ps
 /*
+    Top Module:  sysotlic_array_pe_os
     Data:        SA_IN_DATA_WIDTH is the width of input data -> OUT_WORD_SIZE is the width of output data.
     Timing:      Sequential Logic
     Reset:       Synchronized Reset [High negedge rst_n]
@@ -22,18 +23,7 @@
     Author:      Jianming Tong (jianming.tong@gatech.edu) Anirudh Itagi (aitagi7@gatech.edu)
 */
 
-/*
-Note: 
-The accumulation part of the MAC operation involves adding the w_mult_result to the current 
-value stored in the r_stationary_data register. This register holds the running accumulation 
-of previous MAC operations. The sum of w_mult_result and r_stationary_data is assigned to 
-the w_accum_out wire, which is written back to r_stationary_data if enable is asserted. 
-Unless a flush command (i_cmd_top[1]) is received, the r_stationary_data register continues 
-to accumulate the MAC results from subsequent cycles. When a flush command is received, the 
-final accumulated value in r_stationary_data is propagated to the output (o_data_down) if the 
-current PE is in the last row of the systolic array. Otherwise, the accumulated value is passed 
-down to the next row (r_data_down).
-*/
+
 
 module systolic_array_pe_os #(
     parameter   SA_IN_DATA_WIDTH    = 8,

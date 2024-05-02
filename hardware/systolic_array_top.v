@@ -29,7 +29,6 @@
  [0*IWS+:IWS]               [NUM_ROW*IWS+:IWS]
  
  Every node has an output value;
- Last modified by: Spandan More (smore39@gatech.edu), Adithi Upadhya (aupadhya7@gatech.edu), Anirudh Tulasi (atulasi3@gatech.edu)
  */
 
 module systolic_array_top#(parameter NUM_ROW = 8,
@@ -208,6 +207,7 @@ module systolic_array_top#(parameter NUM_ROW = 8,
     //---------------------------------------------------------------------------------------------------
     if (SKEW_LEFT_INPUT_EN == 1)
     begin
+        // do we need to do for data as well??
         reg                                                 r_left_rd_wr_en [0 : NUM_ROW-1];
         reg     [LOG2_SRAM_BANK_DEPTH       -1: 0]          r_left_addr     [0 : NUM_ROW-1];
         /*

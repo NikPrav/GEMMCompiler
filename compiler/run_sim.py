@@ -3,6 +3,7 @@ import torch.nn as nn
 from torch.autograd import Variable
 import fpga
 import numpy as np
+import subprocess
 
 from memory_handler import DRAM
 from layer_nodes import LayerNode
@@ -12,8 +13,26 @@ from padding import padding_func, padding_func_ip
 # import chain
 from itertools import chain
 
-# x = Variable(torch.randn(1,7,7, dtype=torch.float16))
+def compile_v():
+        try:
+            # Run the shell script
+            subprocess.run(["chmod", "+x", "compile.sh"])
+            subprocess.run(arguments)
+        except subprocess.CalledProcessError:
+            print("Error: The verilog compilation script did not run successfully.")
 
+def simulate_v(output_file):
+        # Prepare the arguments for the shell script
+        arguments = ["./run.sh", output_file]
+
+        try:
+            # Run the shell script
+            subprocess.run(["chmod", "+x", "run.sh"])
+            subprocess.run(arguments)
+        except subprocess.CalledProcessError:
+            print("Error: The verilog run script did not run successfully.")
+
+# Define the input tensor 
 x = torch.tensor([[1,2,3,4,5,6],[7,8,9,10,11,12],[13,14,15,16,17,18]], dtype=torch.float16)
 input = x
 
@@ -25,8 +44,6 @@ node_list = []
 # Create the model
 # model = nn.Sequential(nn.Linear(7, 10, dtype=torch.float16, bias=False), nn.Linear(10, 5, dtype=torch.float16, bias=False))
 model = nn.Sequential(nn.Linear(6, 3, dtype=torch.float16, bias=False))
-
-
 
 # Setting Systolic Array Parameters
 R, C = 4, 4  # Size of the systolic array
@@ -40,6 +57,7 @@ print(f"Systolic array parameters: \n R: {R}, \n C: {C}, \n Memory size: {mem_si
 
 sys_params = SystolicArrayParams(R, C, mem_size, i_buf_size, w_buf_size, o_buf_size, data_size)
 
+# Define the weight tensor
 model[0].weight = nn.Parameter(data=torch.tensor([[1,2,3,4,5,6],[7,8,9,10,11,12],[13,14,15,16,17,18]], dtype=torch.float16))
 
 print(f"Weight array: \n {model[0].weight}")
@@ -96,7 +114,6 @@ for i in instruction_list:
     
 Dram_content.generate_lists(instruction_list)
 
-
 # Create FPGA
 fpga_test = fpga.FPGA(sys_params, Dram_content, M*sys_params.data_size, K*sys_params.data_size)
 # print(instruction_list_test)
@@ -104,10 +121,30 @@ fpga_test.flash(instruction_list_test)
 
 fpga_test.execute(list(chain.from_iterable(instruction_list_test)))
 
-# Add code to run verilog
+# Code to run verilog
+
+# List of Verilog files in the desired compilation order
+verilog_files = [
+    "systolic_array_pe.v",
+    "sram_bank_sp.v",
+    "systolic_array_controller.v",
+    "systolic_array_datapath.v",
+    "inst_reader.v",
+    "systolic_array_top.v",
+    "systolic_array_tb.v"
+]
+
+# Output file name
+output_file = "fpg"
+
+# Prepare the arguments for the shell script
+arguments = ["./compile.sh", output_file] + verilog_files
+
+# Compile and run the verilog code
+compile_v()
+simulate_v(output_file)
 
 # Read back the text file
 # Dram_content.parse_generated_data("filename.txt")
-
 
 print(f"Output from FPGA:\n {fpga_test.extract(i_ptr_cur-sys_params.inst_mem, (M,K))}")

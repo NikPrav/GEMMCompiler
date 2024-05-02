@@ -79,7 +79,7 @@ class DRAM:
     
     def generate_lists(self,instruction_list):
         # writing the instructions into the DRAM
-        with open("instruction_list.txt", "w") as file:
+        with open("../hardware/inst.txt", "w") as file:
             # Iterate through each element in the list
             for row in instruction_list:
                 for element in row:
@@ -88,7 +88,7 @@ class DRAM:
 
         # Change this for actual FPGA
         cur_entry_mem = 0
-        with open("data_list.txt", "w") as file:
+        with open("../hardware/data.txt", "w") as file:
             # Iterate through each element in the list
             for weight_entry in self.data:
                 file.write(str(format(int(weight_entry),f'0{16}b')) + "\n")  # Add a newline character to separate elements

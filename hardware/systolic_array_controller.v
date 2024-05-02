@@ -31,7 +31,6 @@
  Every node has an output value;
  
  Author:      Jianming Tong (jianming.tong@gatech.edu) Anirudh Itagi (aitagi7@gatech.edu)
- Last modified by: Spandan More (smore39@gatech.edu), Adithi Upadhya (aupadhya7@gatech.edu), Anirudh Tulasi (atulasi3@gatech.edu)
  */
 
 module systolic_array_controller#(parameter NUM_ROW = 8,
