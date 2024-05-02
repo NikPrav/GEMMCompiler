@@ -1,3 +1,45 @@
+/* 
+Instruction Reader
+Function: Parse the memory snapshot obtained from compiler to find opcode, memory locations to write and read addresses from
+          Instructions are read from inst.txt 
+          Data is read from data.txt 
+          Results and inputs are stored in A, dumped to output_buf.txt
+Opcodes: 
+        1. Instruction -  LD 
+        Operands - dst: buf, src: ptr[TILE]
+        Opcode - 0010 
+        Explanation - Load buf_size entries from ptr[TILE] to SRAM buffer.
+
+        2. Instruction - ST
+        Operands - dst: ptr[TILE], src: buf
+        Opcode - 0011
+        Explanation - Load buf_size entries from SRAM buffer to ptr[TILE]
+
+        3. Instruction - GEMM
+        Operands - N/A
+        Opcode - 0100
+        Explanation - Pass information from both 𝑖𝑏𝑢𝑓 and 𝑤𝑏𝑢𝑓 into systolic array and compute GEMM
+
+        4. Instruction - DRAINSYS
+        Operands - N/A
+        Opcode - 0101
+        Explanation - Drain systolic array to 𝑜𝑏𝑢𝑓
+
+Opcodes for buffers:
+        i𝑏𝑢𝑓 01 (corresponds to left buffer)
+        w𝑏𝑢𝑓 10 (top buffer)
+        o𝑏𝑢𝑓 11 (down buffer)
+
+Sample instructions:
+        00101000000000000000000000000000 //load to top buffer, starting from address 0
+        00100100000000000000000000100000 //load to left buffer, starting from address 32
+
+Note: Delay counters were incorporated into the implementation to manage time lags between instruction
+execution stages, guaranteeing appropriate coordination and synchronization.
+
+Authors: Spandan More (smore39@gatech.edu), Adithi Upadhya (aupadhya7@gatech.edu), Anirudh Tulasi (atulasi3@gatech.edu)
+*/
+
 module inst_reader #(
         parameter INST_WIDTH                    = 16,
         parameter INST_MEMORY_SIZE              = 1024,
@@ -341,7 +383,7 @@ module inst_reader #(
                                                 end 
                                                 else if (reg_i_down_rd_addr == NUM_ROW && i == NUM_ROW && delay_counter_ST == 9) 
                                                 begin 
-                                                        $writememb("array_C_outs.txt", A);
+                                                        $writememb("output_buf.txt", A);
                                                         reg_i_down_rd_en <= 0;
                                                         delay_counter_ST <= delay_counter_ST + 1;
                                                         PC <= PC + 1;

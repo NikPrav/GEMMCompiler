@@ -1,3 +1,4 @@
+##This code generates sample input arrays for GEMM exceution check, can be loaded into the testbench code
 import os
 import numpy as np
 

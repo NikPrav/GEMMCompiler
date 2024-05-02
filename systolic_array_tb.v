@@ -1,8 +1,11 @@
 `timescale 1ns/1ps
-
+/*
+ Testbench code 
+ Authors: Spandan More (smore39@gatech.edu), Adithi Upadhya (aupadhya7@gatech.edu), Anirudh Tulasi (atulasi3@gatech.edu)
+*/
 `define PERIOD 10
 
-module new_tb();
+module systolic_array_tb();
         parameter                                       NUM_ROW              = 4;
         parameter                                       NUM_COL              = 4;
         parameter                                       DATA_WIDTH           = 16;
