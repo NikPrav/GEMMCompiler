@@ -37,7 +37,7 @@ snapshot (compiler output). Based on the opcode, the module
 executes different operations such as loading data into
 buffers (opcode_LD), performing matrix multiplication (opcode_
 GEMM), or draining data from the systolic array (opcode_
-DRAINSYS).
+DRAINSYS). 
 
 * Wrapper (testbench): systolic_array_tb wraps around the systolic array
 top module which provides the necessary data
@@ -47,6 +47,7 @@ for the unit, where each instruction corresponds to a
 controller state and is set by the wrapper accordingly.
 
 **NOTE:** The sizes of all the elements in the datapath (PE grid dimensions, SRAM buffer size, data width) are parameterized.
+To simulate this code, use systolic_array_tb.v as the testbench, and store the instructions and data from the compiler in inst.txt and data.txt respectively. Results and inputs are dumped to output_buf.txt for further use. 
 
 * FPGA Synthesis Results: 212 ALMs,344 ALUTs, 204
 registers
