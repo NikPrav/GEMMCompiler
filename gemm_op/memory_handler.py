@@ -93,6 +93,21 @@ class DRAM:
             for weight_entry in self.data:
                 file.write(str(format(int(weight_entry),f'0{16}b')) + "\n")  # Add a newline character to separate elements
                 cur_entry_mem += 1
+    
+    def parse_generated_data(self, filename):
+        arr = []
+        with open(filename, 'r') as file:
+            for line in file:
+                try:
+                    # Convert binary string to integer and append to list
+                    num = int(line.strip(), 2)
+                    arr.append(num)
+                except ValueError:
+                    # Ignore lines that are not numbers
+                    continue
+        # Convert list to numpy array
+        self.data = np.array(arr)
+        # return numpy_array
 
     def __str__(self):
         return str(self.data)
