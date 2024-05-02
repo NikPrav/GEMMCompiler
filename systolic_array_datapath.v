@@ -145,7 +145,7 @@ module systolic_array_datapath#(
         // Initialise shift register 
         reg r_left_valid [0: NUM_ROW-1];
 
-        // Make always blcok for shifting (sync to clk)
+        // Make always block for shifting (sync to clk)
         always@(posedge clk or negedge rst_n)
         begin
             if (!rst_n)
