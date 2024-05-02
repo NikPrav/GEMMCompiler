@@ -1,4 +1,4 @@
-# Compiler Framework and Simulator for Systolic Array
+# End-toEnd Framework and Simulator for Systolic Array
 This repo contains code for a compiler for a custom systolic array hardware, along with a simulator to verify correctness of the generated instructions
 
 ![Overview](img/HML_Complier_flowchart.drawio.png)
