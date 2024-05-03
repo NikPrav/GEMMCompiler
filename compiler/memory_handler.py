@@ -79,7 +79,7 @@ class DRAM:
     
     def generate_lists(self,instruction_list):
         # writing the instructions into the DRAM
-        with open("../hardware/inst.txt", "w") as file:
+        with open("GEMMCompiler/hardware/inst.txt", "w") as file:
             # Iterate through each element in the list
             for row in instruction_list:
                 for element in row:
@@ -88,7 +88,7 @@ class DRAM:
 
         # Change this for actual FPGA
         cur_entry_mem = 0
-        with open("../hardware/data.txt", "w") as file:
+        with open("GEMMCompiler/hardware/data.txt", "w") as file:
             # Iterate through each element in the list
             for weight_entry in self.data:
                 file.write(str(format(int(weight_entry),f'0{16}b')) + "\n")  # Add a newline character to separate elements
@@ -108,6 +108,9 @@ class DRAM:
         # Convert list to numpy array
         self.data = np.array(arr)
         # return numpy_array
+
+    def extract(self, i_ptr, shape):
+        return self.data[i_ptr//self.sys_params.data_size:i_ptr//self.sys_params.data_size+shape[0]*shape[1]].reshape(shape).T
 
     def __str__(self):
         return str(self.data)

@@ -29,6 +29,7 @@
  [0*IWS+:IWS]               [NUM_ROW*IWS+:IWS]
  
  Every node has an output value;
+ Last modified by: Spandan More (smore39@gatech.edu), Adithi Upadhya (aupadhya7@gatech.edu), Anirudh Tulasi (atulasi3@gatech.edu)
  */
 
 module systolic_array_top#(parameter NUM_ROW = 8,
@@ -150,7 +151,7 @@ module systolic_array_top#(parameter NUM_ROW = 8,
         
         for(gc = 0; gc<NUM_COL; gc = gc+1)
             begin : sram
-            assign  w_i_top_wr_data [gc] = {1, i_top_wr_data[gc*DATA_WIDTH +:  DATA_WIDTH]};
+            assign  w_i_top_wr_data [gc] = {1'b1, i_top_wr_data[gc*DATA_WIDTH +:  DATA_WIDTH]};
             sram_bank_sp#(
             .SRAM_BANK_DATA_WIDTH   (DATA_WIDTH+1),  // +1 for the CMD
             .SRAM_BANK_ADDR_WIDTH   (LOG2_SRAM_BANK_DEPTH),
@@ -186,7 +187,7 @@ module systolic_array_top#(parameter NUM_ROW = 8,
     
     for(gc = 0; gc<NUM_COL; gc = gc+1)
         begin : sram_bank_top
-        assign  w_i_top_wr_data [gc] = {1, i_top_wr_data[gc*DATA_WIDTH +:  DATA_WIDTH]};
+        assign  w_i_top_wr_data [gc] = {1'b1, i_top_wr_data[gc*DATA_WIDTH +:  DATA_WIDTH]};
         sram_bank_sp#(
         .SRAM_BANK_DATA_WIDTH   (DATA_WIDTH+1),  // +1 for the CMD
         .SRAM_BANK_ADDR_WIDTH   (LOG2_SRAM_BANK_DEPTH),
@@ -237,7 +238,7 @@ module systolic_array_top#(parameter NUM_ROW = 8,
         
         for(gr = 0; gr<NUM_ROW; gr = gr+1)
             begin : sram_bank_left
-            assign  w_i_left_wr_data [gr] = {1, i_left_wr_data[gr*DATA_WIDTH +:  DATA_WIDTH]};
+            assign  w_i_left_wr_data [gr] = {1'b1, i_left_wr_data[gr*DATA_WIDTH +:  DATA_WIDTH]};
             sram_bank_sp#(
             .SRAM_BANK_DATA_WIDTH   (DATA_WIDTH+1),  // +1 for the CMD
             .SRAM_BANK_ADDR_WIDTH   (LOG2_SRAM_BANK_DEPTH),
@@ -275,7 +276,7 @@ module systolic_array_top#(parameter NUM_ROW = 8,
     
     for(gr = 0; gr<NUM_ROW; gr = gr+1)
         begin : sram_bank_sp_left
-        assign  w_i_left_wr_data [gr] = {1, i_left_wr_data[gr*DATA_WIDTH +:  DATA_WIDTH]};
+        assign  w_i_left_wr_data [gr] = {1'b1, i_left_wr_data[gr*DATA_WIDTH +:  DATA_WIDTH]};
         sram_bank_sp#(
         .SRAM_BANK_DATA_WIDTH   (DATA_WIDTH+1),  // +1 for the CMD
         .SRAM_BANK_ADDR_WIDTH   (LOG2_SRAM_BANK_DEPTH),
@@ -330,7 +331,7 @@ module systolic_array_top#(parameter NUM_ROW = 8,
         assign  w_i_cmd_top_to_sa[gc*2 +: 2] = {w_cmd_top_flsh ,w_o_top_rd_data [gc][DATA_WIDTH]};
         
         assign  w_i_valid_top_to_sa     [gc]                                          = w_top_valid_from_ctrl   [gc];
-        assign  w_i_data_top_to_sa      [(gc*ACCU_DATA_WIDTH)    +:  ACCU_DATA_WIDTH] = {0, w_o_top_rd_data     [gc][0  +:  DATA_WIDTH]};
+        assign  w_i_data_top_to_sa      [(gc*ACCU_DATA_WIDTH)    +:  ACCU_DATA_WIDTH] = {1'b0, w_o_top_rd_data     [gc][0  +:  DATA_WIDTH]};
     
     assign  w_i_down_rd_wr_en       [gc] = w_down_rd_wr_en_from_ctrl;
     assign  w_i_down_wr_data        [gc] = w_o_data_down_from_sa   [(gc*OUT_DATA_WIDTH)    +:  OUT_DATA_WIDTH];

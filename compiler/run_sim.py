@@ -16,18 +16,18 @@ from itertools import chain
 def compile_v():
         try:
             # Run the shell script
-            subprocess.run(["chmod", "+x", "compile.sh"])
+            subprocess.run(["chmod", "+x", "GEMMCompiler/compiler/compile.sh"])
             subprocess.run(arguments)
         except subprocess.CalledProcessError:
             print("Error: The verilog compilation script did not run successfully.")
 
 def simulate_v(output_file):
         # Prepare the arguments for the shell script
-        arguments = ["./run.sh", output_file]
+        arguments = ["GEMMCompiler/compiler/run.sh", output_file]
 
         try:
             # Run the shell script
-            subprocess.run(["chmod", "+x", "run.sh"])
+            subprocess.run(["chmod", "+x", "GEMMCompiler/compiler/run.sh"])
             subprocess.run(arguments)
         except subprocess.CalledProcessError:
             print("Error: The verilog run script did not run successfully.")
@@ -138,13 +138,14 @@ verilog_files = [
 output_file = "fpg"
 
 # Prepare the arguments for the shell script
-arguments = ["./compile.sh", output_file] + verilog_files
+arguments = ["GEMMCompiler/compiler/compile.sh", output_file] + verilog_files
 
 # Compile and run the verilog code
 compile_v()
 simulate_v(output_file)
 
 # Read back the text file
-# Dram_content.parse_generated_data("filename.txt")
+Dram_content.parse_generated_data("GEMMCompiler/hardware/out.txt")
 
-print(f"Output from FPGA:\n {fpga_test.extract(i_ptr_cur-sys_params.inst_mem, (M,K))}")
+# Print the contents of the DRAM 
+print(f"Output from FPGA:\n {Dram_content.extract(i_ptr_cur-sys_params.inst_mem, (M,K))}")

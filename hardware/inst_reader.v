@@ -1,3 +1,45 @@
+/* 
+Instruction Reader
+Function: Parse the memory snapshot obtained from compiler to find opcode, memory locations to write and read addresses from
+          Instructions are read from instruction_list.txt  
+          Data is read from data_list.txt 
+          Results and inputs are stored in A, dumped to output_buf.txt
+Opcodes: 
+        1. Instruction -  LD 
+        Operands - dst: buf, src: ptr[TILE]
+        Opcode - 0010 
+        Explanation - Load buf_size entries from ptr[TILE] to SRAM buffer.
+
+        2. Instruction - ST
+        Operands - dst: ptr[TILE], src: buf
+        Opcode - 0011
+        Explanation - Load buf_size entries from SRAM buffer to ptr[TILE]
+
+        3. Instruction - GEMM
+        Operands - N/A
+        Opcode - 0100
+        Explanation - Pass information from both 𝑖𝑏𝑢𝑓 and 𝑤𝑏𝑢𝑓 into systolic array and compute GEMM
+
+        4. Instruction - DRAINSYS
+        Operands - N/A
+        Opcode - 0101
+        Explanation - Drain systolic array to 𝑜𝑏𝑢𝑓
+
+Opcodes for buffers:
+        i𝑏𝑢𝑓 01 (corresponds to left buffer)
+        w𝑏𝑢𝑓 10 (top buffer)
+        o𝑏𝑢𝑓 11 (down buffer)
+
+Sample instructions:
+        00101000000000000000000000000000 //load to top buffer, starting from address 0
+        00100100000000000000000000100000 //load to left buffer, starting from address 32
+
+Note: Delay counters were incorporated into the implementation to manage time lags between instruction
+execution stages, guaranteeing appropriate coordination and synchronization.
+
+Authors: Spandan More (smore39@gatech.edu), Adithi Upadhya (aupadhya7@gatech.edu), Anirudh Tulasi (atulasi3@gatech.edu)
+*/
+
 module inst_reader #(
         parameter INST_WIDTH                    = 16,
         parameter INST_MEMORY_SIZE              = 1024,
@@ -24,7 +66,8 @@ module inst_reader #(
         parameter ACCU_DATA_WIDTH               = 32,
         parameter LOG2_SRAM_BANK_DEPTH          = 10,
         parameter SKEW_TOP_INPUT_EN             = 1,
-        parameter SKEW_LEFT_INPUT_EN            = 1
+        parameter SKEW_LEFT_INPUT_EN            = 1,
+        parameter MEM_DEPTH = 1024
 )(
         input                                   clk,
         input                                   rst_n,
@@ -66,7 +109,7 @@ module inst_reader #(
         // Local variables //
         reg [INST_WIDTH - 1 : 0]                inst;
         reg [INST_WIDTH - 1 : 0]                inst_memory[0: INST_MEMORY_SIZE - 1];
-        reg [DATA_WIDTH - 1 : 0]                A[0 : 1023];
+        reg [DATA_WIDTH - 1 : 0]                A[0 : MEM_DEPTH - 1];
         reg [LOG2_INST_MEMORY_SIZE - 1 : 0]     PC;
         integer                                 buffer_counter_A, buffer_counter_B, buffer_counter_C;
         integer                                 i, j;
