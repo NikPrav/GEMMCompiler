@@ -5,15 +5,26 @@ This repo contains code for a compiler for a custom systolic array hardware, alo
 
 ![Example](img/Figure_1.png)
 
+## Requirements
+To install requirements, create a new environment and use 
+
+```
+pip install -f requirements.txt
+```
+
+Make sure to have `iverilog` installed in the system
+
 ## Running the Code
 An example on how to run the code is given in `gemm_op/run_sim.py` and with convolutions in `gemm_op/im2col.py`
 
 To run an example:
 ```
-cd compiler/gemm_op
-python3 run_sim.py
+python3 GEMMCompiler/compiler/run_sim.py
 ```
-
+To run an im2col example
+```
+python3 GEMMCompiler/compiler/run_im2col.py
+```
 
 
 # Compiler - PyTorch Model to GEMM operation Conversion for a Dense Systolic Array
