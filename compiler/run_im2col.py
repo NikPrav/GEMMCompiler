@@ -15,18 +15,18 @@ import fpga
 def compile_v():
         try:
             # Run the shell script
-            subprocess.run(["chmod", "+x", "GEMMCompiler/compiler/compile.sh"])
+            subprocess.run(["chmod", "+x", "compiler/compile.sh"])
             subprocess.run(arguments)
         except subprocess.CalledProcessError:
             print("Error: The verilog compilation script did not run successfully.")
 
 def simulate_v(output_file):
         # Prepare the arguments for the shell script
-        arguments = ["GEMMCompiler/compiler/run.sh", output_file]
+        arguments = ["compiler/run.sh", output_file]
 
         try:
             # Run the shell script
-            subprocess.run(["chmod", "+x", "GEMMCompiler/compiler/run.sh"])
+            subprocess.run(["chmod", "+x", "compiler/run.sh"])
             subprocess.run(arguments)
         except subprocess.CalledProcessError:
             print("Error: The verilog run script did not run successfully.")
@@ -44,8 +44,8 @@ sys_params = SystolicArrayParams(R, C, mem_size, i_buf_size, w_buf_size, o_buf_s
 
 
 # Read the image
-# img = read_image('GEMMCompiler/img/ok.png')
-img = read_image('GEMMCompiler/compiler/100.png')
+# img = read_image('img/ok.png')
+img = read_image('compiler/100.png')
 # Convert the image to a tensor
 img = torch.tensor(img, dtype=torch.int16)
 # Compute the minimum value in the tensor
@@ -159,7 +159,7 @@ ax2 = fig.add_subplot(2, 2, 3)  # bottom row, first column
 ax3 = fig.add_subplot(2, 2, 4)  # bottom row, second column
 
 Dram_content.generate_lists(instruction_list)
-Dram_content.parse_generated_data("GEMMCompiler/hardware/data.txt")
+Dram_content.parse_generated_data("hardware/data.txt")
 
 
 # Code to run verilog
@@ -179,7 +179,7 @@ verilog_files = [
 output_file = "fpg"
 
 # Prepare the arguments for the shell script
-arguments = ["GEMMCompiler/compiler/compile.sh", output_file] + verilog_files
+arguments = ["compiler/compile.sh", output_file] + verilog_files
 
 # Compile and run the verilog code
 compile_v()
@@ -187,7 +187,7 @@ simulate_v(output_file)
 
 # Read back the text file
 fpga_memory = DRAM(mem_size, sys_params)
-fpga_memory.parse_generated_data("GEMMCompiler/hardware/out.txt")
+fpga_memory.parse_generated_data("hardware/out.txt")
 
 # i_ptr_cur += 26*16 
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set the directory where your Verilog files are located
-verilog_directory="$PWD/GEMMCompiler/hardware"
+verilog_directory="$PWD/hardware"
 
 # Check if the directory exists
 if [ ! -d "$verilog_directory" ]; then

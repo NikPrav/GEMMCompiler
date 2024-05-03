@@ -15,15 +15,15 @@ pip install -f requirements.txt
 Make sure to have `iverilog` installed in the system; installation guides can be found at https://iverilog.fandom.com/wiki/Installation_Guide#Compiling_on_Linux/Unix.
 
 ## Running the Code
-An example on how to run the code is given in `gemm_op/run_sim.py` and with convolutions in `gemm_op/im2col.py`
+An example on how to run the code is given in `compiler/run_sim.py` and with convolutions in `compiler/im2col.py`
 
 To run an example:
 ```
-python3 GEMMCompiler/compiler/run_sim.py
+python3 compiler/run_sim.py
 ```
 To run an im2col example
 ```
-python3 GEMMCompiler/compiler/run_im2col.py
+python3 compiler/run_im2col.py
 ```
 
 
