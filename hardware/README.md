@@ -1,7 +1,7 @@
 # Dense Systolic Array (SA) for an End-to-end ML Accelerator Framework
 System Overview:
 
-<img title="System architecture" alt=" " src="/hardware/hardware backend.png">
+<img title="System architecture" alt=" " src="hardware backend.png">
 
 ### Components 
 

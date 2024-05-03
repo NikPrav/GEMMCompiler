@@ -145,7 +145,11 @@ compile_v()
 simulate_v(output_file)
 
 # Read back the text file
-Dram_content.parse_generated_data("GEMMCompiler/hardware/out.txt")
+fpga_memory = DRAM(mem_size, sys_params)
+fpga_memory.parse_generated_data("GEMMCompiler/hardware/out.txt")
+
+# Dram_content.parse_generated_data("GEMMCompiler/hardware/out.txt")
 
 # Print the contents of the DRAM 
-print(f"Output from FPGA:\n {Dram_content.extract(i_ptr_cur-sys_params.inst_mem, (M,K))}")
+# print(f"Output from FPGA:\n {Dram_content.extract(i_ptr_cur-sys_params.inst_mem, (M,K))}")
+print(f"Output from FPGA:\n {fpga_memory.extract(i_ptr_cur-sys_params.inst_mem, (M,K))}")

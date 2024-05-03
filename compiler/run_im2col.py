@@ -3,6 +3,7 @@ import torch.nn as nn
 import numpy as np
 import matplotlib.pyplot as plt
 from itertools import chain
+import subprocess
 
 from im2col import im2col, read_image
 from compiler import GEMMCompiler, SystolicArrayParams
@@ -11,11 +12,29 @@ from padding import padding_func, padding_func_ip
 from memory_handler import DRAM
 import fpga
 
+def compile_v():
+        try:
+            # Run the shell script
+            subprocess.run(["chmod", "+x", "GEMMCompiler/compiler/compile.sh"])
+            subprocess.run(arguments)
+        except subprocess.CalledProcessError:
+            print("Error: The verilog compilation script did not run successfully.")
+
+def simulate_v(output_file):
+        # Prepare the arguments for the shell script
+        arguments = ["GEMMCompiler/compiler/run.sh", output_file]
+
+        try:
+            # Run the shell script
+            subprocess.run(["chmod", "+x", "GEMMCompiler/compiler/run.sh"])
+            subprocess.run(arguments)
+        except subprocess.CalledProcessError:
+            print("Error: The verilog run script did not run successfully.")
 
 
 # Setting Systolic Array Parameters
 R, C = 4, 4  # Size of the systolic array
-mem_size = 1024*32  # Memory size of the FPGA
+mem_size = 1024*128  # Memory size of the FPGA
 data_size = 16
 i_buf_size = 16*data_size  # Input buffer size of the FPGA
 w_buf_size = i_buf_size  # Weight buffer size of the FPGA
@@ -25,10 +44,17 @@ sys_params = SystolicArrayParams(R, C, mem_size, i_buf_size, w_buf_size, o_buf_s
 
 
 # Read the image
-img = read_image('img/ok.png')
-# img = read_image('gemm_op/100.png')
+# img = read_image('GEMMCompiler/img/ok.png')
+img = read_image('GEMMCompiler/compiler/100.png')
 # Convert the image to a tensor
 img = torch.tensor(img, dtype=torch.int16)
+# Compute the minimum value in the tensor
+min_val = torch.min(img)
+
+# If the minimum value is less than 0, shift all elements
+if min_val < 0:
+    img = img - min_val
+
 print(f"Image shape: {img.shape}") 
 
 
@@ -63,8 +89,6 @@ output = model(img_unfolded.float())
 x = img_unfolded.float()
 # print(output.size())
 
-
-
 model[0].weight = nn.Parameter(data=edge_filter.squeeze(0).squeeze(0).float().t())
 # model[0].weight = nn.Parameter(data=torch.tensor([[1,2,3,4],[5,6,7,8],[9,10,11,12], [13,14,15,16]], dtype=torch.float16))
 
@@ -76,13 +100,6 @@ for name, layer in model.named_children():
         padded_node = padding_func(new_node,sys_params)
         node_list.append(padded_node)
         x = layer(x)
-
-# if isinstance(layer, torch.nn.modules.conv.Conv2d) or isinstance(layer, torch.nn.modules.linear.Linear):
-#     new_node = LayerNode("gemm",layer, x)
-#     padded_node = padding_func(new_node,sys_params)
-#     node_list.append(padded_node)
-#     x = layer(x)
-
 
 # Create 1D DRAM array representation with instructions and memory
 Dram_content = DRAM(mem_size, sys_params)
@@ -142,16 +159,45 @@ ax2 = fig.add_subplot(2, 2, 3)  # bottom row, first column
 ax3 = fig.add_subplot(2, 2, 4)  # bottom row, second column
 
 Dram_content.generate_lists(instruction_list)
-Dram_content.parse_generated_data("data_list.txt")
+Dram_content.parse_generated_data("GEMMCompiler/hardware/data.txt")
+
+
+# Code to run verilog
+
+# List of Verilog files in the desired compilation order
+verilog_files = [
+    "systolic_array_pe.v",
+    "sram_bank_sp.v",
+    "systolic_array_controller.v",
+    "systolic_array_datapath.v",
+    "inst_reader.v",
+    "systolic_array_top.v",
+    "systolic_array_tb.v"
+]
+
+# Output file name
+output_file = "fpg"
+
+# Prepare the arguments for the shell script
+arguments = ["GEMMCompiler/compiler/compile.sh", output_file] + verilog_files
+
+# Compile and run the verilog code
+compile_v()
+simulate_v(output_file)
+
+# Read back the text file
+fpga_memory = DRAM(mem_size, sys_params)
+fpga_memory.parse_generated_data("GEMMCompiler/hardware/out.txt")
+
+# i_ptr_cur += 26*16 
 
 # Display images
 ax1.imshow(img.squeeze(0).squeeze(0).detach().numpy(), cmap='gray')
 # ax1.axis('off')  # to hide the axis
 ax2.imshow(edge_detected.squeeze(0).squeeze(0).detach().numpy(), cmap='gray')
 # ax2.axis('off')  # to hide the axis
-ax3.imshow(fpga_test.extract(i_ptr_cur-sys_params.inst_mem, (14,14)).T, cmap='gray')
+ax3.imshow(fpga_memory.extract(i_ptr_cur-sys_params.inst_mem, (26,26)).T[1:25,:], cmap='gray')
 # ax3.axis('off')  # to hide the axis
-
 
 
 # DR
@@ -161,3 +207,4 @@ ax3.set_title('Gaussian Blurred Image from the FPGA Simulator')
 
 # Show the plot
 plt.show()
+# plt.savefig('blur.png')

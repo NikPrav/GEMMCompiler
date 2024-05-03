@@ -233,7 +233,7 @@ module new_tb();
         #(`PERIOD)
         rst_n = 1;
 
-        #2000 $finish;
+        #1500 $finish;
     end
     
     // Free running clk
